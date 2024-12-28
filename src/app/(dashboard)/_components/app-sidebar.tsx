@@ -15,7 +15,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, convex } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { LogOutIcon } from "lucide-react";
 import { useClerk } from "@clerk/nextjs";
@@ -29,19 +29,19 @@ import {
 } from "@/constants";
 import OrganisationDropdown from "./organisation-dropdown";
 import { Button } from "@/components/ui/button";
+import { useUserProvider } from "@/components/convex-user-provider";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const { signOut, user } = useClerk();
+  const { clerkUser, convexUser } = useUserProvider();
 
-  const data = useQuery(api.users.getCurrentUser, {
-    userId: user?.id as string,
-  });
+  const { signOut } = useClerk();
 
   const generalItems = React.useMemo(() => sidebarGeneralItems, []);
   const profileItems = React.useMemo(() => sidebarProfileItems, []);
   const backendItems = React.useMemo(() => sidebarBackendItems, []);
 
+  if (!clerkUser || !convex) return;
   // if (!currentUser) return;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderSidebarGroup = (label: string, items: any[]) => (
@@ -90,7 +90,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {renderSidebarGroup("General", generalItems)}
         {renderSidebarGroup("Account & Activities", profileItems)}
-        {data?.role === RoleType.ADMIN &&
+        {convexUser?.role === RoleType.ADMIN &&
           renderSidebarGroup("Content Management", backendItems)}
       </SidebarContent>
       <SidebarFooter className="">

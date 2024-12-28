@@ -15,19 +15,17 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ConvexUserProvider>
-      <SidebarProvider className="relative">
-        <AppSidebar variant="inset" className="" />
-        <SidebarInset className="">
-          <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <SidebarBreadcrumb />
-          </header>
-          <div className="md:p-8 lg:p-10 p-6 h-full">{children}</div>
-        </SidebarInset>
-        <MobileBottomBar />
-      </SidebarProvider>
-    </ConvexUserProvider>
+    <SidebarProvider className="relative">
+      <AppSidebar variant="inset" className="" />
+      <SidebarInset className="">
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <SidebarBreadcrumb />
+        </header>
+        <div className="md:p-8 lg:p-10 p-6 h-full">{children}</div>
+      </SidebarInset>
+      <MobileBottomBar />
+    </SidebarProvider>
   );
 }
