@@ -28,6 +28,7 @@ import {
 import Link from "next/link";
 import TicketPaymentDialog from "./_components/ticket-payment-dialog";
 import TicketDialog from "./_components/ticket-dialog";
+import EventSkeleton from "./_components/event-skeleton";
 
 declare global {
   interface Window {
@@ -56,7 +57,7 @@ const EventIdPage = () => {
     eventId: event?._id as Id<"events">,
   });
 
-  if (!event || !user) return;
+  if (!event || !user) return <EventSkeleton />;
 
   const AMOUNT = event.ticketPrice;
 
