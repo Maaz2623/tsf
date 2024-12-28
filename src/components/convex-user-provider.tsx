@@ -10,7 +10,7 @@ type ClerkUserType = {
   id: string;
   fullName: string;
   email: string; // Add more fields as needed from Clerk
-  
+  phoneNumber: string | undefined;
 };
 
 interface UserContextType {
@@ -45,6 +45,7 @@ export const ConvexUserProvider: React.FC<{ children: React.ReactNode }> = ({
         id: clerkRawUser.id,
         fullName: clerkRawUser.fullName ?? "",
         email: clerkRawUser.emailAddresses?.[0]?.emailAddress ?? "",
+        phoneNumber: clerkRawUser.primaryPhoneNumber?.phoneNumber,
       });
     } else {
       setClerkUser(null);

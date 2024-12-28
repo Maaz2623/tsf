@@ -85,8 +85,8 @@ const EventIdPage = () => {
         order_id: data.orderId,
         prefill: {
           name: clerkUser.fullName,
-          email: clerkUser.primaryEmailAddress?.emailAddress,
-          contact: clerkUser.primaryPhoneNumberId,
+          email: clerkUser.email,
+          contact: clerkUser.phoneNumber,
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handler: async function (response: any) {
@@ -102,7 +102,7 @@ const EventIdPage = () => {
 
             const ticket = await createTicket({
               eventId: event._id,
-              userId: user.id,
+              userId: clerkUser.id,
               paymentId: response.razorpay_payment_id,
               orderId: response.razorpay_order_id,
             });
@@ -200,7 +200,7 @@ const EventIdPage = () => {
                 paymentId={existingTicket.paymentId}
                 uniqueCode={existingTicket.uniqueCode}
               >
-                <Button className="relative flex items-center gap-x-2 bg-green-600">
+                <Button className="relative flex items-center gap-x-2">
                   <TicketIcon className="w-5 h-5 text-white" />
                   <Separator orientation="vertical" className="h-5" />
                   <span className="text-white font-medium">Show Ticket</span>
