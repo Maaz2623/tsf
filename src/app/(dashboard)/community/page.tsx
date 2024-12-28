@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { columns } from "./_components/columns";
 import { DataTable } from "./_components/data-table";
 import { Separator } from "@/components/ui/separator";

@@ -13,7 +13,6 @@ import Script from "next/script";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
@@ -45,7 +44,7 @@ const EventIdPage = () => {
   });
 
   const createTicket = useMutation(api.tickets.createTicket);
-  const { clerkUser, convexUser, loading } = useUserProvider();
+  const { clerkUser } = useUserProvider();
   const router = useRouter();
 
   const [isProcessing, setIsProcessing] = useState(false);

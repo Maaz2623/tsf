@@ -10,7 +10,6 @@ import {
   UsersIcon,
 } from "lucide-react";
 import { IconType } from "react-icons/lib";
-import { FaUsers } from "react-icons/fa";
 
 type SidebarItemsProps = {
   label: string;

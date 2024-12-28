@@ -25,6 +25,7 @@ const TxnVerification = () => {
           onUploadError={(error: Error) => {
             // Do something with the error.
             toast.error("Failed");
+            console.log(error);
           }}
         />
       </div>

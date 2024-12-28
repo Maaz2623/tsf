@@ -1,6 +1,5 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
-import Script from "next/script";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EventSkeleton = () => {
