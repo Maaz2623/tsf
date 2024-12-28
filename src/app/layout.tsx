@@ -3,6 +3,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "@/components/theme-provider";
+import "@uploadthing/react/styles.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,7 +25,14 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={`antialiased `}>
           <ConvexClientProvider>
-            {children} <Toaster />
+            <ThemeProvider
+              attribute={`class`}
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children} <Toaster />
+            </ThemeProvider>
           </ConvexClientProvider>
         </body>
       </html>

@@ -59,6 +59,12 @@ export const ConvexUserProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(!isLoaded || convexData === undefined);
   }, [convexData, isLoaded]);
 
+  console.log({
+    clerkUser,
+    convexUser,
+    clerkRawUser,
+  });
+
   return (
     <UserContext.Provider value={{ clerkUser, convexUser, loading }}>
       {children}

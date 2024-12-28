@@ -175,7 +175,7 @@ const EventUpdateForm = ({
               )}
             />
             <div className="w-full flex items-center justify-end">
-              <Button type="submit" className="bg-green-600" disabled={loading}>
+              <Button type="submit" disabled={loading}>
                 Submit
               </Button>
             </div>

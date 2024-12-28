@@ -1,4 +1,5 @@
 import {
+  BadgeIndianRupeeIcon,
   Calendar,
   CalendarCogIcon,
   LucideIcon,
@@ -61,6 +62,12 @@ export const sidebarProfileItems: SidebarItemsProps[] = [
     icon: TicketIcon,
     tag: "tickets",
   },
+  {
+    label: "Transaction Verifier",
+    link: "/txn-verification",
+    icon: BadgeIndianRupeeIcon,
+    tag: "txn",
+  },
 ];
 
 export const sidebarBackendItems: SidebarItemsProps[] = [
@@ -100,7 +107,7 @@ export const mobilebarItems: MobileSidebarProps[] = [
   {
     label: "Teams",
     link: "/my-teams",
-    icon: FaUsers,
+    icon: UsersIcon,
     tag: "teams",
   },
   {

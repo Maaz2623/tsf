@@ -150,7 +150,7 @@ const EventIdPage = () => {
         <div className="flex flex-col gap-y-4 p-3 md:p-0">
           {/* Title and Description */}
           <div>
-            <h1 className="text-3xl font-semibold text-gray-800">
+            <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-200">
               {event.eventName}
             </h1>
             <p className="mt-2 text-gray-600">{event.eventCardDescription}</p>
@@ -159,13 +159,13 @@ const EventIdPage = () => {
           {/* Date and Location */}
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
             <div className="flex items-center gap-x-2">
-              <CalendarIcon className="w-5 h-5 text-gray-600" />
+              <CalendarIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               <p className="text-gray-800">{event.eventDate}</p>
             </div>
             <Link
               href="https://maps.app.goo.gl/DWt147x2xojzJN1w8"
               target="_blank"
-              className="flex items-center gap-x-2 text-blue-600 hover:underline"
+              className="flex items-center gap-x-2 text-blue-400 dark:text-gray-400 hover:underline"
             >
               <MapPin className="w-5 h-5" />
               <p>{event.eventVenue}</p>
@@ -174,18 +174,18 @@ const EventIdPage = () => {
 
           {/* Attendees and Info Dialog */}
           <div className="flex items-center gap-x-3">
-            <UsersIcon className="w-5 h-5 text-gray-600" />
+            <UsersIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             <span className="text-gray-800">+260</span>
             <Dialog>
               <DialogTrigger>
                 <InfoIcon className="w-5 h-5 text-blue-800 cursor-pointer" />
               </DialogTrigger>
-              <DialogContent className="bg-white border shadow-lg rounded-lg p-4 max-w-xs">
+              <DialogContent className="border shadow-lg rounded-lg p-4 max-w-xs">
                 <DialogHeader>
-                  <DialogTitle className="text-lg font-medium text-gray-800">
+                  <DialogTitle className="text-lg font-medium text-gray-800 dark:text-gray-200">
                     Attendees Information
                   </DialogTitle>
-                  <DialogDescription className="text-sm text-gray-600">
+                  <DialogDescription className="text-sm ">
                     Shows the count of people attending the event.
                   </DialogDescription>
                 </DialogHeader>
@@ -201,16 +201,16 @@ const EventIdPage = () => {
                 uniqueCode={existingTicket.uniqueCode}
               >
                 <Button className="relative flex items-center gap-x-2">
-                  <TicketIcon className="w-5 h-5 text-white" />
+                  <TicketIcon className="w-5 h-5" />
                   <Separator orientation="vertical" className="h-5" />
-                  <span className="text-white font-medium">Show Ticket</span>
+                  <span className="font-medium">Show Ticket</span>
                 </Button>
               </TicketDialog>
             ) : (
               <Button
                 onClick={handlePayment}
                 disabled={isProcessing}
-                className="relative flex items-center gap-x-2 bg-green-600"
+                className="relative flex items-center gap-x-2 dark:text-black"
               >
                 <TicketIcon className="w-5 h-5 text-white" />
                 <Separator orientation="vertical" className="h-5" />
