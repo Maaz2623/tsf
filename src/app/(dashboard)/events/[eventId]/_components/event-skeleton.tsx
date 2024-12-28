@@ -6,7 +6,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 const EventSkeleton = () => {
   return (
     <div className="rounded-lg min-h-screen">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="flex flex-col md:flex-row gap-y-6 gap-x-8 p-0 md:p-3">
         {/* Event Image */}
         <Skeleton className="aspect-video w-full md:w-[400px] rounded-lg bg-gradient-to-r from-gray-300 to-gray-400 shadow-md" />
@@ -15,7 +14,7 @@ const EventSkeleton = () => {
         <div className="flex flex-col gap-y-4 p-3 md:p-0">
           {/* Title and Description */}
           <div>
-            <Skeleton className="bg-gray-500 text-3xl font-semibold text-gray-800 h-10 w-[300px]" />
+            <Skeleton className="bg-gray-500 h-10 w-[300px]" />
             <Skeleton className="mt-2 text-gray-600 h-8 w-[200px] bg-gray-500" />
           </div>
 

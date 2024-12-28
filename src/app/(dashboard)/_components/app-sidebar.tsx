@@ -34,10 +34,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { signOut, user } = useClerk();
 
-  const data = useQuery(api.users.getCurrentUser, {
-    userId: user?.id as string,
-  });
-
   const generalItems = React.useMemo(() => sidebarGeneralItems, []);
   const profileItems = React.useMemo(() => sidebarProfileItems, []);
   const backendItems = React.useMemo(() => sidebarBackendItems, []);
@@ -81,6 +77,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarGroupContent>
     </SidebarGroup>
   );
+
+  const data = useQuery(api.users.getCurrentUser, {
+    userId: user?.id as string,
+  });
+
+  console.log(user);
 
   return (
     <Sidebar {...props} className="">

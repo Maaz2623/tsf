@@ -29,6 +29,7 @@ import Link from "next/link";
 import TicketPaymentDialog from "./_components/ticket-payment-dialog";
 import TicketDialog from "./_components/ticket-dialog";
 import EventSkeleton from "./_components/event-skeleton";
+import { useUserProvider } from "@/components/convex-user-provider";
 
 declare global {
   interface Window {
@@ -44,7 +45,7 @@ const EventIdPage = () => {
   });
 
   const createTicket = useMutation(api.tickets.createTicket);
-  const { user } = useUser();
+  const { clerkUser, convexUser, loading } = useUserProvider();
   const router = useRouter();
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -53,11 +54,11 @@ const EventIdPage = () => {
   const [paymentId, setPaymentId] = useState("");
 
   const existingTicket = useQuery(api.tickets.getTicket, {
-    userId: user?.id as string,
+    userId: clerkUser?.id as string,
     eventId: event?._id as Id<"events">,
   });
 
-  if (!event || !user) return <EventSkeleton />;
+  if (!event || !clerkUser) return <EventSkeleton />;
 
   const AMOUNT = event.ticketPrice;
 
@@ -83,9 +84,9 @@ const EventIdPage = () => {
         description: `Ticket purchase for ${event.eventName} event`,
         order_id: data.orderId,
         prefill: {
-          name: user.fullName,
-          email: user.primaryEmailAddress?.emailAddress,
-          contact: user.primaryPhoneNumberId,
+          name: clerkUser.fullName,
+          email: clerkUser.primaryEmailAddress?.emailAddress,
+          contact: clerkUser.primaryPhoneNumberId,
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handler: async function (response: any) {
