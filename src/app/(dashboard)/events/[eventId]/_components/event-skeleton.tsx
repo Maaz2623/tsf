@@ -1,29 +1,6 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  CalendarIcon,
-  DownloadIcon,
-  InfoIcon,
-  MapPin,
-  TicketIcon,
-  UsersIcon,
-} from "lucide-react";
 import Script from "next/script";
-import toast from "react-hot-toast";
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-import { useMutation, useQuery } from "convex/react";
-import { DialogDescription } from "@/components/ui/dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EventSkeleton = () => {
