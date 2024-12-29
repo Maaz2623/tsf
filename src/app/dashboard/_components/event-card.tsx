@@ -36,10 +36,12 @@ const EventCard = () => {
 
       {/* Background Image */}
       <Image
+        quality={50}
         src={`/nature-1.jpg`}
         alt="nature"
-        fill
-        className="object-cover group-hover:scale-110 transition-all duration-300 object-center"
+        width={400}
+        height={400}
+        className="object-cover h-full w-full group-hover:scale-110 transition-all duration-300 object-center"
       />
 
       {/* Backdrop Layer */}

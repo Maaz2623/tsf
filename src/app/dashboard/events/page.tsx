@@ -11,7 +11,7 @@ const EventsPage = () => {
         </p>
       </header>
       <div className="min-h-screen bg-white rounded-lg shadow-sm p-6">
-        <div className="border w-full flex justify-center flex-wrap gap-y-14 gap-x-10">
+        <div className="border w-full flex justify-start flex-wrap gap-y-14 gap-x-10">
           <EventCard />
           <EventCard />
           <EventCard />
