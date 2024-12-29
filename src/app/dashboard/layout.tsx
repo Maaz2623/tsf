@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="bg-transparent space-y-2">
-        <div className="bg-neutral-50 rounded-lg">
+        <div className="bg-white rounded-lg">
           <Topbar />
         </div>
         {children}
