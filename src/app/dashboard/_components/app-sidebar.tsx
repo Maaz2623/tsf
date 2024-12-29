@@ -52,6 +52,15 @@ const items = [
   },
 ];
 
+const adminItems = [
+  {
+    title: "Events Management",
+    url: "/dashboard/admin/events-management",
+    icon: CalendarIcon,
+    tag: "events-management",
+  },
+];
+
 export function AppSidebar() {
   const { open } = useSidebar();
   const pathname = usePathname();
@@ -70,6 +79,47 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
+                const isActive = activeUrl === item.url;
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={cn(
+                        "h-9",
+                        isActive && "bg-neutral-200",
+                        !open &&
+                          isActive &&
+                          "bg-primary text-white transition-colors duration-300"
+                      )}
+                      onClick={() => {
+                        setActiveUrl(item.url);
+                      }} // Optimistically update UI instantly
+                    >
+                      <Link href={item.url}>
+                        {open && (
+                          <div
+                            className={cn(
+                              "h-4 w-1 scale-y-0 rounded-full bg-primary transition-all duration-300",
+                              isActive && "scale-y-100"
+                            )}
+                          />
+                        )}
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {adminItems.map((item) => {
                 const isActive = activeUrl === item.url;
 
                 return (
