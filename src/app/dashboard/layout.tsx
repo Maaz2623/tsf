@@ -6,9 +6,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <Topbar />
-        <main className="p-3 h-full">{children}</main>
+      <SidebarInset className="bg-transparent space-y-2">
+        <div className="bg-neutral-50 rounded-lg">
+          <Topbar />
+        </div>
+        {children}
       </SidebarInset>
     </SidebarProvider>
   );
