@@ -3,11 +3,15 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { InfoIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const EventCard = () => {
   return (
-    <div className="h-[280px] relative group overflow-hidden w-[229px] bg-gray-500 rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer">
+    <Link
+      href={`/dashboard/events/123`}
+      className="h-[210px] relative group overflow-hidden w-[319px] bg-gray-500 rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer"
+    >
       {/* Event Title on Top */}
       <div
         className={cn(
@@ -50,7 +54,7 @@ const EventCard = () => {
           "absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         )}
       />
-    </div>
+    </Link>
   );
 };
 
