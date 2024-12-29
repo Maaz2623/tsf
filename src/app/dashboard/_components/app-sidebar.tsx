@@ -15,7 +15,7 @@ import {
 import OrganisationDropdown from "@/components/organisation-dropdown";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -55,7 +55,6 @@ const items = [
 export function AppSidebar() {
   const { open } = useSidebar();
   const pathname = usePathname();
-  const router = useRouter();
   const [activeUrl, setActiveUrl] = useState(pathname); // Track the active URL
 
   return (
