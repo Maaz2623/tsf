@@ -5,6 +5,7 @@ import "@radix-ui/themes/styles.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Theme } from "@radix-ui/themes";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +33,11 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Theme>
-            <ConvexClientProvider>{children}</ConvexClientProvider>
+          <Theme accentColor="green">
+            <ConvexClientProvider>
+              {children}
+              <Toaster />
+            </ConvexClientProvider>
           </Theme>
         </body>
       </html>

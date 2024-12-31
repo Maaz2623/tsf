@@ -9,7 +9,8 @@ export default defineSchema({
       label: v.string(),
       location: v.string(),
     }),
-    date: v.number(),
+    date: v.string(),
     price: v.number(),
+    poster: v.optional(v.string()),
   }),
 });

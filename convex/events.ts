@@ -1,5 +1,6 @@
 import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
+import { paginationOptsValidator } from "convex/server";
 
 export const create = mutation({
   args: {
@@ -7,7 +8,7 @@ export const create = mutation({
     description: v.string(),
     label: v.string(),
     location: v.string(),
-    date: v.number(),
+    date: v.string(),
     price: v.number(),
   },
   handler: async (ctx, args) => {
@@ -23,5 +24,19 @@ export const create = mutation({
     });
 
     return event;
+  },
+});
+
+export const getEvents = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const data = await ctx.db
+      .query("events")
+      .order("desc")
+      .paginate(args.paginationOpts);
+
+    return data;
   },
 });

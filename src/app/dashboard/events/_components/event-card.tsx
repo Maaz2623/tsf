@@ -5,12 +5,34 @@ import { InfoIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { Id } from "../../../../../convex/_generated/dataModel";
 
-const EventCard = () => {
+interface EventCardProps {
+  id: Id<"events">;
+  name: string;
+  description: string;
+  venue: {
+    label: string;
+    location: string;
+  };
+  date: number;
+  price: number;
+  poster?: string; // Optional property
+}
+
+const EventCard = ({
+  id,
+  name,
+  description,
+  venue,
+  date,
+  price,
+  poster,
+}: EventCardProps) => {
   return (
     <Link
-      href={`/dashboard/events/123`}
-      className="h-[210px] relative group overflow-hidden w-[319px] bg-gray-500 rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer"
+      href={`/dashboard/events/${id}`}
+      className="h-[210px] relative group overflow-hidden w-[310px] mx-auto bg-gray-500 rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer"
     >
       {/* Event Title on Top */}
       <div
@@ -18,7 +40,7 @@ const EventCard = () => {
           "absolute text-white tracking-wide top-0 left-0 text-xl z-10 p-3 -translate-y-4 opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:translate-y-0 font-semibold"
         )}
       >
-        Event Name
+        {name}
       </div>
 
       {/* Description Section */}

@@ -1,3 +1,4 @@
+"use client";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { UserButton } from "@clerk/nextjs";
 import React from "react";
