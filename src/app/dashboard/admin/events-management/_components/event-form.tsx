@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,6 +24,7 @@ import {
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { XIcon } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -79,8 +80,19 @@ const EventForm = () => {
             <CarouselItem>
               <div className="flex items-center justify-center h-full  p-1 w-full">
                 {image ? (
-                  <div className="w-[400px] overflow-hidden shadow-lg aspect-video rounded-lg border border-black relative">
-                    <Image src={image} alt="image" fill />
+                  <div className="w-[400px] overflow-hidden z-10 shadow-lg aspect-video rounded-lg border border-black relative">
+                    <Image
+                      src={image}
+                      alt="image"
+                      fill
+                      className="rounded-lg"
+                    />
+                    <div
+                      className="absolute -top-0 -right-0 bg-white rounded-full shadow-lg"
+                      onClick={() => setImage("")}
+                    >
+                      <XIcon className="cursor-pointer size-5" />
+                    </div>
                   </div>
                 ) : (
                   <div className="w-[400px] shadow-lg rounded-lg flex items-center justify-center border border-black/30 aspect-video relative">
@@ -101,7 +113,9 @@ const EventForm = () => {
                 )}
               </div>
             </CarouselItem>
-            <CarouselItem></CarouselItem>
+            <CarouselItem className="">
+              <div className="border h-full rounded-lg"></div>
+            </CarouselItem>
             <CarouselItem>...</CarouselItem>
           </CarouselContent>
           <div className="h-10 relative w-full mt-4">
