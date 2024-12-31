@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,6 +13,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { UploadButton } from "@/lib/uploadthing";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -26,7 +36,9 @@ const formSchema = z.object({
 });
 
 const EventForm = () => {
-  // 1. Define your form.
+  const [image, setImage] = useState<string>(""); // Base64 or Object URL of the image
+  const [file, setFile] = useState<File | null>(null); // File object for later upload
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,143 +51,70 @@ const EventForm = () => {
       poster: "",
     },
   });
-  // 2. Define a submit handler.
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result as string); // Set the image preview
+      };
+      reader.readAsDataURL(selectedFile); // Read the file as a data URL
+    }
+  };
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
+    if (file) {
+      console.log("File to upload:", file); // You can upload the file here
+    }
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
-        <div className="flex items-center justify-between gap-x-3 w-full">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="">Event Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g. Movie Night"
-                    className="w-[300px] mx-auto"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />{" "}
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="shadcn"
-                    className="w-[300px] mx-auto"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>{" "}
-        <div className="flex items-center justify-between gap-x-3 w-full">
-          <FormField
-            control={form.control}
-            name="label"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Venue Label</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g. Movie Night"
-                    className="w-[300px] mx-auto"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />{" "}
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Venu Location</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="http://google.maps/"
-                    className="w-[300px] mx-auto"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex items-center justify-between gap-x-3 w-full">
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Ticket Price</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g. Movie Night"
-                    className="w-[300px] mx-auto"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />{" "}
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Event Poster Link</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="http://image.url"
-                    className="w-[300px] mx-auto"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Ticket Price</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="e.g. Movie Night"
-                  className="w-full mx-auto"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />{" "}
-        <div className="w-full justify-end items-center flex">
-          <Button type="submit">Save</Button>
-        </div>
+        <Carousel className="min-h-60">
+          <CarouselContent>
+            <CarouselItem>
+              <div className="flex items-center justify-center h-full  p-1 w-full">
+                {image ? (
+                  <div className="w-[400px] overflow-hidden shadow-lg aspect-video rounded-lg border border-black relative">
+                    <Image src={image} alt="image" fill />
+                  </div>
+                ) : (
+                  <div className="w-[400px] shadow-lg rounded-lg flex items-center justify-center border border-black/30 aspect-video relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="image-input"
+                      onChange={handleImageChange}
+                    />
+                    <label
+                      htmlFor="image-input"
+                      className="cursor-pointer text-center flex flex-col items-center justify-center"
+                    >
+                      <span>Click to select an image</span>
+                    </label>
+                  </div>
+                )}
+              </div>
+            </CarouselItem>
+            <CarouselItem></CarouselItem>
+            <CarouselItem>...</CarouselItem>
+          </CarouselContent>
+          <div className="h-10 relative w-full mt-4">
+            <CarouselPrevious
+              className="absolute left-5 rounded-md w-fit px-2 shadow-md"
+              variant={`outline`}
+            />
+            <CarouselNext
+              className={cn("absolute right-5 rounded-md w-fit px-2 shadow-md")}
+              variant={`outline`}
+            />
+          </div>
+        </Carousel>
       </form>
     </Form>
   );

@@ -1,15 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Doc, Id } from "../../../../../../convex/_generated/dataModel";
-import toast from "react-hot-toast";
-import { format } from "date-fns";
+import { Id } from "../../../../../../convex/_generated/dataModel";
 import Link from "next/link";
 import { LinkIcon, MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -84,10 +81,14 @@ export const columns: ColumnDef<Event>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const { name, description, venue, _id, price } = row.original;
+      const {} = row.original;
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+          <DropdownMenuTrigger
+            className=""
+            asChild
+            onClick={(e) => e.stopPropagation()}
+          >
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />

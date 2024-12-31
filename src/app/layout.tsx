@@ -5,6 +5,7 @@ import "@radix-ui/themes/styles.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Theme } from "@radix-ui/themes";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
+
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({

@@ -20,15 +20,7 @@ interface EventCardProps {
   poster?: string; // Optional property
 }
 
-const EventCard = ({
-  id,
-  name,
-  description,
-  venue,
-  date,
-  price,
-  poster,
-}: EventCardProps) => {
+const EventCard = ({ id, name }: EventCardProps) => {
   return (
     <Link
       href={`/dashboard/events/${id}`}

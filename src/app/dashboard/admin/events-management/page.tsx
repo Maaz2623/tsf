@@ -2,15 +2,10 @@
 import React, { useEffect, useRef } from "react";
 import { columns } from "./_components/columns";
 import { DataTable } from "./_components/data-table";
-import { useGetEvents } from "@/features/events/api/use-get-events";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { usePaginatedQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
-import { LoaderIcon } from "react-hot-toast";
-import { Button, Spinner, Text, TextField } from "@radix-ui/themes";
-import { Skeleton } from "@/components/ui/skeleton";
-import { PlusCircleIcon } from "lucide-react";
-
+import { Spinner } from "@radix-ui/themes";
 
 const EventsManagemenPage = () => {
   const { results, loadMore, status } = usePaginatedQuery(
@@ -65,6 +60,8 @@ const EventsManagemenPage = () => {
       </div>
     );
   }
+
+  console.log(results);
 
   return (
     <div className="space-y-2">

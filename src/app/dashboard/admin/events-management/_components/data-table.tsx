@@ -77,16 +77,17 @@ export function DataTable<TData, TValue>({
           />
         </div>
         <Dialog>
-          <DialogTrigger>
-            {" "}
+          <DialogTrigger asChild>
             <Button className="cursor-pointer">
               <PlusCircleIcon className="size-5" />
               Create
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-1/2 max-w-[800px]">
+          <DialogContent className="max-w-screen-md bg-neutral-50">
             <DialogHeader>
-              <DialogTitle className="text-xl">Create new event</DialogTitle>
+              <DialogTitle className="text-xl w-full text-center">
+                Create new event
+              </DialogTitle>
               <DialogDescription></DialogDescription>
             </DialogHeader>
             <EventForm />
