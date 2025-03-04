@@ -358,4 +358,4 @@ export const events = [
   },
 ];
 
-
+export const contingentPrice = 15000;

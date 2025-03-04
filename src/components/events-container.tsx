@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { RatingsCombobox } from "./combo-box";
 import { ThreeDCardDemo } from "./three-d-card-demo";
-import { events } from "@/constants";
+import { contingentPrice, events } from "@/constants";
 import { Button } from "./ui/button";
 import QRCode from "react-qr-code";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -44,6 +44,8 @@ const EventsContainer = () => {
 
   const upiLink = `upi://pay?pa=masiddique.mm@oksbi&pn=MohammedMaaz&tn=ODER123&am=${price}&cu=INR`;
 
+  const contingentUpiLink = `upi://pay?pa=masiddique.mm@oksbi&pn=MohammedMaaz&tn=ODER123&am=${contingentPrice}&cu=INR`;
+
   // Filter events based on selected rating
   const filteredEvents =
     selectedRating === "All" || !selectedRating
@@ -58,56 +60,108 @@ const EventsContainer = () => {
           setSelectedRating={setSelectedRating}
         />
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              className="py-3 rounded-lg shadow-md"
-              disabled={price === 0}
-            >
-              Buy Ticket
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <VisuallyHidden>
-                <AlertDialogTitle className="w-full text-center">
-                  Payment
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </VisuallyHidden>
-            </AlertDialogHeader>
-            <div className="min-h-40 flex justify-center items-center">
-              <div className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md relative">
-                <h2 className="text-lg font-medium mb-2">
-                  Scan or Click to Pay{" "}
-                  <span className="font-bold text-black">₹{price}</span>
-                </h2>
-                <Link href={upiLink}>
-                  <div className="relative">
-                    {/* QR Code */}
-                    <QRCode
-                      value={upiLink}
-                      size={150}
-                      bgColor="#ffffff"
-                      fgColor="#000000"
-                      className="rounded-lg"
-                    />
-                  </div>
-                </Link>
-                <p className="text-sm text-gray-600 mt-2 text-center text-wrap w-3/4">
-                  Use any upi payments provider to pay the amount
-                </p>
+        <div className="gap-x-2 flex ">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className="py-3 rounded-lg shadow-md">
+                Buy Contingent
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <VisuallyHidden>
+                  <AlertDialogTitle className="w-full text-center">
+                    Payment
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </VisuallyHidden>
+              </AlertDialogHeader>
+              <div className="min-h-40 flex justify-center items-center">
+                <div className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md relative">
+                  <h2 className="text-lg font-medium mb-2">
+                    Scan or Click to Pay{" "}
+                    <span className="font-bold text-black">
+                      ₹{contingentPrice}
+                    </span>
+                  </h2>
+                  <Link href={contingentUpiLink}>
+                    <div className="relative">
+                      {/* QR Code */}
+                      <QRCode
+                        value={contingentUpiLink}
+                        size={150}
+                        bgColor="#ffffff"
+                        fgColor="#000000"
+                        className="rounded-lg"
+                      />
+                    </div>
+                  </Link>
+                  <p className="text-sm text-gray-600 mt-2 text-center text-wrap w-3/4">
+                    Use any upi payments provider to pay the amount
+                  </p>
+                </div>
               </div>
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                className="py-3 rounded-lg shadow-md"
+                disabled={price === 0}
+              >
+                Buy Ticket
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <VisuallyHidden>
+                  <AlertDialogTitle className="w-full text-center">
+                    Payment
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </VisuallyHidden>
+              </AlertDialogHeader>
+              <div className="min-h-40 flex justify-center items-center">
+                <div className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md relative">
+                  <h2 className="text-lg font-medium mb-2">
+                    Scan or Click to Pay{" "}
+                    <span className="font-bold text-black">₹{price}</span>
+                  </h2>
+                  <Link href={upiLink}>
+                    <div className="relative">
+                      {/* QR Code */}
+                      <QRCode
+                        value={upiLink}
+                        size={150}
+                        bgColor="#ffffff"
+                        fgColor="#000000"
+                        className="rounded-lg"
+                      />
+                    </div>
+                  </Link>
+                  <p className="text-sm text-gray-600 mt-2 text-center text-wrap w-3/4">
+                    Use any upi payments provider to pay the amount
+                  </p>
+                </div>
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
       <div className="flex flex-wrap gap-x-8 justify-center">
         {filteredEvents.map((event, i) => (

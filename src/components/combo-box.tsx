@@ -35,6 +35,8 @@ export function RatingsCombobox({
 }) {
   const [open, setOpen] = React.useState(false);
 
+  const displayValue = selectedRating ?? "All";
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -44,9 +46,7 @@ export function RatingsCombobox({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {selectedRating
-            ? ratings.find((r) => r.value === selectedRating)?.label
-            : "Select Rating..."}
+          {ratings.find((r) => r.value === displayValue)?.label}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
