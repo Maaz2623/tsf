@@ -19,14 +19,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 
-export interface EventType {
-  title: string;
-  description: string;
-  rating: number;
-  price: number;
-  teamSize: number;
-}
-
 const EventsContainer = () => {
   const [selectedRating, setSelectedRating] = useState<string | null>(null);
 

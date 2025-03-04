@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 import { CardBody, CardContainer, CardItem } from "./ui/3d-card";
 import { StarIcon, TrashIcon, UsersIcon } from "lucide-react";
-import { EventType } from "./events-container";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
