@@ -1,11 +1,12 @@
-import React from 'react'
+import { HydrateClient } from "@/trpc/server";
+import React from "react";
 
-const TicketsPage = () => {
+const TicketsPage = async () => {
   return (
-    <div>
-      TicketsPage
-    </div>
-  )
-}
+    <HydrateClient>
+      <div>TicketsPage</div>
+    </HydrateClient>
+  );
+};
 
-export default TicketsPage
+export default TicketsPage;

@@ -23,8 +23,9 @@ export const tickets = pgTable(
     paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
     events: jsonb("events").notNull().$type<EventType[]>(),
     email: text("email").notNull(),
+    clerkId: text("clerk_id").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (t) => [uniqueIndex("email_id_idx").on(t.email)]
+  (t) => [uniqueIndex("clerk_id_idx").on(t.clerkId)]
 );

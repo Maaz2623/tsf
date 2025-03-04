@@ -59,7 +59,7 @@ const EventsContainer = () => {
                 Buy Contingent
               </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="">
               <AlertDialogHeader>
                 <VisuallyHidden>
                   <AlertDialogTitle className="w-full text-center">
@@ -71,8 +71,8 @@ const EventsContainer = () => {
                   </AlertDialogDescription>
                 </VisuallyHidden>
               </AlertDialogHeader>
-              <div className="min-h-40 flex justify-center items-center">
-                <div className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md relative">
+              <div className="min-h-40 w-full gap-y-3 flex flex-col justify-center items-center">
+                <div className="flex flex-col items-center justify-center bg-white rounded-lg relative">
                   <h2 className="text-lg font-medium mb-2">
                     Scan or Click to Pay{" "}
                     <span className="font-bold text-black">
@@ -81,7 +81,6 @@ const EventsContainer = () => {
                   </h2>
                   <Link href={contingentUpiLink}>
                     <div className="relative">
-                      {/* QR Code */}
                       <QRCode
                         value={contingentUpiLink}
                         size={150}
@@ -98,7 +97,9 @@ const EventsContainer = () => {
               </div>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
+                <AlertDialogAction onClick={() => {}}>
+                  I have paid
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
