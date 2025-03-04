@@ -29,7 +29,7 @@ export function ThreeDCardDemo({
   event: EventType;
 }) {
   return (
-    <CardContainer className="inter-var cursor-pointer -mt-20">
+    <CardContainer className="inter-var cursor-pointer -mt-20 bg-white/20">
       <CardBody
         className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] 
         w-[300px] md:w-[300px] h-auto min-h-[360px] sm:h-[360px] rounded-xl p-4 border flex flex-col"

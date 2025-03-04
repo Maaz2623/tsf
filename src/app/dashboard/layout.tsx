@@ -15,7 +15,13 @@ export default async function EventsLayout({
     <SidebarProvider className="bg-neutral-400">
       <AppSidebar />
       <SidebarInset>
-        <main>
+        <main
+           style={{
+            backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("/bg-japan.svg")',
+            backgroundPosition: "center",
+            backgroundBlendMode: "lighten",
+          }}
+        >
           <div className="px-2 py-3 w-full flex items-center justify-between border-b ">
             <SidebarTrigger />
             <UserButton />

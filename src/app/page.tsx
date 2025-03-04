@@ -4,9 +4,11 @@ import React from "react";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-black flex flex-col justify-center items-center overflow-hidden">
+    <div
+      
+      className="min-h-screen bg-black flex flex-col justify-center items-center overflow-hidden"
+    >
       <Navbar />
-
       <HeroSection />
     </div>
   );
