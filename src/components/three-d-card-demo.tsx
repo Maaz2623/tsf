@@ -3,8 +3,11 @@
 import Image from "next/image";
 import React from "react";
 import { CardBody, CardContainer, CardItem } from "./ui/3d-card";
-import Link from "next/link";
-import { StarIcon, UsersIcon } from "lucide-react";
+import { StarIcon, TrashIcon, UsersIcon } from "lucide-react";
+import { EventType } from "./events-container";
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 export function ThreeDCardDemo({
   title,
@@ -12,12 +15,18 @@ export function ThreeDCardDemo({
   price,
   rating,
   teamSize,
+  selectedEvents,
+  setSelectedEvents,
+  event,
 }: {
+  selectedEvents: EventType[];
+  setSelectedEvents: React.Dispatch<React.SetStateAction<EventType[]>>;
   title: string;
   description: string;
   price: number | "Free";
   rating: number;
   teamSize: number;
+  event: EventType;
 }) {
   return (
     <CardContainer className="inter-var cursor-pointer -mt-20">
@@ -59,8 +68,6 @@ export function ThreeDCardDemo({
           <div className="flex justify-between w-full items-center">
             <CardItem
               translateZ={20}
-              as={Link}
-              href="https://twitter.com/mannupaaji"
               target="__blank"
               className="px-4 py-2 rounded-xl text-sm font-normal flex items-center dark:text-white"
             >
@@ -70,8 +77,6 @@ export function ThreeDCardDemo({
             </CardItem>
             <CardItem
               translateZ={20}
-              as={Link}
-              href="https://twitter.com/mannupaaji"
               target="__blank"
               className="px-4 py-2 rounded-xl text-sm font-normal flex items-center dark:text-white"
             >
@@ -84,20 +89,38 @@ export function ThreeDCardDemo({
           <div className="flex justify-between items-center mt-auto">
             <CardItem
               translateZ={20}
-              as={Link}
-              href="https://twitter.com/mannupaaji"
               target="__blank"
               className="px-4 py-2 rounded-xl text-sm font-normal dark:text-white"
             >
               {price === "Free" ? "Free" : <>₹{price}</>}
             </CardItem>
-            <CardItem
-              translateZ={20}
-              as="button"
-              className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
+            <Button
+              variant={`outline`}
+              className={cn(
+                "bg-green-200/80 text-green-600 hover:text-green-600 border border-green-500 hover:bg-green-100/80",
+                selectedEvents.some((e) => e.title === event.title) &&
+                  "bg-red-100/80 border border-red-500 hover:text-red-500 text-red-600 hover:bg-red-100/80"
+              )}
+              onClick={() => {
+                setSelectedEvents((prev) => {
+                  if (prev.some((e) => e.title === event.title)) {
+                    return prev.filter((e) => e.title !== event.title); // Remove if already selected
+                  } else {
+                    return [...prev, event]; // Add if not selected
+                  }
+                });
+                toast.success("Event list updated");
+              }}
             >
-              Add to cart
-            </CardItem>
+              {selectedEvents.some((e) => e.title === event.title) ? (
+                <>
+                  <TrashIcon className="" />
+                  <p>Remove</p>
+                </>
+              ) : (
+                "Select"
+              )}
+            </Button>
           </div>
         </div>
       </CardBody>

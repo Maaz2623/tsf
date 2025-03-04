@@ -5,18 +5,7 @@ import { ThreeDCardDemo } from "./three-d-card-demo";
 import { events } from "@/constants";
 import { Button } from "./ui/button";
 import QRCode from "react-qr-code";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { ScrollArea } from "./ui/scroll-area";
-import { Checkbox } from "./ui/checkbox";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 
-interface EventType {
+export interface EventType {
   title: string;
   description: string;
   rating: number;
@@ -68,119 +57,65 @@ const EventsContainer = () => {
           selectedRating={selectedRating}
           setSelectedRating={setSelectedRating}
         />
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="">Buy Ticket</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-lg p-6 rounded-xl shadow-lg">
-            <DialogHeader>
-              <DialogTitle className="text-center text-2xl font-bold">
-                Ticket Counter
-              </DialogTitle>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              className="py-3 rounded-lg shadow-md"
+              disabled={price === 0}
+            >
+              Buy Ticket
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
               <VisuallyHidden>
-                <DialogDescription>
+                <AlertDialogTitle className="w-full text-center">
+                  Payment
+                </AlertDialogTitle>
+                <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
                   your account and remove your data from our servers.
-                </DialogDescription>
+                </AlertDialogDescription>
               </VisuallyHidden>
-            </DialogHeader>
-            <ScrollArea className="h-[200px] border rounded-lg p-4 shadow-sm">
-              <h2 className="text-lg font-semibold text-center mb-3">
-                Select Events
-              </h2>
-              <div className="space-y-3">
-                {events.map((event, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
-                  >
-                    <Checkbox
-                      className="w-5 h-5"
-                      checked={selectedEvents.some(
-                        (e) => e.title === event.title
-                      )}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setSelectedEvents((prev) => [...prev, event]);
-                        } else {
-                          setSelectedEvents((prev) =>
-                            prev.filter((e) => e.title !== event.title)
-                          );
-                        }
-                      }}
+            </AlertDialogHeader>
+            <div className="min-h-40 flex justify-center items-center">
+              <div className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md relative">
+                <h2 className="text-lg font-medium mb-2">
+                  Scan or Click to Pay{" "}
+                  <span className="font-bold text-black">₹{price}</span>
+                </h2>
+                <Link href={upiLink}>
+                  <div className="relative">
+                    {/* QR Code */}
+                    <QRCode
+                      value={upiLink}
+                      size={150}
+                      bgColor="#ffffff"
+                      fgColor="#000000"
+                      className="rounded-lg"
                     />
-
-                    <p className="text-base">{event.title}</p>
                   </div>
-                ))}
+                </Link>
+                <p className="text-sm text-gray-600 mt-2 text-center text-wrap w-3/4">
+                  Use any upi payments provider to pay the amount
+                </p>
               </div>
-            </ScrollArea>
-            <DialogFooter>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    className="w-full py-3 rounded-lg shadow-md"
-                    disabled={price === 0}
-                    onClick={() => console.log(selectedEvents)}
-                  >
-                    Calculate and Pay
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <VisuallyHidden>
-                      <AlertDialogTitle className="w-full text-center">
-                        Payment
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
-                      </AlertDialogDescription>
-                    </VisuallyHidden>
-                  </AlertDialogHeader>
-                  <div className="min-h-40 flex justify-center items-center">
-                    <div className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md relative">
-                      <h2 className="text-lg font-semibold mb-2">
-                        Scan or Click to Pay
-                      </h2>
-                      <Link href={upiLink}>
-                        <div className="relative">
-                          {/* QR Code */}
-                          <QRCode
-                            value={upiLink}
-                            size={150}
-                            bgColor="#ffffff"
-                            fgColor="#000000"
-                            className="rounded-lg"
-                          />
-                          {/* Amount overlay */}
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="bg-white px-2 py-1 rounded-md text-black font-semibold text-xl shadow-md">
-                              ₹{price}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                      <p className="text-sm text-gray-600 mt-2 text-center">
-                        Scan or click the QR code to pay ₹{price}
-                      </p>
-                    </div>
-                  </div>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="flex flex-wrap gap-x-8 justify-center">
         {filteredEvents.map((event, i) => (
           <ThreeDCardDemo
+            event={event}
             key={i}
+            selectedEvents={selectedEvents}
+            setSelectedEvents={setSelectedEvents}
             teamSize={event.teamSize}
             rating={event.rating}
             title={event.title}
