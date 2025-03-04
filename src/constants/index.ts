@@ -1,9 +1,9 @@
 export const words = [
   { text: "Welcome", className: "text-white font-bold " },
   { text: "to", className: " text-white" },
-  { text: "The", className: "text-blue-500" },
-  { text: "Student", className: "text-blue-500 font-bold " },
-  { text: "Forum.", className: "text-blue-500 font-bold " },
+  { text: "THE", className: "text-[#FFD700]" },
+  { text: "STUDENT", className: "text-[#FFD700] font-bold " },
+  { text: "FORUM.", className: "text-[#FFD700] font-bold " },
 ];
 export const events = [
   {
