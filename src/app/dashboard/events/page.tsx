@@ -5,7 +5,7 @@ import React from "react";
 const EventsPage = () => {
   return (
     <div className="px-4 space-y-4 pb-[1000px]">
-      <PageHeader title="Events" description="Explore all our events" />
+      <PageHeader title="Elyisian 2025" description="Explore all our events" />
       <EventsContainer />
     </div>
   );

@@ -4,6 +4,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { UserButton } from "@clerk/nextjs";
 
 export default async function EventsLayout({
   children,
@@ -11,12 +12,13 @@ export default async function EventsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="bg-neutral-400">
       <AppSidebar />
       <SidebarInset>
         <main>
-          <div className="px-2 py-3 w-full flex items-center border-b ">
+          <div className="px-2 py-3 w-full flex items-center justify-between border-b ">
             <SidebarTrigger />
+            <UserButton />
           </div>
           {children}
         </main>
