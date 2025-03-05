@@ -33,7 +33,11 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { Input } from "./ui/input";
+import { useUploadThing } from "@/lib/uploadthing";
+import toast from "react-hot-toast";
+import { trpc } from "@/trpc/client";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const EventsContainer = () => {
   const [selectedRating, setSelectedRating] = useState<string | null>(null);
@@ -165,11 +169,24 @@ const TicketGenerator = ({
   setTicketGeneratorOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [image, setImage] = useState<string | null>(null);
+
+  const [newImageUrl, setNewImageUrl] = useState("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
+
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
+    onClientUploadComplete: (res) => {
+      toast.success("Upload complete");
+      setNewImageUrl(res[0].ufsUrl);
+    },
+    onUploadError: () => {
+      toast.error("Upload error");
+    },
+  });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -177,10 +194,41 @@ const TicketGenerator = ({
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
+      startUpload([file]);
       console.log("Selected file:", file);
     } else {
       alert("Please select a valid image file.");
     }
+  };
+
+  const user = useUser();
+
+  const createTicket = trpc.tickets.createTicket.useMutation();
+
+  const router = useRouter();
+
+  const handleCreateTicket = async () => {
+    if (!user.user?.primaryEmailAddress?.emailAddress) {
+      return;
+    }
+    const mutationPromise = createTicket.mutateAsync(
+      {
+        paymentScreenshotUrl: newImageUrl,
+        events: selectedEvents,
+        email: user.user.primaryEmailAddress.emailAddress,
+      },
+      {
+        onSuccess: (data) => {
+          router.push(`/dashboard/tickets/${data.ticketId}`);
+        },
+      }
+    );
+
+    toast.promise(mutationPromise, {
+      loading: "Generating ticket",
+      success: "Ticket generated",
+      error: "Ticket generation failed",
+    });
   };
 
   return (
@@ -261,10 +309,17 @@ const TicketGenerator = ({
           <div className="w-full flex justify-center items-center">
             <Button
               className="w-[300px]"
-              onClick={() => {}}
-              disabled={selectedEvents.length === 0 || !image}
+              onClick={handleCreateTicket}
+              disabled={
+                selectedEvents.length === 0 ||
+                !image ||
+                isUploading ||
+                createTicket.isPending
+              }
             >
-              Verify
+              {isUploading && "Uploading screenshot"}
+              {!isUploading && !createTicket.isPending && "Verify"}
+              {createTicket.isPending && "Generating..."}
             </Button>
           </div>
         </div>
