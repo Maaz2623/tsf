@@ -8,7 +8,6 @@ import QRCode from "react-qr-code";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -34,6 +33,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { Input } from "./ui/input";
 
 const EventsContainer = () => {
   const [selectedRating, setSelectedRating] = useState<string | null>(null);
@@ -126,7 +126,9 @@ const EventsContainer = () => {
 
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction>Continue</AlertDialogAction>
+                  <Button onClick={() => setTicketGeneratorOpen(true)}>
+                    I have paid
+                  </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
@@ -153,7 +155,6 @@ const EventsContainer = () => {
 };
 
 export default EventsContainer;
-
 const TicketGenerator = ({
   ticketGeneratorOpen,
   selectedEvents,
@@ -219,7 +220,7 @@ const TicketGenerator = ({
               </div>
             ) : (
               <>
-                <p className="text-gray-700 text-lg font-medium">
+                <p className="text-gray-700 text-lg font-medium text-center">
                   Upload payment screenshot for verification
                 </p>
                 <input
@@ -247,9 +248,12 @@ const TicketGenerator = ({
               >
                 <AccordionTrigger>Events List</AccordionTrigger>
                 <AccordionContent>
-                  {selectedEvents.map((item, i) => {
-                    return <p key={i}>{item.title}</p>;
-                  })}
+                  {selectedEvents.map((item, i) => (
+                    <p key={i}>
+                      {item.title} -{" "}
+                      <span className="text-neutral-700">₹{item.price}</span>
+                    </p>
+                  ))}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

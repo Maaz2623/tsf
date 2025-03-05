@@ -38,7 +38,7 @@ const ContingentModal = () => {
       />
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="py-3 rounded-lg shadow-md" variant={`outline`}>
+          <Button className="py-3 rounded-md" variant={`outline`}>
             <PackageIcon />
             Buy Contingent
           </Button>

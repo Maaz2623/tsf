@@ -19,7 +19,7 @@ export const tickets = pgTable(
   "tickets",
   {
     ticketId: uuid("id").unique().notNull().defaultRandom().primaryKey(),
-    status: ticketStatus().notNull().default("pending"),
+    status: ticketStatus().notNull(),
     paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
     events: jsonb("events").notNull().$type<EventType[]>(),
     email: text("email").notNull(),
