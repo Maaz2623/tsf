@@ -1,5 +1,5 @@
 "use client";
-import { Calendar, Package, Ticket } from "lucide-react";
+import { Calendar, Package, QrCodeIcon, Ticket } from "lucide-react";
 
 import {
   Sidebar,
@@ -34,6 +34,14 @@ const items = [
   },
 ];
 
+const adminItems = [
+  {
+    title: "Ticket Verifier",
+    url: "/dashboard/ticket-verifier",
+    icon: QrCodeIcon,
+  },
+];
+
 export function AppSidebar() {
   const pathname = usePathname();
 
@@ -45,6 +53,29 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
+                const isActive = pathname.includes(item.url);
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={cn("", isActive && "bg-neutral-200")}
+                    >
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Admin Apps</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {adminItems.map((item) => {
                 const isActive = pathname.includes(item.url);
                 return (
                   <SidebarMenuItem key={item.title}>
