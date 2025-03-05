@@ -359,3 +359,6 @@ export const events = [
 ];
 
 export const contingentPrice = 15000;
+
+
+export const contingentUpiLink = `upi://pay?pa=masiddique.mm@oksbi&pn=MohammedMaaz&tn=ODER123&am=${contingentPrice}&cu=INR`;

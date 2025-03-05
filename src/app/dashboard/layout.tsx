@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import ContingentModal from "@/components/contingent-modal";
 import {
   SidebarInset,
   SidebarProvider,
@@ -18,7 +19,10 @@ export default async function EventsLayout({
         <main>
           <div className="px-2 py-3 w-full flex items-center justify-between border-b ">
             <SidebarTrigger />
-            <UserButton />
+            <div className="flex gap-x-3">
+              <ContingentModal />
+              <UserButton />
+            </div>
           </div>
           {children}
         </main>
