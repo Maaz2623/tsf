@@ -6,6 +6,25 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const ticketsRouter = createTRPCRouter({
+  getByTicketId: protectedProcedure
+    .input(
+      z.object({
+        ticketId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const [data] = await db
+        .select()
+        .from(tickets)
+        .where(eq(tickets.ticketId, input.ticketId))
+        .limit(1);
+
+      if (!data) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      return data;
+    }),
   getByClerkId: protectedProcedure.query(async ({ ctx }) => {
     if (!ctx.clerkUserId) {
       throw new TRPCError({

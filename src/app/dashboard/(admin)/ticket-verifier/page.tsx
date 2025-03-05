@@ -1,7 +1,12 @@
-import React from "react";
+"use client";
+import QRScanner from "./qr-scanner";
 
 const TicketVerifier = () => {
-  return <div>Ticket Verifier</div>;
+  return (
+    <div className="px-6 py-3">
+      <QRScanner />
+    </div>
+  );
 };
 
 export default TicketVerifier;
