@@ -34,8 +34,8 @@ const items = [
     icon: Ticket,
   },
   {
-    title: "Contingent",
-    url: "/dashboard/contingent",
+    title: "Contingents",
+    url: "/dashboard/contingents",
     icon: Package,
   },
 ];

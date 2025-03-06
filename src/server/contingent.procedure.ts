@@ -101,6 +101,12 @@ export const contingentsRouter = createTRPCRouter({
         });
       }
 
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const [newContingent] = await db
         .insert(contingents)
         .values({

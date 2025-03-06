@@ -35,10 +35,10 @@ import QRCode from "react-qr-code";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
+import { cn } from "@/lib/utils";
 
 const TicketsPage = async () => {
   const tickets = await trpc.tickets.getByClerkId();
-
 
   return (
     <div className="px-6">
@@ -80,9 +80,30 @@ const TicketsPage = async () => {
                   <TableCell className="font-medium text-center">
                     <TicketQr ticketId={ticket.ticketId}>Show</TicketQr>
                   </TableCell>
-                  <TableCell className="text-center w-[150px]">
-                    {ticket.status}
+                  <TableCell className="text-center flex items-center gap-2">
+                    <span
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full animate-ping",
+                        ticket.status === "pending" && "bg-orange-700",
+                        ticket.status === "processing" && "bg-orange-400",
+                        ticket.status === "verified" && "bg-green-500",
+                        ticket.status === "rejected" && "bg-red-500"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "font-medium",
+                        ticket.status === "pending" && "text-orange-700",
+                        ticket.status === "processing" && "text-orange-400",
+                        ticket.status === "verified" && "text-green-500",
+                        ticket.status === "rejected" && "text-red-500"
+                      )}
+                    >
+                      {ticket.status.charAt(0).toUpperCase() +
+                        ticket.status.slice(1)}
+                    </span>
                   </TableCell>
+
                   <TableCell className="text-center w-[150px]">
                     {ticket.orderId}
                   </TableCell>
