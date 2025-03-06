@@ -1,3 +1,10 @@
+import { Exo_2 } from "next/font/google";
+
+export const exo_2 = Exo_2({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
 export const words = [
   { text: "Welcome", className: "text-white font-bold " },
   { text: "to", className: " text-white" },
@@ -5,13 +12,15 @@ export const words = [
   { text: "STUDENT", className: "text-[#FFD700] font-bold " },
   { text: "FORUM.", className: "text-[#FFD700] font-bold " },
 ];
-export const events = [
+export const events: EventType[] = [
   {
     title: "Event 1",
     description: "Exciting event about technology",
     rating: 3,
     price: 1,
     teamSize: 4,
+    date: new Date().toISOString().split("T")[0],
+    maxRegistration: 10,
   },
   {
     title: "Event 2",

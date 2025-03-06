@@ -87,7 +87,7 @@ export const contingentsRouter = createTRPCRouter({
             price: z.number(),
             teamSize: z.number().optional(),
             maxRegistration: z.number().optional(),
-            date: z.coerce.date().optional(),
+            date: z.string().optional(),
           })
         ),
       })

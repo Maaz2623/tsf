@@ -3,10 +3,17 @@
 import Image from "next/image";
 import React from "react";
 import { CardBody, CardContainer, CardItem } from "./ui/3d-card";
-import { StarIcon, TrashIcon, UsersIcon } from "lucide-react";
+import {
+  StarIcon,
+  TrashIcon,
+  UsersIcon,
+  CalendarIcon,
+  TicketsIcon,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
+import { format, parseISO } from "date-fns";
 
 export function ThreeDCardDemo({
   title,
@@ -14,6 +21,8 @@ export function ThreeDCardDemo({
   price,
   rating,
   teamSize,
+  date,
+  maxRegistration,
   selectedEvents,
   setSelectedEvents,
   event,
@@ -24,14 +33,16 @@ export function ThreeDCardDemo({
   description: string;
   price: number | "Free";
   rating: number;
-  teamSize: number;
+  teamSize?: number;
+  date?: string;
+  maxRegistration?: number;
   event: EventType;
 }) {
   return (
     <CardContainer className="inter-var cursor-pointer -mt-20 bg-white/20">
       <CardBody
         className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] 
-        w-[300px] md:w-[300px] h-auto min-h-[360px] sm:h-[360px] rounded-xl p-4 border flex flex-col"
+        w-[300px] md:w-[300px] h-auto min-h-[380px] sm:h-[380px] rounded-xl p-4 border flex flex-col"
       >
         {/* Title */}
         <CardItem
@@ -61,22 +72,24 @@ export function ThreeDCardDemo({
           />
         </CardItem>
 
-        {/* Rating & Price Section */}
+        {/* Event Details Section */}
         <div className="mt-4 flex flex-col flex-grow">
-          {/* Rating */}
+          {/* Rating & Team Size */}
           <div className="flex justify-between w-full items-center">
             <CardItem
               translateZ={20}
-              target="__blank"
               className="px-4 py-2 rounded-xl text-sm font-normal flex items-center dark:text-white"
             >
               {Array.from({ length: rating }).map((_, i) => (
-                <StarIcon key={i} className="size-4" fill="currentColor" />
+                <StarIcon
+                  key={i}
+                  className="size-4 text-yellow-500"
+                  fill="currentColor"
+                />
               ))}
             </CardItem>
             <CardItem
               translateZ={20}
-              target="__blank"
               className="px-4 py-2 rounded-xl text-sm font-normal flex items-center dark:text-white"
             >
               <UsersIcon className="mr-1 size-4" />
@@ -84,11 +97,25 @@ export function ThreeDCardDemo({
             </CardItem>
           </div>
 
-          {/* Price & Add to Cart */}
+          {/* Date & Max Registrations */}
+          <div className="flex justify-between w-full items-center mt-2 px-2 text-xs text-gray-600 dark:text-gray-300">
+            <div className="flex items-center gap-1">
+              <CalendarIcon className="size-4" />
+              <span>
+                {date ? format(parseISO(date), "dd MMM yyyy") : "No Date"}
+              </span>
+            </div>
+            {maxRegistration && (
+              <div className="text-right flex items-center text-xs font-medium">
+                <TicketsIcon className="size-4.5 mr-1" /> 5 / {maxRegistration}
+              </div>
+            )}
+          </div>
+
+          {/* Price & Select Button */}
           <div className="flex justify-between items-center mt-auto">
             <CardItem
               translateZ={20}
-              target="__blank"
               className="px-4 py-2 rounded-xl text-sm font-normal dark:text-white"
             >
               {price === "Free" ? "Free" : <>₹{price}</>}
@@ -103,9 +130,9 @@ export function ThreeDCardDemo({
               onClick={() => {
                 setSelectedEvents((prev) => {
                   if (prev.some((e) => e.title === event.title)) {
-                    return prev.filter((e) => e.title !== event.title); // Remove if already selected
+                    return prev.filter((e) => e.title !== event.title);
                   } else {
-                    return [...prev, event]; // Add if not selected
+                    return [...prev, event];
                   }
                 });
                 toast.success("Event list updated");
@@ -113,7 +140,7 @@ export function ThreeDCardDemo({
             >
               {selectedEvents.some((e) => e.title === event.title) ? (
                 <>
-                  <TrashIcon className="" />
+                  <TrashIcon />
                   <p>Remove</p>
                 </>
               ) : (

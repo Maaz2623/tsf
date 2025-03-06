@@ -30,9 +30,12 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUploadThing } from "@/lib/uploadthing";
 import { trpc } from "@/trpc/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const ContingentModal = () => {
   const [contingentGenerator, setContingentGenerator] = useState(false);
+
+  const isMobile = useIsMobile();
 
   return (
     <>
@@ -42,7 +45,11 @@ const ContingentModal = () => {
       />
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="py-3 rounded-md" variant={`outline`}>
+          <Button
+            className="py-3 rounded-md"
+            variant={`outline`}
+            size={isMobile ? `sm` : `default`}
+          >
             <PackageIcon />
             Buy Contingent
           </Button>

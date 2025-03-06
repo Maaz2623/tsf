@@ -47,6 +47,13 @@ const EventsContainer = () => {
 
   const [ticketGeneratorOpen, setTicketGeneratorOpen] = useState(false);
 
+  const formattedEvents = selectedEvents.map((event) => ({
+    ...event,
+    date: event.date
+      ? new Date(event.date).toISOString().split("T")[0]
+      : undefined,
+  }));
+
   useEffect(() => {
     const totalPrice = selectedEvents.reduce(
       (acc, event) => acc + event.price,
@@ -66,7 +73,7 @@ const EventsContainer = () => {
   return (
     <>
       <TicketGenerator
-        selectedEvents={selectedEvents}
+        selectedEvents={formattedEvents}
         ticketGeneratorOpen={ticketGeneratorOpen}
         setTicketGeneratorOpen={setTicketGeneratorOpen}
       />
@@ -140,6 +147,8 @@ const EventsContainer = () => {
         <div className="flex flex-wrap gap-x-8 justify-center">
           {filteredEvents.map((event, i) => (
             <ThreeDCardDemo
+              maxRegistration={event.maxRegistration}
+              date={event.date}
               event={event}
               key={i}
               selectedEvents={selectedEvents}
