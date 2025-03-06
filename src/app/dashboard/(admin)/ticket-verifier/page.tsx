@@ -1,12 +1,215 @@
 "use client";
-import QRScanner from "./qr-scanner";
+import PageHeader from "@/components/page-header";
+import { trpc } from "@/trpc/client";
+import React from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const TicketVerifier = () => {
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import QRCode from "react-qr-code";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { format } from "date-fns";
+import { ticketStatus } from "@/db/schema";
+import { StatusAction } from "./_components/status-action";
+import { LoaderCircle } from "lucide-react";
+
+const TicketVerifierPage = () => {
+  const { data: tickets, isPending } = trpc.tickets.getAllTickets.useQuery();
+
+  if (isPending) {
+    return (
+      <div className="h-full w-full flex justify-center items-center ">
+        <div className=" text-neutral-600 items-center justify-center flex flex-col">
+          <LoaderCircle className="size-5 animate-spin" />
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="px-6 py-3">
-      <QRScanner />
+    <div className="px-6">
+      <PageHeader
+        title="Your tickets"
+        description="Manage all your tickets from here"
+      />
+      <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Payment status" />
+          </SelectTrigger>
+          <SelectContent>
+            {ticketStatus.enumValues.map((value) => (
+              <SelectItem key={value} value={value}>
+                {value}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="rounded-lg overflow-hidden my-4 border">
+        <Table className="">
+          <TableHeader className="bg-neutral-100">
+            <TableRow>
+              <TableHead className="w-[100px] pl-4">Ticket QR</TableHead>
+              <TableHead className="text-center">Status</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead className="text-center">Events</TableHead>
+              <TableHead className="text-center">Amount</TableHead>
+              <TableHead className="text-left">Created At</TableHead>
+              <TableHead className="text-center pr-3">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {tickets
+              ?.sort(
+                (a, b) =>
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+              )
+              .map((ticket) => {
+                return (
+                  <TableRow key={ticket.ticketId}>
+                    <TableCell className="font-medium text-center">
+                      <TicketQr ticketId={ticket.ticketId}>Show</TicketQr>
+                    </TableCell>
+                    <TableCell className="text-center w-[150px]">
+                      {ticket.status}
+                    </TableCell>
+                    <TableCell className="w-[350px] truncate">
+                      {ticket.email}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <EventDetailsPopover events={ticket.events}>
+                        Details
+                      </EventDetailsPopover>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      ₹
+                      {ticket.events.reduce(
+                        (total, event) => total + event.price,
+                        0
+                      )}
+                    </TableCell>
+                    <TableCell className="text-left">
+                      {format(ticket.createdAt, "dd MMMM, yyyy")}
+                    </TableCell>
+                    <TableCell className="text-center flex justify-center">
+                      <StatusAction ticketId={ticket.ticketId} />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };
 
-export default TicketVerifier;
+export default TicketVerifierPage;
+
+const EventDetailsPopover = ({
+  children,
+  events,
+}: {
+  children: React.ReactNode;
+  events: EventType[];
+}) => {
+  return (
+    <Popover>
+      <PopoverTrigger className="underline underline-offset-2">
+        {children}
+      </PopoverTrigger>
+      <PopoverContent className="p-4 bg-white shadow-lg rounded-lg border w-64">
+        <h3 className="text-lg font-semibold mb-2">Event Details</h3>
+        <ScrollArea className="h-60">
+          <div className="space-y-3">
+            {events.map((event, i) => (
+              <div key={i} className="p-3 bg-gray-100 rounded-md">
+                <p className="text-sm font-medium text-gray-800">
+                  {event.title}
+                </p>
+                <p className="text-xs text-gray-600">{event.description}</p>
+                <p className="text-xs text-gray-700 mt-1">
+                  Price: <span className="font-semibold">₹{event.price}</span>
+                </p>
+                {event.date && (
+                  <p className="text-xs text-gray-500">
+                    Date: {new Date(event.date).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+const TicketQr = ({
+  children,
+  ticketId,
+}: {
+  children: React.ReactNode;
+  ticketId: string;
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger className="underline underline-offset-2">
+        {children}
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="w-full text-center">
+            Show this when asked
+          </DialogTitle>
+          <VisuallyHidden>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </DialogDescription>
+          </VisuallyHidden>
+        </DialogHeader>
+        <div className="flex justify-center items-center">
+          <div className="shadow-md rounded-xl p-4">
+            <QRCode
+              value={ticketId}
+              size={150}
+              bgColor="#ffffff"
+              fgColor="#000000"
+              className="rounded-lg"
+            />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};

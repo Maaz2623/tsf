@@ -6,6 +6,35 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const ticketsRouter = createTRPCRouter({
+  updatedStatus: protectedProcedure
+    .input(
+      z.object({
+        ticketId: z.string(),
+        value: z.enum(["pending", "processing", "verified", "rejected"]),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const [data] = await db
+        .update(tickets)
+        .set({
+          status: input.value,
+        })
+        .where(eq(tickets.ticketId, input.ticketId))
+        .returning();
+
+      return data;
+    }),
+  getAllTickets: protectedProcedure.query(async () => {
+    const data = await db.select().from(tickets);
+
+    if (!data) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+      });
+    }
+
+    return data;
+  }),
   getByTicketId: protectedProcedure
     .input(
       z.object({
@@ -49,6 +78,7 @@ export const ticketsRouter = createTRPCRouter({
     .input(
       z.object({
         paymentScreenshotUrl: z.string(),
+        orderId: z.string(),
         events: z.array(
           z.object({
             title: z.string(),
@@ -78,6 +108,7 @@ export const ticketsRouter = createTRPCRouter({
           events: input.events,
           email: input.email,
           clerkId: ctx.clerkUserId,
+          orderId: input.orderId,
         })
         .returning();
 

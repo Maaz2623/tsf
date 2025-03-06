@@ -20,6 +20,7 @@ export const tickets = pgTable("tickets", {
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
   email: text("email").notNull(),
+  orderId: text("order_id").notNull(),
   clerkId: text("clerk_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

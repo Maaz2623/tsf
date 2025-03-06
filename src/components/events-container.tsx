@@ -38,6 +38,7 @@ import toast from "react-hot-toast";
 import { trpc } from "@/trpc/client";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { generateUniqueHex } from "@/actions";
 
 const EventsContainer = () => {
   const [selectedRating, setSelectedRating] = useState<string | null>(null);
@@ -56,7 +57,7 @@ const EventsContainer = () => {
     setPrice(totalPrice);
   }, [selectedEvents]);
 
-  const upiLink = `upi://pay?pa=masiddique.mm@oksbi&pn=MohammedMaaz&tn=ODER123&am=${price}&cu=INR`;
+  const upiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&tn=${generateUniqueHex}&am=${price}&cu=INR`;
 
   // Filter events based on selected rating
   const filteredEvents =
@@ -216,6 +217,7 @@ const TicketGenerator = ({
         paymentScreenshotUrl: newImageUrl,
         events: selectedEvents,
         email: user.user.primaryEmailAddress.emailAddress,
+        orderId: await generateUniqueHex(),
       },
       {
         onSuccess: (data) => {

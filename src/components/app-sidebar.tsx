@@ -1,5 +1,11 @@
 "use client";
-import { Calendar, Package, QrCodeIcon, Ticket } from "lucide-react";
+import {
+  Calendar,
+  Package,
+  QrCodeIcon,
+  Ticket,
+  TicketCheckIcon,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -38,6 +44,11 @@ const adminItems = [
   {
     title: "Ticket Verifier",
     url: "/dashboard/ticket-verifier",
+    icon: TicketCheckIcon,
+  },
+  {
+    title: "Ticket Scanner",
+    url: "/dashboard/ticket-scanner",
     icon: QrCodeIcon,
   },
 ];

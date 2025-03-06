@@ -1,3 +1,5 @@
+import { generateUniqueHex } from "@/actions";
+
 export const words = [
   { text: "Welcome", className: "text-white font-bold " },
   { text: "to", className: " text-white" },
@@ -10,7 +12,7 @@ export const events = [
     title: "Event 1",
     description: "Exciting event about technology",
     rating: 3,
-    price: 275,
+    price: 1,
     teamSize: 4,
   },
   {
@@ -358,7 +360,6 @@ export const events = [
   },
 ];
 
-export const contingentPrice = 15000;
+export const contingentPrice = 1;
 
-
-export const contingentUpiLink = `upi://pay?pa=masiddique.mm@oksbi&pn=MohammedMaaz&tn=ODER123&am=${contingentPrice}&cu=INR`;
+export const contingentUpiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&am=${contingentPrice}&cu=INR&tn=Payment for order ${generateUniqueHex}`;

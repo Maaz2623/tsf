@@ -39,7 +39,6 @@ import { ticketStatus } from "@/db/schema";
 const TicketsPage = async () => {
   const tickets = await trpc.tickets.getByClerkId();
 
-  console.log(tickets);
 
   return (
     <div className="px-6">
@@ -67,6 +66,7 @@ const TicketsPage = async () => {
             <TableRow>
               <TableHead className="w-[100px] pl-4">Ticket QR</TableHead>
               <TableHead className="text-center">Status</TableHead>
+              <TableHead className="text-center">Order ID</TableHead>
               <TableHead>Email</TableHead>
               <TableHead className="text-center">Events</TableHead>
               <TableHead className="text-center">Amount</TableHead>
@@ -82,6 +82,9 @@ const TicketsPage = async () => {
                   </TableCell>
                   <TableCell className="text-center w-[150px]">
                     {ticket.status}
+                  </TableCell>
+                  <TableCell className="text-center w-[150px]">
+                    {ticket.orderId}
                   </TableCell>
                   <TableCell className="w-[350px] truncate">
                     {ticket.email}
