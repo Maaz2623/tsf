@@ -1,6 +1,6 @@
 import PageHeader from "@/components/page-header";
 import { trpc } from "@/trpc/server";
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Popover,
   PopoverContent,
@@ -36,6 +36,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const TicketsPage = async () => {
   const tickets = await trpc.tickets.getByClerkId();
@@ -68,6 +69,7 @@ const TicketsPage = async () => {
               <TableHead className="text-center">Status</TableHead>
               <TableHead className="text-center">Order ID</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Screenshot</TableHead>
               <TableHead className="text-center">Events</TableHead>
               <TableHead className="text-center">Amount</TableHead>
               <TableHead className="text-left pl-3">Created At</TableHead>
@@ -107,8 +109,15 @@ const TicketsPage = async () => {
                   <TableCell className="text-center w-[150px]">
                     {ticket.orderId}
                   </TableCell>
-                  <TableCell className="w-[350px] truncate">
+                  <TableCell className="w-[300px] truncate">
                     {ticket.email}
+                  </TableCell>
+                  <TableCell className="truncate">
+                    <PaymentScreenshotDialog
+                      imageUrl={ticket.paymentScreentshotUrl}
+                    >
+                      Image
+                    </PaymentScreenshotDialog>
                   </TableCell>
                   <TableCell className="text-center">
                     <EventDetailsPopover events={ticket.events}>
@@ -136,6 +145,44 @@ const TicketsPage = async () => {
 };
 
 export default TicketsPage;
+
+const PaymentScreenshotDialog = ({
+  children,
+  imageUrl,
+}: {
+  children: React.ReactNode;
+  imageUrl: string;
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger className="underline-offset-2 underline">
+        {children}
+      </DialogTrigger>
+      <DialogContent className="flex justify-center items-center">
+        <VisuallyHidden>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </DialogDescription>
+          </DialogHeader>
+        </VisuallyHidden>
+        <div className="w-[350px] aspect-square">
+          <Suspense fallback={<p>loading...</p>}>
+            <Image
+              src={imageUrl}
+              alt="ss"
+              width={450}
+              height={450}
+              className="w-full rounded-lg"
+            />
+          </Suspense>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const EventDetailsPopover = ({
   children,

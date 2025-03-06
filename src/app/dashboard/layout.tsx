@@ -17,11 +17,11 @@ export default async function EventsLayout({
 }) {
   return (
     <SidebarProvider className="bg-neutral-400">
-      <AppSidebar />
-      <SidebarInset>
-        <HydrateClient>
-          <ErrorBoundary fallback={<div>Something went wrong</div>}>
-            <Suspense>
+      <HydrateClient>
+        <ErrorBoundary fallback={<div>Something went wrong</div>}>
+          <Suspense>
+            <AppSidebar />
+            <SidebarInset>
               <main>
                 <div className="px-2 py-3 w-full flex items-center justify-between border-b ">
                   <SidebarTrigger />
@@ -32,10 +32,10 @@ export default async function EventsLayout({
                 </div>
                 {children}
               </main>
-            </Suspense>
-          </ErrorBoundary>
-        </HydrateClient>
-      </SidebarInset>
+            </SidebarInset>
+          </Suspense>
+        </ErrorBoundary>
+      </HydrateClient>
     </SidebarProvider>
   );
 }
