@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { contingentPrice, contingentUpiLink } from "@/constants";
+import { contingentPrice, contingentUpiLink, events } from "@/constants";
 import QRCode from "react-qr-code";
 import {
   Drawer,
@@ -26,6 +26,12 @@ import { PackageIcon, UploadIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import toast from "react-hot-toast";
+import { generateUniqueHex } from "@/actions";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import { useUploadThing } from "@/lib/uploadthing";
+import { trpc } from "@/trpc/client";
 
 const ContingentModal = () => {
   const [contingentGenerator, setContingentGenerator] = useState(false);
@@ -33,8 +39,8 @@ const ContingentModal = () => {
   return (
     <>
       <ContingentGenerator
-        contingentGenerator={contingentGenerator}
-        setContingentGenerator={setContingentGenerator}
+        contingentGeneratorOpen={contingentGenerator}
+        setContingentGeneratorOpen={setContingentGenerator}
       />
       <AlertDialog>
         <AlertDialogTrigger asChild>
@@ -95,20 +101,36 @@ const ContingentModal = () => {
 export default ContingentModal;
 
 const ContingentGenerator = ({
-  contingentGenerator,
-  setContingentGenerator,
+  contingentGeneratorOpen,
+
+  setContingentGeneratorOpen,
 }: {
-  contingentGenerator: boolean;
-  setContingentGenerator: React.Dispatch<React.SetStateAction<boolean>>;
+  contingentGeneratorOpen: boolean;
+  setContingentGeneratorOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [image, setImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [selectedEvents] = useState<EventType[]>(events);
+
+  const [newImageUrl, setNewImageUrl] = useState("");
 
   const [collegeName, setCollegeName] = useState("");
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
+
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
+    onClientUploadComplete: (res) => {
+      toast.success("Upload complete");
+      setNewImageUrl(res[0].ufsUrl);
+    },
+    onUploadError: () => {
+      toast.error("Upload error");
+    },
+  });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -116,18 +138,57 @@ const ContingentGenerator = ({
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
+      startUpload([file]);
       console.log("Selected file:", file);
     } else {
       alert("Please select a valid image file.");
     }
   };
 
+  const user = useUser();
+
+  const createTicket = trpc.contingents.createContingent.useMutation();
+
+  const router = useRouter();
+
+  const handleCreateTicket = async () => {
+    if (!user.user?.primaryEmailAddress?.emailAddress) {
+      return;
+    }
+    const mutationPromise = createTicket.mutateAsync(
+      {
+        paymentScreenshotUrl: newImageUrl,
+        events: selectedEvents,
+        email: user.user.primaryEmailAddress.emailAddress,
+        orderId: await generateUniqueHex(),
+        collegeName: collegeName,
+      },
+      {
+        onSuccess: () => {
+          setContingentGeneratorOpen(false);
+          setCollegeName("");
+          setImage(null);
+          router.push(`/dashboard/contingents`);
+        },
+      }
+    );
+
+    toast.promise(mutationPromise, {
+      loading: "Generating contingent plan for you",
+      success: "Contingent plan generated",
+      error: "Contingent plan generation failed",
+    });
+  };
+
   return (
-    <Drawer onOpenChange={setContingentGenerator} open={contingentGenerator}>
+    <Drawer
+      onOpenChange={setContingentGeneratorOpen}
+      open={contingentGeneratorOpen}
+    >
       <DrawerContent className="mb-8">
         <DrawerHeader>
           <DrawerTitle className="w-full text-center text-2xl">
-            Payment Verification
+            Generate Contingent Plan
           </DrawerTitle>
           <VisuallyHidden>
             <DrawerDescription>
@@ -137,16 +198,14 @@ const ContingentGenerator = ({
           </VisuallyHidden>
         </DrawerHeader>
         <div className="min-h-40 space-y-4 w-full flex flex-col justify-center items-center">
-          <div className="w-[300px] space-y-1">
+          <div className="space-y-1">
             <Label>University Name</Label>
             <Input
-              className=""
-              value={collegeName}
+              placeholder="e.g. Jain College VV Puram"
               onChange={(e) => setCollegeName(e.target.value)}
-              placeholder="e.g. Jain College"
             />
           </div>
-          <div className="flex flex-col items-center justify-center w-[300px] space-y-4 p-6  border-dotted border-2 rounded-lg">
+          <div className="flex flex-col w-[300px] items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
             {image ? (
               <div className="flex flex-col justify-center items-center space-y-2">
                 <p className="text-center text-lg font-semibold">
@@ -188,10 +247,21 @@ const ContingentGenerator = ({
               </>
             )}
           </div>
-
           <div className="w-full flex justify-center items-center">
-            <Button className="w-[300px]" onClick={() => {}} disabled={!image}>
-              Verify
+            <Button
+              className="w-[300px]"
+              onClick={handleCreateTicket}
+              disabled={
+                selectedEvents.length === 0 ||
+                !image ||
+                isUploading ||
+                createTicket.isPending ||
+                collegeName.length === 0
+              }
+            >
+              {isUploading && "Uploading screenshot"}
+              {!isUploading && !createTicket.isPending && "Verify"}
+              {createTicket.isPending && "Generating..."}
             </Button>
           </div>
         </div>

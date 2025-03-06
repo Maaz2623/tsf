@@ -1,9 +1,12 @@
+import { sql } from "drizzle-orm";
 import {
+  date,
   jsonb,
   pgEnum,
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -14,9 +17,42 @@ export const ticketStatus = pgEnum("ticket_status", [
   "rejected",
 ]);
 
+export const roleType = pgEnum("role_enum", ["admin", "moderator", "user"]);
+
+export const users = pgTable(
+  "users",
+  {
+    id: uuid("id").unique().notNull().defaultRandom().primaryKey(),
+    email: text("email").unique().notNull(),
+    clerkId: text("clerk_id").unique().notNull(),
+    name: text("name").notNull(),
+    imageUrl: text("image_url").notNull(),
+    role: roleType().notNull().default("user"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [uniqueIndex("clerk_id_idx").on(t.clerkId)]
+);
+
 export const tickets = pgTable("tickets", {
   ticketId: uuid("id").unique().notNull().defaultRandom().primaryKey(),
   status: ticketStatus().notNull(),
+  paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
+  events: jsonb("events").notNull().$type<EventType[]>(),
+  email: text("email").notNull(),
+  orderId: text("order_id").notNull(),
+  clerkId: text("clerk_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const contingents = pgTable("contingents", {
+  id: uuid("id").unique().notNull().defaultRandom().primaryKey(),
+  status: ticketStatus().notNull(),
+  validTill: date()
+    .default(sql`CURRENT_DATE + INTERVAL '1 year'`)
+    .notNull(),
+  collegeName: text("college_name").notNull(),
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
   email: text("email").notNull(),

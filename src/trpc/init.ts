@@ -1,5 +1,8 @@
+import { db } from "@/db";
+import { users } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
+import { eq } from "drizzle-orm";
 import { cache } from "react";
 import superjson from "superjson";
 import { ratelimit } from "@/lib/ratelimit";
@@ -39,7 +42,19 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(
     });
   }
 
-  const { success } = await ratelimit.limit(ctx.clerkUserId);
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.clerkId, ctx.clerkUserId))
+    .limit(1);
+
+  if (!user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
+
+  const { success } = await ratelimit.limit(user.id);
 
   if (!success) {
     throw new TRPCError({
@@ -50,6 +65,7 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(
   return opts.next({
     ctx: {
       ...ctx,
+      user,
     },
   });
 });

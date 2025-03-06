@@ -160,6 +160,8 @@ const EventsContainer = () => {
 };
 
 export default EventsContainer;
+
+
 const TicketGenerator = ({
   ticketGeneratorOpen,
   selectedEvents,
