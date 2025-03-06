@@ -27,9 +27,7 @@ import Image from "next/image";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import toast from "react-hot-toast";
-import { generateUniqueHex } from "@/actions";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
 import { useUploadThing } from "@/lib/uploadthing";
 import { trpc } from "@/trpc/client";
 
@@ -145,22 +143,15 @@ const ContingentGenerator = ({
     }
   };
 
-  const user = useUser();
-
   const createTicket = trpc.contingents.createContingent.useMutation();
 
   const router = useRouter();
 
   const handleCreateTicket = async () => {
-    if (!user.user?.primaryEmailAddress?.emailAddress) {
-      return;
-    }
     const mutationPromise = createTicket.mutateAsync(
       {
         paymentScreenshotUrl: newImageUrl,
         events: selectedEvents,
-        email: user.user.primaryEmailAddress.emailAddress,
-        orderId: await generateUniqueHex(),
         collegeName: collegeName,
       },
       {

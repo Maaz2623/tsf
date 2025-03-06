@@ -36,9 +36,7 @@ import {
 import { useUploadThing } from "@/lib/uploadthing";
 import toast from "react-hot-toast";
 import { trpc } from "@/trpc/client";
-import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { generateUniqueHex } from "@/actions";
 
 const EventsContainer = () => {
   const [selectedRating, setSelectedRating] = useState<string | null>(null);
@@ -57,7 +55,7 @@ const EventsContainer = () => {
     setPrice(totalPrice);
   }, [selectedEvents]);
 
-  const upiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&tn=${generateUniqueHex}&am=${price}&cu=INR`;
+  const upiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&am=${price}&cu=INR`;
 
   // Filter events based on selected rating
   const filteredEvents =
@@ -161,7 +159,6 @@ const EventsContainer = () => {
 
 export default EventsContainer;
 
-
 const TicketGenerator = ({
   ticketGeneratorOpen,
   selectedEvents,
@@ -204,26 +201,19 @@ const TicketGenerator = ({
     }
   };
 
-  const user = useUser();
-
   const createTicket = trpc.tickets.createTicket.useMutation();
 
   const router = useRouter();
 
   const handleCreateTicket = async () => {
-    if (!user.user?.primaryEmailAddress?.emailAddress) {
-      return;
-    }
     const mutationPromise = createTicket.mutateAsync(
       {
         paymentScreenshotUrl: newImageUrl,
         events: selectedEvents,
-        email: user.user.primaryEmailAddress.emailAddress,
-        orderId: await generateUniqueHex(),
       },
       {
-        onSuccess: (data) => {
-          router.push(`/dashboard/tickets/${data.ticketId}`);
+        onSuccess: () => {
+          router.push(`/dashboard/tickets`);
         },
       }
     );

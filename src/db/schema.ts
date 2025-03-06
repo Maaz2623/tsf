@@ -28,6 +28,7 @@ export const users = pgTable(
     name: text("name").notNull(),
     imageUrl: text("image_url").notNull(),
     role: roleType().notNull().default("user"),
+    phoneNumber: text("phone_number"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
@@ -40,8 +41,7 @@ export const tickets = pgTable("tickets", {
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
   email: text("email").notNull(),
-  orderId: text("order_id").notNull(),
-  clerkId: text("clerk_id").notNull(),
+  userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -56,8 +56,7 @@ export const contingents = pgTable("contingents", {
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
   email: text("email").notNull(),
-  orderId: text("order_id").notNull(),
-  clerkId: text("clerk_id").notNull(),
+  userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

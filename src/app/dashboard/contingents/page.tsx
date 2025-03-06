@@ -67,7 +67,6 @@ const TicketsPage = async () => {
             <TableRow>
               <TableHead className="w-[100px] pl-4">Ticket QR</TableHead>
               <TableHead className="text-center">Status</TableHead>
-              <TableHead className="text-center">Order ID</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Screenshot</TableHead>
               <TableHead className="text-center">Events</TableHead>
@@ -104,9 +103,6 @@ const TicketsPage = async () => {
                       {contingent.status.charAt(0).toUpperCase() +
                         contingent.status.slice(1)}
                     </span>
-                  </TableCell>
-                  <TableCell className="text-center w-[150px]">
-                    {contingent.orderId}
                   </TableCell>
                   <TableCell className="w-[300px] truncate">
                     {contingent.email}

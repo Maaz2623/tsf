@@ -64,7 +64,7 @@ export const contingentsRouter = createTRPCRouter({
     const data = await db
       .select()
       .from(contingents)
-      .where(eq(contingents.clerkId, ctx.clerkUserId));
+      .where(eq(contingents.userId, ctx.user.id));
 
     if (!data) {
       throw new TRPCError({
@@ -78,7 +78,6 @@ export const contingentsRouter = createTRPCRouter({
     .input(
       z.object({
         paymentScreenshotUrl: z.string(),
-        orderId: z.string(),
         collegeName: z.string(),
         events: z.array(
           z.object({
@@ -91,7 +90,6 @@ export const contingentsRouter = createTRPCRouter({
             date: z.coerce.date().optional(),
           })
         ),
-        email: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -108,9 +106,8 @@ export const contingentsRouter = createTRPCRouter({
           collegeName: input.collegeName,
           paymentScreentshotUrl: input.paymentScreenshotUrl,
           events: input.events,
-          email: input.email,
-          clerkId: ctx.clerkUserId,
-          orderId: input.orderId,
+          email: ctx.user.email,
+          userId: ctx.user.id,
         })
         .returning();
 

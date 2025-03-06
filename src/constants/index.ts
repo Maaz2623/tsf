@@ -1,5 +1,3 @@
-import { generateUniqueHex } from "@/actions";
-
 export const words = [
   { text: "Welcome", className: "text-white font-bold " },
   { text: "to", className: " text-white" },
@@ -362,4 +360,4 @@ export const events = [
 
 export const contingentPrice = 1;
 
-export const contingentUpiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&am=${contingentPrice}&cu=INR&tn=Payment for order ${generateUniqueHex}`;
+export const contingentUpiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&am=${contingentPrice}&cu=INR`;
