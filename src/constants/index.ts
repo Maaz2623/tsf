@@ -2,8 +2,11 @@ import { Exo_2 } from "next/font/google";
 
 export const exo_2 = Exo_2({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
+
+
+
 
 export const words = [
   { text: "Welcome", className: "text-white font-bold " },

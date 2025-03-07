@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import ContingentModal from "@/components/contingent-modal";
+import { FloatingNav } from "@/components/floating-navbar";
 import {
   SidebarInset,
   SidebarProvider,
@@ -9,6 +10,31 @@ import { HydrateClient } from "@/trpc/server";
 import { UserButton } from "@clerk/nextjs";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+
+import { Calendar, Ticket, Package } from "lucide-react";
+import { JSX } from "react";
+
+const navItems: {
+  name: string;
+  link: string;
+  icon?: JSX.Element;
+}[] = [
+  {
+    name: "Events",
+    link: "/dashboard/events",
+    icon: <Calendar className="size-5" />,
+  },
+  {
+    name: "Tickets",
+    link: "/dashboard/tickets",
+    icon: <Ticket className="size-5" />,
+  },
+  {
+    name: "Contingents",
+    link: "/dashboard/contingents",
+    icon: <Package className="size-5" />,
+  },
+];
 
 export default async function EventsLayout({
   children,
@@ -23,6 +49,7 @@ export default async function EventsLayout({
             <AppSidebar />
             <SidebarInset>
               <main>
+                <FloatingNav navItems={navItems} />
                 <div className="px-2 py-3 w-full flex items-center justify-between border-b ">
                   <SidebarTrigger />
                   <div className="flex gap-x-3">

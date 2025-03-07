@@ -25,7 +25,7 @@ import SidebarHeaderTsf from "./ui/sidebar-header-tsf";
 import { useTransition } from "react";
 
 // Menu items.
-const items = [
+export const items = [
   {
     title: "Events",
     url: "/dashboard/events",
