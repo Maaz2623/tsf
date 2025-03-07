@@ -25,7 +25,13 @@ export const ticketsRouter = createTRPCRouter({
       return data;
     }),
   getAllTickets: protectedProcedure.query(async () => {
-    const data = await db.select().from(tickets);
+    const data = await db
+      .select({
+        ticket: tickets,
+        user: users,
+      })
+      .from(tickets)
+      .leftJoin(users, eq(users.id, tickets.userId));
 
     if (!data) {
       throw new TRPCError({
@@ -33,7 +39,10 @@ export const ticketsRouter = createTRPCRouter({
       });
     }
 
-    return data;
+    return data.map(({ ticket, user }) => ({
+      ...ticket,
+      user, // Embed user details inside the ticket object
+    }));
   }),
   getByTicketId: protectedProcedure
     .input(
@@ -45,7 +54,8 @@ export const ticketsRouter = createTRPCRouter({
       const [data] = await db
         .select()
         .from(tickets)
-        .where(eq(tickets.ticketId, input.ticketId)).leftJoin(users, eq(users.id, tickets.userId))
+        .where(eq(tickets.ticketId, input.ticketId))
+        .leftJoin(users, eq(users.id, tickets.userId))
         .limit(1);
 
       if (!data) {

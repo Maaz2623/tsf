@@ -37,9 +37,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
 import { StatusAction } from "./_components/status-action";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Mail, Phone, UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const TicketVerifierPage = () => {
   const { data: tickets, isPending } = trpc.tickets.getAllTickets.useQuery();
@@ -82,6 +83,7 @@ const TicketVerifierPage = () => {
               <TableHead className="w-[100px] pl-4">Ticket QR</TableHead>
               <TableHead className="text-center">Status</TableHead>
               <TableHead>Fest</TableHead>
+              <TableHead>User</TableHead>
               <TableHead>Screenshot</TableHead>
               <TableHead className="text-center">Events</TableHead>
               <TableHead className="text-center">Amount</TableHead>
@@ -97,6 +99,13 @@ const TicketVerifierPage = () => {
                   new Date(a.createdAt).getTime()
               )
               .map((ticket) => {
+                const formattedUser = {
+                  name: ticket.user?.name,
+                  email: ticket.user?.email,
+                  imageUrl: ticket.user?.imageUrl,
+                  phoneNumber: ticket.user?.phoneNumber,
+                };
+
                 return (
                   <TableRow key={ticket.ticketId}>
                     <TableCell className="font-medium text-center">
@@ -127,6 +136,11 @@ const TicketVerifierPage = () => {
                     </TableCell>
                     <TableCell className="w-[350px] truncate">
                       {ticket.festType}
+                    </TableCell>
+                    <TableCell className="w-[350px] underline-offset-2 underline truncate">
+                      <UserDetailsDialog user={formattedUser}>
+                        Details
+                      </UserDetailsDialog>
                     </TableCell>
                     <TableCell className="w-[300px] truncate">
                       <PaymentScreenshotDialog
@@ -164,6 +178,59 @@ const TicketVerifierPage = () => {
 };
 
 export default TicketVerifierPage;
+
+type UserType = {
+  email?: string;
+  name?: string;
+  imageUrl?: string;
+  phoneNumber?: string | null;
+};
+
+const UserDetailsDialog = ({
+  user,
+  children,
+}: {
+  user: UserType;
+  children: React.ReactNode;
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger className="underline underline-offset-2">
+        {children}
+      </DialogTrigger>
+      <DialogContent className="p-6 max-w-md">
+        <DialogHeader className="text-center">
+          <DialogTitle className="text-xl text-center font-semibold">
+            User Details
+          </DialogTitle>
+        </DialogHeader>
+
+        {/* User Profile Section */}
+        <div className="flex flex-col items-center gap-3">
+          <Avatar className="w-16 h-16">
+            <AvatarImage src={user.imageUrl} alt={user.name} />
+            <AvatarFallback className="bg-gray-300 text-gray-700">
+              <UserIcon className="w-6 h-6" />
+            </AvatarFallback>
+          </Avatar>
+          <h2 className="text-lg font-medium">{user.name}</h2>
+        </div>
+
+        {/* User Information */}
+        <ScrollArea className="mt-4 space-y-3">
+          <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-md">
+            <Mail className="w-5 h-5 text-gray-600" />
+            <p className="text-sm text-gray-800">{user.email || "N/A"}</p>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-md">
+            <Phone className="w-5 h-5 text-gray-600" />
+            <p className="text-sm text-gray-800">{user.phoneNumber || "N/A"}</p>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const PaymentScreenshotDialog = ({
   children,
@@ -216,7 +283,10 @@ const EventDetailsPopover = ({
         {children}
       </PopoverTrigger>
       <PopoverContent className="p-4 bg-white shadow-lg rounded-lg border w-64">
-        <h3 className="text-lg font-semibold mb-2">Event Details</h3>
+        <h3 className="text-lg font-semibold mb-2">
+          Event Details (
+          {events[0].festType === "elysian" ? "Elysian" : "Solaris"})
+        </h3>
         <ScrollArea className="h-60">
           <div className="space-y-3">
             {events.map((event, i) => (

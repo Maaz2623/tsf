@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { contingents } from "@/db/schema";
+import { contingents, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
@@ -25,7 +25,10 @@ export const contingentsRouter = createTRPCRouter({
       return data;
     }),
   getAllContingents: protectedProcedure.query(async () => {
-    const data = await db.select().from(contingents);
+    const data = await db
+      .select()
+      .from(contingents)
+      .leftJoin(users, eq(users.id, contingents.userId));
 
     if (!data) {
       throw new TRPCError({
@@ -46,6 +49,7 @@ export const contingentsRouter = createTRPCRouter({
         .select()
         .from(contingents)
         .where(eq(contingents.id, input.contingentId))
+        .leftJoin(users, eq(users.id, contingents.userId))
         .limit(1);
 
       if (!data) {
