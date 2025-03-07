@@ -106,7 +106,7 @@ const TicketsPage = async () => {
                   </TableCell>
 
                   <TableCell className="w-[300px] truncate">
-                    {ticket.festType}
+                    {ticket.festType === "elysian" ? "Elysian" : "Solaris"}
                   </TableCell>
                   <TableCell className="truncate">
                     <PaymentScreenshotDialog

@@ -37,6 +37,7 @@ import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { contingentPrice } from "@/constants";
 
 const TicketsPage = async () => {
   const contingents = await trpc.contingents.getByClerkId();
@@ -105,7 +106,7 @@ const TicketsPage = async () => {
                     </span>
                   </TableCell>
                   <TableCell className="w-[300px] truncate">
-                    {contingent.festType}
+                    {contingent.festType === "elysian" ? "Elysian" : "Solaris"}
                   </TableCell>
                   <TableCell className="truncate">
                     <PaymentScreenshotDialog
@@ -121,10 +122,7 @@ const TicketsPage = async () => {
                   </TableCell>
                   <TableCell className="text-center">
                     ₹
-                    {contingent.events.reduce(
-                      (total, event) => total + event.price,
-                      0
-                    )}
+                    {contingentPrice}
                   </TableCell>
                   <TableCell className="text-left pl-3">
                     {format(contingent.createdAt, "dd MMMM, yyyy")}
