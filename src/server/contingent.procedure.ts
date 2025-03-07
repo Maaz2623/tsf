@@ -79,8 +79,10 @@ export const contingentsRouter = createTRPCRouter({
       z.object({
         paymentScreenshotUrl: z.string(),
         collegeName: z.string(),
+        festType: z.enum(["elysian", "solaris"]),
         events: z.array(
           z.object({
+            festType: z.enum(["elysian", "solaris"]),
             title: z.string(),
             description: z.string(),
             rating: z.number(),
@@ -99,14 +101,19 @@ export const contingentsRouter = createTRPCRouter({
         });
       }
 
+      const updatedEvents = input.events.map((event) => ({
+        ...event,
+        festType: input.festType,
+      }));
+
       const [newContingent] = await db
         .insert(contingents)
         .values({
+          festType: input.festType,
           status: "processing",
           collegeName: input.collegeName,
           paymentScreentshotUrl: input.paymentScreenshotUrl,
-          events: input.events,
-          email: ctx.user.email,
+          events: updatedEvents,
           userId: ctx.user.id,
         })
         .returning();

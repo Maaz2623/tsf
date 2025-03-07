@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { tickets } from "@/db/schema";
+import { tickets, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
@@ -45,7 +45,7 @@ export const ticketsRouter = createTRPCRouter({
       const [data] = await db
         .select()
         .from(tickets)
-        .where(eq(tickets.ticketId, input.ticketId))
+        .where(eq(tickets.ticketId, input.ticketId)).leftJoin(users, eq(users.id, tickets.userId))
         .limit(1);
 
       if (!data) {
@@ -78,6 +78,7 @@ export const ticketsRouter = createTRPCRouter({
     .input(
       z.object({
         paymentScreenshotUrl: z.string(),
+        festType: z.enum(["elysian", "solaris"]),
         events: z.array(
           z.object({
             title: z.string(),
@@ -98,13 +99,18 @@ export const ticketsRouter = createTRPCRouter({
         });
       }
 
+      const updatedEvents = input.events.map((event) => ({
+        ...event,
+        festType: input.festType,
+      }));
+
       const [newTicket] = await db
         .insert(tickets)
         .values({
+          festType: input.festType,
           status: "processing",
           paymentScreentshotUrl: input.paymentScreenshotUrl,
-          events: input.events,
-          email: ctx.user.email,
+          events: updatedEvents,
           userId: ctx.user.id,
         })
         .returning();

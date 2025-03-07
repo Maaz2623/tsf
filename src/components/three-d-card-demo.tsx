@@ -47,7 +47,7 @@ export function ThreeDCardDemo({
         {/* Title */}
         <CardItem
           translateZ="50"
-          className="text-xl font-bold text-neutral-600 dark:text-white"
+          className="text-xl font-bold text-neutral-600 tracking-wide dark:text-white"
         >
           {title}
         </CardItem>

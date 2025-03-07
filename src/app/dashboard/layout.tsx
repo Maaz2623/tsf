@@ -6,10 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { HydrateClient } from "@/trpc/server";
 import { UserButton } from "@clerk/nextjs";
-import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 
 import { Calendar, Ticket, Package } from "lucide-react";
 import { JSX } from "react";
@@ -43,9 +40,9 @@ export default async function EventsLayout({
 }) {
   return (
     <SidebarProvider className="bg-neutral-400">
-      <HydrateClient>
+      {/* <HydrateClient>
         <ErrorBoundary fallback={<div>Something went wrong</div>}>
-          <Suspense>
+          <Suspense> */}
             <AppSidebar />
             <SidebarInset>
               <main>
@@ -60,9 +57,9 @@ export default async function EventsLayout({
                 {children}
               </main>
             </SidebarInset>
-          </Suspense>
+          {/* </Suspense>
         </ErrorBoundary>
-      </HydrateClient>
+      </HydrateClient> */}
     </SidebarProvider>
   );
 }

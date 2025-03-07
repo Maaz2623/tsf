@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { AlignJustifyIcon } from "lucide-react";
+import { SidebarOpenIcon } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -255,7 +255,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar, open } = useSidebar();
+  const { toggleSidebar } = useSidebar();
 
   return (
     <Button
@@ -270,11 +270,7 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      {open ? (
-        <AlignJustifyIcon className="rotate-90" />
-      ) : (
-        <AlignJustifyIcon className="" />
-      )}
+      <SidebarOpenIcon />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

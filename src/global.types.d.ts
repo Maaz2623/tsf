@@ -6,4 +6,5 @@ interface EventType {
   teamSize?: number;
   maxRegistration?: number;
   date?: string;
+  festType: "elysian" | "solaris";
 }

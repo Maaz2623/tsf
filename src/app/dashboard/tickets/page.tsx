@@ -67,7 +67,7 @@ const TicketsPage = async () => {
             <TableRow>
               <TableHead className="w-[100px] pl-4">Ticket QR</TableHead>
               <TableHead className="text-center">Status</TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead>Fest</TableHead>
               <TableHead>Screenshot</TableHead>
               <TableHead className="text-center">Events</TableHead>
               <TableHead className="text-center">Amount</TableHead>
@@ -106,7 +106,7 @@ const TicketsPage = async () => {
                   </TableCell>
 
                   <TableCell className="w-[300px] truncate">
-                    {ticket.email}
+                    {ticket.festType}
                   </TableCell>
                   <TableCell className="truncate">
                     <PaymentScreenshotDialog

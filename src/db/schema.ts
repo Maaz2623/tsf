@@ -18,6 +18,7 @@ export const ticketStatus = pgEnum("ticket_status", [
 ]);
 
 export const roleType = pgEnum("role_enum", ["admin", "moderator", "user"]);
+export const festType = pgEnum("fest_enum", ["elysian", "solaris"]);
 
 export const users = pgTable(
   "users",
@@ -40,7 +41,7 @@ export const tickets = pgTable("tickets", {
   status: ticketStatus().notNull(),
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
-  email: text("email").notNull(),
+  festType: festType().notNull(),
   userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -55,7 +56,7 @@ export const contingents = pgTable("contingents", {
   collegeName: text("college_name").notNull(),
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
-  email: text("email").notNull(),
+  festType: festType().notNull(),
   userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

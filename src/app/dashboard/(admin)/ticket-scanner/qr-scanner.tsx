@@ -22,10 +22,13 @@ const QRScanner = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch ticket details based on the scanned ticket ID
-  const { data: ticket, isFetching } = trpc.tickets.getByTicketId.useQuery(
+  const { data, isFetching } = trpc.tickets.getByTicketId.useQuery(
     { ticketId },
     { enabled: !!ticketId }
   );
+
+  const ticket = data?.tickets;
+  const user = data?.users;
 
   useEffect(() => {
     if (
@@ -105,7 +108,7 @@ const QRScanner = () => {
                   <span className="font-semibold">Status:</span> {ticket.status}
                 </p>
                 <p>
-                  <span className="font-semibold">Email:</span> {ticket.email}
+                  <span className="font-semibold">Email:</span> {user?.email}
                 </p>
                 <div>
                   <p className="font-semibold">Event Details:</p>

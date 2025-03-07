@@ -31,6 +31,13 @@ import { useRouter } from "next/navigation";
 import { useUploadThing } from "@/lib/uploadthing";
 import { trpc } from "@/trpc/client";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ContingentModal = () => {
   const [contingentGenerator, setContingentGenerator] = useState(false);
@@ -121,6 +128,10 @@ const ContingentGenerator = ({
 
   const [collegeName, setCollegeName] = useState("");
 
+  const [festType, setFestType] = useState<"elysian" | "solaris" | undefined>(
+    undefined
+  );
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
@@ -160,6 +171,7 @@ const ContingentGenerator = ({
         paymentScreenshotUrl: newImageUrl,
         events: selectedEvents,
         collegeName: collegeName,
+        festType: festType as "elysian" | "solaris",
       },
       {
         onSuccess: () => {
@@ -178,12 +190,14 @@ const ContingentGenerator = ({
     });
   };
 
+  console.log(festType);
+
   return (
     <Drawer
       onOpenChange={setContingentGeneratorOpen}
       open={contingentGeneratorOpen}
     >
-      <DrawerContent className="mb-8">
+      <DrawerContent className="mb-8 z-50">
         <DrawerHeader>
           <DrawerTitle className="w-full text-center text-2xl">
             Generate Contingent Plan
@@ -196,12 +210,28 @@ const ContingentGenerator = ({
           </VisuallyHidden>
         </DrawerHeader>
         <div className="min-h-40 space-y-4 w-full flex flex-col justify-center items-center">
-          <div className="space-y-1">
+          <div className="space-y-1 w-[300px]">
             <Label>University Name</Label>
             <Input
               placeholder="e.g. Jain College VV Puram"
               onChange={(e) => setCollegeName(e.target.value)}
             />
+          </div>
+          <div className="space-y-1">
+            <Label>Fest Type</Label>
+            <Select
+              onValueChange={(value) =>
+                setFestType(value as "elysian" | "solaris")
+              }
+            >
+              <SelectTrigger className=" w-[300px]">
+                <SelectValue placeholder="Select event type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="elysian">Elysian</SelectItem>
+                <SelectItem value="solaris">Solaris</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex flex-col w-[300px] items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
             {image ? (
@@ -250,6 +280,7 @@ const ContingentGenerator = ({
               className="w-[300px]"
               onClick={handleCreateTicket}
               disabled={
+                !festType ||
                 selectedEvents.length === 0 ||
                 !image ||
                 isUploading ||

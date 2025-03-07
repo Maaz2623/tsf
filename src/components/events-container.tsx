@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RatingsCombobox } from "./combo-box";
 import { ThreeDCardDemo } from "./three-d-card-demo";
-import { events } from "@/constants";
+import { events, solarisEvents } from "@/constants";
 import { Button } from "./ui/button";
 import QRCode from "react-qr-code";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -38,7 +38,11 @@ import toast from "react-hot-toast";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 
-const EventsContainer = () => {
+const EventsContainer = ({
+  eventType,
+}: {
+  eventType: "elysian" | "solaris";
+}) => {
   const [selectedRating, setSelectedRating] = useState<string | null>(null);
 
   const [selectedEvents, setSelectedEvents] = useState<EventType[]>([]);
@@ -66,19 +70,26 @@ const EventsContainer = () => {
 
   // Filter events based on selected rating
   const filteredEvents =
-    selectedRating === "All" || !selectedRating
-      ? events
-      : events.filter((event) => event.rating === Number(selectedRating));
+    eventType === "elysian"
+      ? selectedRating === "All" || !selectedRating
+        ? events
+        : events.filter((event) => event.rating === Number(selectedRating))
+      : selectedRating === "All" || !selectedRating
+      ? solarisEvents
+      : solarisEvents.filter(
+          (event) => event.rating === Number(selectedRating)
+        );
 
   return (
     <>
       <TicketGenerator
+        eventType={eventType}
         selectedEvents={formattedEvents}
         ticketGeneratorOpen={ticketGeneratorOpen}
         setTicketGeneratorOpen={setTicketGeneratorOpen}
       />
       <div className="space-y-4">
-        <div className="h-14 flex px-0 md:px-12 justify-between items-center w-full">
+        <div className="h-14 flex  justify-between items-center w-full">
           <RatingsCombobox
             selectedRating={selectedRating}
             setSelectedRating={setSelectedRating}
@@ -172,8 +183,10 @@ const TicketGenerator = ({
   ticketGeneratorOpen,
   selectedEvents,
   setTicketGeneratorOpen,
+  eventType,
 }: {
   selectedEvents: EventType[];
+  eventType: "elysian" | "solaris";
   ticketGeneratorOpen: boolean;
   setTicketGeneratorOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -219,6 +232,7 @@ const TicketGenerator = ({
       {
         paymentScreenshotUrl: newImageUrl,
         events: selectedEvents,
+        festType: eventType,
       },
       {
         onSuccess: () => {
