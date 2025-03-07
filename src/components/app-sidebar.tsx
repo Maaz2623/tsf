@@ -23,6 +23,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import SidebarHeaderTsf from "./ui/sidebar-header-tsf";
 import { useTransition } from "react";
+import { trpc } from "@/trpc/client";
 
 // Menu items.
 export const items = [
@@ -62,6 +63,8 @@ export function AppSidebar() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isPending, startTransition] = useTransition();
 
+  const { data: user } = trpc.users.getUserByClerkId.useQuery();
+
   const { setOpenMobile } = useSidebar();
 
   const handleClick = () => {
@@ -95,29 +98,31 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Admin Apps</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {adminItems.map((item) => {
-                const isActive = pathname.includes(item.url);
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      className={cn("", isActive && "bg-neutral-200")}
-                    >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {(user?.role === "admin" || user?.role === "moderator") && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin Apps</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminItems.map((item) => {
+                  const isActive = pathname.includes(item.url);
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        className={cn("", isActive && "bg-neutral-200")}
+                      >
+                        <Link href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
     </Sidebar>
   );
