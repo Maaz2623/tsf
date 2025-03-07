@@ -17,8 +17,8 @@ export const words = [
 ];
 export const events: EventType[] = [
   {
-    title: "Event 1",
-    description: "Exciting event about technology",
+    title: "JAM",
+    description: "Get ready for HIGUCHI TAIKAI, a thrilling Japanese themed twist on the classic Just A Minute (JAM) game!",
     rating: 3,
     price: 1,
     teamSize: 4,
