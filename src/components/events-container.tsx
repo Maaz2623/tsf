@@ -225,6 +225,8 @@ const TicketGenerator = ({
 
   const createTicket = trpc.tickets.createTicket.useMutation();
 
+  const utils = trpc.useUtils();
+
   const router = useRouter();
 
   const handleCreateTicket = async () => {
@@ -237,6 +239,7 @@ const TicketGenerator = ({
       {
         onSuccess: () => {
           router.push(`/dashboard/tickets`);
+          utils.tickets.getByClerkId.invalidate();
         },
       }
     );
