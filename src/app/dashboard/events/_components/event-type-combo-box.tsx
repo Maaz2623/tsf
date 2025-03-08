@@ -40,7 +40,7 @@ export function EventTypeComboBox({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild disabled>
         <Button
           variant="ghost"
           role="combobox"
