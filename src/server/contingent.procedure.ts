@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { contingents, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const contingentsRouter = createTRPCRouter({
@@ -28,9 +28,10 @@ export const contingentsRouter = createTRPCRouter({
     const data = await db
       .select({
         contingent: contingents,
-        user: users
+        user: users,
       })
       .from(contingents)
+      .orderBy(desc(contingents.createdAt))
       .leftJoin(users, eq(users.id, contingents.userId));
 
     if (!data) {
@@ -74,6 +75,7 @@ export const contingentsRouter = createTRPCRouter({
     const data = await db
       .select()
       .from(contingents)
+      .orderBy(desc(contingents.createdAt))
       .where(eq(contingents.userId, ctx.user.id));
 
     if (!data) {

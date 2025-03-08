@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { tickets, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const ticketsRouter = createTRPCRouter({
@@ -31,6 +31,7 @@ export const ticketsRouter = createTRPCRouter({
         user: users,
       })
       .from(tickets)
+      .orderBy(desc(tickets.createdAt))
       .leftJoin(users, eq(users.id, tickets.userId));
 
     if (!data) {
@@ -74,7 +75,8 @@ export const ticketsRouter = createTRPCRouter({
     const data = await db
       .select()
       .from(tickets)
-      .where(eq(tickets.userId, ctx.user.id));
+      .where(eq(tickets.userId, ctx.user.id))
+      .orderBy(desc(tickets.createdAt));
 
     if (!data) {
       throw new TRPCError({
