@@ -1,5 +1,6 @@
+"use client";
 import PageHeader from "@/components/page-header";
-import { trpc } from "@/trpc/server";
+import { trpc } from "@/trpc/client";
 import React, { Suspense } from "react";
 import {
   Popover,
@@ -37,9 +38,38 @@ import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const TicketsPage = async () => {
-  const tickets = await trpc.tickets.getByClerkId();
+const TicketsPage = () => {
+  const { data: tickets, isFetching } = trpc.tickets.getByClerkId.useQuery();
+
+  if (isFetching || !tickets) {
+    return (
+      <div className="px-6">
+        <PageHeader
+          title="Your tickets"
+          description="Manage all your tickets from here"
+        />
+        <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Payment status" />
+            </SelectTrigger>
+            <SelectContent>
+              {ticketStatus.enumValues.map((value) => (
+                <SelectItem key={value} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="rounded-lg overflow-hidden my-4 h-60 border">
+          <Skeleton className="w-full h-full" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-6">
@@ -74,6 +104,19 @@ const TicketsPage = async () => {
               <TableHead className="text-left pl-3">Created At</TableHead>
             </TableRow>
           </TableHeader>
+          {tickets.length === 0 && (
+            <TableBody>
+              <TableRow>
+                <TableCell
+                  colSpan={7}
+                  className="h-60 text-center text-gray-500"
+                >
+                  No results found.
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+
           <TableBody>
             {tickets.map((ticket) => {
               return (

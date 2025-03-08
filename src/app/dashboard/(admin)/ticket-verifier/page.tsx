@@ -37,28 +37,39 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
 import { StatusAction } from "./_components/status-action";
-import {
-  LoaderCircle,
-  Mail,
-  Phone,
-  UserIcon,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
+import { Mail, Phone, UserIcon, ZoomIn, ZoomOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const TicketVerifierPage = () => {
-  const { data: tickets, isPending } = trpc.tickets.getAllTickets.useQuery();
+  const { data: tickets, isFetching } = trpc.tickets.getAllTickets.useQuery();
 
-  if (isPending) {
+  if (isFetching || !tickets) {
     return (
-      <div className="h-full w-full flex justify-center items-center ">
-        <div className=" text-neutral-600 items-center justify-center flex flex-col">
-          <LoaderCircle className="size-5 animate-spin" />
-          <p>Loading...</p>
+      <div className="px-6">
+        <PageHeader
+          title="Your tickets"
+          description="Manage all your tickets from here"
+        />
+        <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Payment status" />
+            </SelectTrigger>
+            <SelectContent>
+              {ticketStatus.enumValues.map((value) => (
+                <SelectItem key={value} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="rounded-lg overflow-hidden my-4 h-60 border">
+          <Skeleton className="w-full h-full" />
         </div>
       </div>
     );
@@ -99,6 +110,19 @@ const TicketVerifierPage = () => {
               <TableHead className="text-center pr-3">Actions</TableHead>
             </TableRow>
           </TableHeader>
+          {tickets.length === 0 && (
+            <TableBody>
+              <TableRow>
+                <TableCell
+                  colSpan={7}
+                  className="h-60 text-center text-gray-500"
+                >
+                  No results found.
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+
           <TableBody>
             {tickets?.map((ticket) => {
               const formattedUser = {

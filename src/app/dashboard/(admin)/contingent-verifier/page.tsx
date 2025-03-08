@@ -37,29 +37,40 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
 import { StatusAction } from "./_components/status-action";
-import {
-  LoaderCircle,
-  Mail,
-  Phone,
-  UserIcon,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
+import { Mail, Phone, UserIcon, ZoomIn, ZoomOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const TicketVerifierPage = () => {
-  const { data: tickets, isPending } =
+  const { data: tickets, isFetching } =
     trpc.contingents.getAllContingents.useQuery();
 
-  if (isPending) {
+  if (isFetching || !tickets) {
     return (
-      <div className="h-full w-full flex justify-center items-center ">
-        <div className=" text-neutral-600 items-center justify-center flex flex-col">
-          <LoaderCircle className="size-5 animate-spin" />
-          <p>Loading...</p>
+      <div className="px-6">
+        <PageHeader
+          title="Your tickets"
+          description="Manage all your tickets from here"
+        />
+        <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Payment status" />
+            </SelectTrigger>
+            <SelectContent>
+              {ticketStatus.enumValues.map((value) => (
+                <SelectItem key={value} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="rounded-lg overflow-hidden my-4 h-60">
+          <Skeleton className="w-full bg-neutral-300 h-full" />
         </div>
       </div>
     );
@@ -100,85 +111,92 @@ const TicketVerifierPage = () => {
               <TableHead className="text-center pr-3">Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {tickets
-              ?.sort(
-                (a, b) =>
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime()
-              )
-              .map((ticket) => {
-                const formattedUser = {
-                  name: ticket.user?.name,
-                  email: ticket.user?.email,
-                  imageUrl: ticket.user?.imageUrl,
-                  phoneNumber: ticket.user?.phoneNumber,
-                };
+          {tickets.length === 0 && (
+            <TableBody>
+              <TableRow>
+                <TableCell
+                  colSpan={7}
+                  className="h-60 text-center text-gray-500"
+                >
+                  No results found.
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          )}
 
-                return (
-                  <TableRow key={ticket.id}>
-                    <TableCell className="font-medium text-center">
-                      <TicketQr ticketId={ticket.id}>Show</TicketQr>
-                    </TableCell>
-                    <TableCell className="text-center flex items-center gap-2">
-                      <span
-                        className={cn(
-                          "w-1.5 h-1.5 rounded-full animate-ping",
-                          ticket.status === "pending" && "bg-orange-700",
-                          ticket.status === "processing" && "bg-orange-400",
-                          ticket.status === "verified" && "bg-green-500",
-                          ticket.status === "rejected" && "bg-red-500"
-                        )}
-                      />
-                      <span
-                        className={cn(
-                          "font-medium",
-                          ticket.status === "pending" && "text-orange-700",
-                          ticket.status === "processing" && "text-orange-400",
-                          ticket.status === "verified" && "text-green-500",
-                          ticket.status === "rejected" && "text-red-500"
-                        )}
-                      >
-                        {ticket.status.charAt(0).toUpperCase() +
-                          ticket.status.slice(1)}
-                      </span>
-                    </TableCell>
-                    <TableCell className="w-[350px] truncate pl-6">
-                      {ticket.festType === "elysian" ? "Elysian" : "Solaris"}
-                    </TableCell>
-                    <TableCell className="w-[350px] underline-offset-2 underline truncate">
-                      <UserDetailsDialog user={formattedUser}>
-                        Details
-                      </UserDetailsDialog>
-                    </TableCell>
-                    <TableCell className="w-[300px] truncate">
-                      <PaymentScreenshotDialog
-                        imageUrl={ticket.paymentScreentshotUrl}
-                      >
-                        Image
-                      </PaymentScreenshotDialog>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <EventDetailsPopover events={ticket.events}>
-                        Details
-                      </EventDetailsPopover>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      ₹
-                      {ticket.events.reduce(
-                        (total, event) => total + event.price,
-                        0
+          <TableBody>
+            {tickets.map((ticket) => {
+              const formattedUser = {
+                name: ticket.user?.name,
+                email: ticket.user?.email,
+                imageUrl: ticket.user?.imageUrl,
+                phoneNumber: ticket.user?.phoneNumber,
+              };
+
+              return (
+                <TableRow key={ticket.id}>
+                  <TableCell className="font-medium text-center">
+                    <TicketQr ticketId={ticket.id}>Show</TicketQr>
+                  </TableCell>
+                  <TableCell className="text-center flex items-center gap-2">
+                    <span
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full animate-ping",
+                        ticket.status === "pending" && "bg-orange-700",
+                        ticket.status === "processing" && "bg-orange-400",
+                        ticket.status === "verified" && "bg-green-500",
+                        ticket.status === "rejected" && "bg-red-500"
                       )}
-                    </TableCell>
-                    <TableCell className="text-left">
-                      {format(ticket.createdAt, "dd MMMM, yyyy")}
-                    </TableCell>
-                    <TableCell className="text-center flex justify-center">
-                      <StatusAction ticketId={ticket.id} />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                    />
+                    <span
+                      className={cn(
+                        "font-medium",
+                        ticket.status === "pending" && "text-orange-700",
+                        ticket.status === "processing" && "text-orange-400",
+                        ticket.status === "verified" && "text-green-500",
+                        ticket.status === "rejected" && "text-red-500"
+                      )}
+                    >
+                      {ticket.status.charAt(0).toUpperCase() +
+                        ticket.status.slice(1)}
+                    </span>
+                  </TableCell>
+                  <TableCell className="w-[350px] truncate pl-6">
+                    {ticket.festType === "elysian" ? "Elysian" : "Solaris"}
+                  </TableCell>
+                  <TableCell className="w-[350px] underline-offset-2 underline truncate">
+                    <UserDetailsDialog user={formattedUser}>
+                      Details
+                    </UserDetailsDialog>
+                  </TableCell>
+                  <TableCell className="w-[300px] truncate">
+                    <PaymentScreenshotDialog
+                      imageUrl={ticket.paymentScreentshotUrl}
+                    >
+                      Image
+                    </PaymentScreenshotDialog>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <EventDetailsPopover events={ticket.events}>
+                      Details
+                    </EventDetailsPopover>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    ₹
+                    {ticket.events.reduce(
+                      (total, event) => total + event.price,
+                      0
+                    )}
+                  </TableCell>
+                  <TableCell className="text-left">
+                    {format(ticket.createdAt, "dd MMMM, yyyy")}
+                  </TableCell>
+                  <TableCell className="text-center flex justify-center">
+                    <StatusAction ticketId={ticket.id} />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
