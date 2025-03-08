@@ -42,7 +42,9 @@ export const tickets = pgTable("tickets", {
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
   festType: festType().notNull(),
-  userId: uuid("user_id").references(() => users.id),
+  userId: uuid("user_id").references(() => users.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -57,7 +59,9 @@ export const contingents = pgTable("contingents", {
   paymentScreentshotUrl: text("payment_screenshot_url").notNull().default(""),
   events: jsonb("events").notNull().$type<EventType[]>(),
   festType: festType().notNull(),
-  userId: uuid("user_id").references(() => users.id),
+  userId: uuid("user_id").references(() => users.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
