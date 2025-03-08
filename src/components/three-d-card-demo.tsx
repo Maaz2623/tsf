@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { format, parseISO } from "date-fns";
 import { trpc } from "@/trpc/client";
+import { Skeleton } from "./ui/skeleton";
 
 export function ThreeDCardDemo({
   title,
@@ -112,11 +113,17 @@ export function ThreeDCardDemo({
                 {date ? format(parseISO(date), "dd MMM yyyy") : "No Date"}
               </span>
             </div>
-            {maxRegistration && (
+            {maxRegistration && bookedTickets ? (
               <div className="text-right flex items-center text-xs font-medium">
                 <TicketsIcon className="size-4.5 mr-1" />{" "}
                 {bookedTickets?.length} / {maxRegistration}
               </div>
+            ) : (
+              <>
+                {bookedTickets === undefined && (
+                  <Skeleton className="w-[60px] h-6 animate-shimmer" />
+                )}
+              </>
             )}
           </div>
 
