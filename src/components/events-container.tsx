@@ -240,6 +240,7 @@ const TicketGenerator = ({
         onSuccess: () => {
           router.push(`/dashboard/tickets`);
           utils.tickets.getByClerkId.invalidate();
+          utils.tickets.invalidate();
         },
       }
     );

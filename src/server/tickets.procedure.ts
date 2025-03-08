@@ -2,10 +2,24 @@ import { db } from "@/db";
 import { tickets, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
 export const ticketsRouter = createTRPCRouter({
+  getByEventTitle: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const data = await db.select().from(tickets).where(sql`EXISTS (
+      SELECT 1 FROM jsonb_array_elements(${tickets.events}) AS event
+      WHERE event->>'title' = ${input.title}
+    )`);
+
+      return data;
+    }),
   updatedStatus: protectedProcedure
     .input(
       z.object({

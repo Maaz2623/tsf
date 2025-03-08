@@ -14,6 +14,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { format, parseISO } from "date-fns";
+import { trpc } from "@/trpc/client";
 
 export function ThreeDCardDemo({
   title,
@@ -38,6 +39,12 @@ export function ThreeDCardDemo({
   maxRegistration?: number;
   event: EventType;
 }) {
+  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery({
+    title: title,
+  });
+
+  const isDisabled = bookedTickets?.length === maxRegistration;
+
   return (
     <CardContainer className="inter-var cursor-pointer -mt-20 bg-white/20">
       <CardBody
@@ -107,7 +114,8 @@ export function ThreeDCardDemo({
             </div>
             {maxRegistration && (
               <div className="text-right flex items-center text-xs font-medium">
-                <TicketsIcon className="size-4.5 mr-1" /> 5 / {maxRegistration}
+                <TicketsIcon className="size-4.5 mr-1" />{" "}
+                {bookedTickets?.length} / {maxRegistration}
               </div>
             )}
           </div>
@@ -121,9 +129,12 @@ export function ThreeDCardDemo({
               {price === "Free" ? "Free" : <>₹{price}</>}
             </CardItem>
             <Button
+              disabled={isDisabled}
               variant={`outline`}
               className={cn(
                 "bg-green-200/80 text-green-600 hover:text-green-600 border border-green-500 hover:bg-green-100/80",
+                isDisabled &&
+                  "bg-red-100/80 border border-red-500 hover:text-red-500 text-red-600 hover:bg-red-100/80",
                 selectedEvents.some((e) => e.title === event.title) &&
                   "bg-red-100/80 border border-red-500 hover:text-red-500 text-red-600 hover:bg-red-100/80"
               )}
@@ -138,13 +149,19 @@ export function ThreeDCardDemo({
                 toast.success("Event list updated");
               }}
             >
-              {selectedEvents.some((e) => e.title === event.title) ? (
-                <>
-                  <TrashIcon />
-                  <p>Remove</p>
-                </>
+              {isDisabled ? (
+                "Maxed out"
               ) : (
-                "Select"
+                <>
+                  {selectedEvents.some((e) => e.title === event.title) ? (
+                    <>
+                      <TrashIcon />
+                      <p>Remove</p>
+                    </>
+                  ) : (
+                    "Select"
+                  )}
+                </>
               )}
             </Button>
           </div>
