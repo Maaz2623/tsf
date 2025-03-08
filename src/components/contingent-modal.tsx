@@ -131,8 +131,10 @@ const ContingentGenerator = ({
 
   const [collegeName, setCollegeName] = useState("");
 
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   const [festType, setFestType] = useState<"elysian" | "solaris" | undefined>(
-    undefined
+    "elysian"
   );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -177,6 +179,7 @@ const ContingentGenerator = ({
         events: selectedEvents,
         collegeName: collegeName,
         festType: festType as "elysian" | "solaris",
+        phoneNumber: phoneNumber,
       },
       {
         onSuccess: () => {
@@ -225,15 +228,28 @@ const ContingentGenerator = ({
               onChange={(e) => setCollegeName(e.target.value)}
             />
           </div>
+          <div className="space-y-1 w-[300px]">
+            <Label>Phone Number</Label>
+            <Input
+              placeholder="e.g. 829647***1"
+              maxLength={10}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
           <div className="space-y-1">
             <Label>Fest Type</Label>
             <Select
+              disabled
+              value="elysian"
               onValueChange={(value) =>
                 setFestType(value as "elysian" | "solaris")
               }
             >
               <SelectTrigger className=" w-[300px]">
-                <SelectValue placeholder="Select event type" />
+                <SelectValue
+                  defaultValue={`elysian`}
+                  placeholder="Select event type"
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="elysian">Elysian</SelectItem>
@@ -288,7 +304,6 @@ const ContingentGenerator = ({
               className="w-[300px]"
               onClick={handleCreateTicket}
               disabled={
-                !festType ||
                 selectedEvents.length === 0 ||
                 !image ||
                 isUploading ||

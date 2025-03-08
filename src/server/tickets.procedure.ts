@@ -23,8 +23,8 @@ export const ticketsRouter = createTRPCRouter({
         ) AND ${tickets.userId} = ${ctx.user.id}`
         );
 
-      if(data.length > 0) {
-        return true
+      if (data.length > 0) {
+        return true;
       }
 
       return false;
@@ -128,6 +128,7 @@ export const ticketsRouter = createTRPCRouter({
       z.object({
         paymentScreenshotUrl: z.string(),
         festType: z.enum(["elysian", "solaris"]),
+        phoneNumber: z.string().max(10),
         events: z.array(
           z.object({
             title: z.string(),
@@ -156,6 +157,7 @@ export const ticketsRouter = createTRPCRouter({
       const [newTicket] = await db
         .insert(tickets)
         .values({
+          phoneNumber: input.phoneNumber,
           festType: input.festType,
           status: "processing",
           paymentScreentshotUrl: input.paymentScreenshotUrl,

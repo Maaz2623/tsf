@@ -92,6 +92,7 @@ export const contingentsRouter = createTRPCRouter({
         paymentScreenshotUrl: z.string(),
         collegeName: z.string(),
         festType: z.enum(["elysian", "solaris"]),
+        phoneNumber: z.string().max(10),
         events: z.array(
           z.object({
             festType: z.enum(["elysian", "solaris"]),
@@ -121,6 +122,7 @@ export const contingentsRouter = createTRPCRouter({
       const [newContingent] = await db
         .insert(contingents)
         .values({
+          phoneNumber: input.phoneNumber,
           festType: input.festType,
           status: "processing",
           collegeName: input.collegeName,

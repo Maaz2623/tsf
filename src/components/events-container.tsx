@@ -37,6 +37,8 @@ import { useUploadThing } from "@/lib/uploadthing";
 import toast from "react-hot-toast";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
 
 const EventsContainer = ({
   eventType,
@@ -194,6 +196,8 @@ const TicketGenerator = ({
 
   const [newImageUrl, setNewImageUrl] = useState("");
 
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
@@ -232,6 +236,7 @@ const TicketGenerator = ({
   const handleCreateTicket = async () => {
     const mutationPromise = createTicket.mutateAsync(
       {
+        phoneNumber: phoneNumber,
         paymentScreenshotUrl: newImageUrl,
         events: selectedEvents,
         festType: eventType,
@@ -268,6 +273,16 @@ const TicketGenerator = ({
           </VisuallyHidden>
         </DrawerHeader>
         <div className="min-h-40 space-y-4 w-full flex flex-col justify-center items-center">
+          <div>
+            <div className="space-y-1 w-[300px]">
+              <Label>Phone Number</Label>
+              <Input
+                placeholder="e.g. 829647***1"
+                maxLength={10}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
+          </div>
           <div className="flex flex-col items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
             {image ? (
               <div className="flex flex-col justify-center items-center space-y-2">
