@@ -8,7 +8,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -41,19 +40,27 @@ import {
 const ContingentModal = () => {
   const [contingentGenerator, setContingentGenerator] = useState(false);
 
+  const [contingentModalOpen, setContingentModalOpen] = useState(false);
+
   return (
     <>
       <ContingentGenerator
+        contingentModalOpen={contingentModalOpen}
+        setContingentModalOpen={setContingentModalOpen}
         contingentGeneratorOpen={contingentGenerator}
         setContingentGeneratorOpen={setContingentGenerator}
       />
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <button className="inline-flex h-8 text-sm animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-3 font-medium text-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 ">
-            <PackageIcon className="size-5 mr-2" />
-            Buy Contingent
-          </button>
-        </AlertDialogTrigger>
+      <AlertDialog
+        onOpenChange={setContingentModalOpen}
+        open={contingentModalOpen}
+      >
+        <button
+          onClick={() => setContingentModalOpen(!contingentModalOpen)}
+          className="inline-flex h-8 text-sm animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-3 font-medium text-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 "
+        >
+          <PackageIcon className="size-5 mr-2" />
+          Buy Contingent
+        </button>
         <AlertDialogContent className="">
           <AlertDialogHeader>
             <VisuallyHidden>
@@ -107,10 +114,13 @@ export default ContingentModal;
 
 const ContingentGenerator = ({
   contingentGeneratorOpen,
-
+  contingentModalOpen,
+  setContingentModalOpen,
   setContingentGeneratorOpen,
 }: {
   contingentGeneratorOpen: boolean;
+  contingentModalOpen: boolean;
+  setContingentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setContingentGeneratorOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [image, setImage] = useState<string | null>(null);
@@ -136,7 +146,6 @@ const ContingentGenerator = ({
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       toast.success("Upload complete");
-      utils.contingents.invalidate();
       setNewImageUrl(res[0].ufsUrl);
     },
     onUploadError: () => {
@@ -174,7 +183,10 @@ const ContingentGenerator = ({
           setContingentGeneratorOpen(false);
           setCollegeName("");
           setImage(null);
+          setContingentModalOpen(!contingentModalOpen);
           router.push(`/dashboard/contingents`);
+          utils.contingents.getByClerkId.invalidate();
+          utils.contingents.getAllContingents.invalidate();
         },
       }
     );
