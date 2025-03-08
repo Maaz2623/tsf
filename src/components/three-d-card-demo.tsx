@@ -41,10 +41,18 @@ export function ThreeDCardDemo({
   event: EventType;
 }) {
   const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery({
-    title: title,
+    title,
   });
 
-  const isDisabled = bookedTickets?.length === maxRegistration;
+  const { data: userTicket } = trpc.tickets.getByEventTitleUserId.useQuery({
+    title,
+  });
+
+  // Fix: Ensure bookedTickets is defined before checking length
+  const isDisabled =
+    bookedTickets && maxRegistration
+      ? bookedTickets.length >= maxRegistration
+      : false;
 
   return (
     <CardContainer className="inter-var cursor-pointer -mt-20 bg-white/20">
@@ -113,18 +121,16 @@ export function ThreeDCardDemo({
                 {date ? format(parseISO(date), "dd MMM yyyy") : "No Date"}
               </span>
             </div>
-            {maxRegistration && bookedTickets ? (
-              <div className="text-right flex items-center text-xs font-medium">
-                <TicketsIcon className="size-4.5 mr-1" />{" "}
-                {bookedTickets?.length} / {maxRegistration}
-              </div>
-            ) : (
-              <>
-                {bookedTickets === undefined && (
-                  <Skeleton className="w-[60px] h-6 animate-shimmer" />
-                )}
-              </>
-            )}
+            {maxRegistration ? (
+              bookedTickets ? (
+                <div className="text-right flex items-center text-xs font-medium">
+                  <TicketsIcon className="size-4.5 mr-1" />{" "}
+                  {bookedTickets.length} / {maxRegistration}
+                </div>
+              ) : (
+                <Skeleton className="w-[60px] h-6 animate-shimmer" />
+              )
+            ) : null}
           </div>
 
           {/* Price & Select Button */}
@@ -136,11 +142,12 @@ export function ThreeDCardDemo({
               {price === "Free" ? "Free" : <>₹{price}</>}
             </CardItem>
             <Button
-              disabled={isDisabled}
-              variant={`outline`}
+              disabled={isDisabled || userTicket || userTicket === undefined} // Fix: Ensure correct check for userTicket
+              variant="outline"
               className={cn(
-                "bg-green-200/80 text-green-600 hover:text-green-600 border border-green-500 hover:bg-green-100/80",
+                "bg-green-200/80 h-8 text-green-600 hover:text-green-600 border border-green-500 hover:bg-green-100/80",
                 isDisabled &&
+                  !userTicket &&
                   "bg-red-100/80 border border-red-500 hover:text-red-500 text-red-600 hover:bg-red-100/80",
                 selectedEvents.some((e) => e.title === event.title) &&
                   "bg-red-100/80 border border-red-500 hover:text-red-500 text-red-600 hover:bg-red-100/80"
@@ -156,19 +163,19 @@ export function ThreeDCardDemo({
                 toast.success("Event list updated");
               }}
             >
-              {isDisabled ? (
+              {userTicket === undefined ? (
+                "Loading"
+              ) : userTicket ? (
+                "Booked"
+              ) : isDisabled ? (
                 "Maxed out"
-              ) : (
+              ) : selectedEvents.some((e) => e.title === event.title) ? (
                 <>
-                  {selectedEvents.some((e) => e.title === event.title) ? (
-                    <>
-                      <TrashIcon />
-                      <p>Remove</p>
-                    </>
-                  ) : (
-                    "Select"
-                  )}
+                  <TrashIcon />
+                  <p>Remove</p>
                 </>
+              ) : (
+                "Select"
               )}
             </Button>
           </div>

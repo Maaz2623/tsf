@@ -6,6 +6,29 @@ import { desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
 export const ticketsRouter = createTRPCRouter({
+  getByEventTitleUserId: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const data = await db
+        .select()
+        .from(tickets)
+        .where(
+          sql`EXISTS (
+          SELECT 1 FROM jsonb_array_elements(${tickets.events}) AS event
+          WHERE event->>'title' = ${input.title}
+        ) AND ${tickets.userId} = ${ctx.user.id}`
+        );
+
+      if(data.length > 0) {
+        return true
+      }
+
+      return false;
+    }),
   getByEventTitle: protectedProcedure
     .input(
       z.object({
