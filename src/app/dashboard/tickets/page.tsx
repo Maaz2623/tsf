@@ -1,7 +1,7 @@
 "use client";
 import PageHeader from "@/components/page-header";
 import { trpc } from "@/trpc/client";
-import React, { Suspense } from "react";
+import React, { useRef, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -39,6 +39,8 @@ import { ticketStatus } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { ZoomIn, ZoomOut } from "lucide-react";
 
 const TicketsPage = () => {
   const { data: tickets, isFetching } = trpc.tickets.getByClerkId.useQuery();
@@ -192,31 +194,112 @@ const PaymentScreenshotDialog = ({
   children: React.ReactNode;
   imageUrl: string;
 }) => {
+  const [zoom, setZoom] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+
+  const lastTouchDistance = useRef<number | null>(null);
+
+  // Start dragging (Mouse & Touch)
+  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
+    if ("touches" in e) {
+      if (e.touches.length === 2) return; // Ignore if pinch gesture
+      setStartPos({
+        x: e.touches[0].clientX - position.x,
+        y: e.touches[0].clientY - position.y,
+      });
+    } else {
+      setStartPos({ x: e.clientX - position.x, y: e.clientY - position.y });
+    }
+    setDragging(true);
+  };
+
+  // Drag movement (Mouse & Touch)
+  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!dragging) return;
+
+    if ("touches" in e) {
+      if (e.touches.length === 2) {
+        // Handle pinch zoom
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const newDistance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        );
+
+        if (lastTouchDistance.current !== null) {
+          const scaleChange = newDistance / lastTouchDistance.current;
+          setZoom((z) => Math.min(3, Math.max(1, z * scaleChange)));
+        }
+        lastTouchDistance.current = newDistance;
+        return;
+      }
+      setPosition({
+        x: e.touches[0].clientX - startPos.x,
+        y: e.touches[0].clientY - startPos.y,
+      });
+    } else {
+      setPosition({ x: e.clientX - startPos.x, y: e.clientY - startPos.y });
+    }
+  };
+
+  // Stop dragging (Mouse & Touch)
+  const handleEnd = () => {
+    setDragging(false);
+    lastTouchDistance.current = null;
+  };
+
   return (
     <Dialog>
       <DialogTrigger className="underline-offset-2 underline">
         {children}
       </DialogTrigger>
-      <DialogContent className="flex justify-center items-center">
-        <VisuallyHidden>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader>
-        </VisuallyHidden>
-        <div className="w-[350px] aspect-square">
-          <Suspense fallback={<p>loading...</p>}>
-            <Image
-              src={imageUrl}
-              alt="ss"
-              width={450}
-              height={450}
-              className="w-full rounded-lg"
-            />
-          </Suspense>
+      <DialogContent className="flex flex-col items-center">
+        <DialogHeader>
+          <DialogTitle>Preview Image</DialogTitle>
+        </DialogHeader>
+
+        {/* Image Container */}
+        <div
+          className="relative w-[300px] h-[300px] border rounded-lg overflow-hidden flex justify-center items-center touch-none"
+          onMouseDown={handleStart}
+          onMouseMove={handleMove}
+          onMouseUp={handleEnd}
+          onMouseLeave={handleEnd}
+          onTouchStart={handleStart}
+          onTouchMove={handleMove}
+          onTouchEnd={handleEnd}
+        >
+          <Image
+            src={imageUrl}
+            alt="Preview"
+            // width={500}
+            // height={500}
+            fill
+            className="cursor-grab active:cursor-grabbing object-contain transition-transform duration-300"
+            style={{
+              transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+            }}
+            draggable={false} // Prevents default browser dragging
+          />
+        </div>
+
+        {/* Zoom Controls */}
+        <div className="mt-4 flex gap-4">
+          <Button
+            variant="outline"
+            onClick={() => setZoom((z) => Math.max(1, z - 0.2))}
+          >
+            <ZoomOut className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setZoom((z) => Math.min(3, z + 0.2))}
+          >
+            <ZoomIn className="w-4 h-4" />
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
