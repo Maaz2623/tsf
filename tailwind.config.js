@@ -10,8 +10,13 @@ module.exports = {
     extend: {
       animation: {
         shimmer: "shimmer 2s linear infinite",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
       keyframes: {
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
         shimmer: {
           from: {
             backgroundPosition: "0 0",

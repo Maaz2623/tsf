@@ -2,6 +2,7 @@
 import {
   Calendar,
   Package,
+  PackageCheckIcon,
   QrCodeIcon,
   Ticket,
   TicketCheckIcon,
@@ -49,6 +50,11 @@ const adminItems = [
     title: "Ticket Verifier",
     url: "/dashboard/ticket-verifier",
     icon: TicketCheckIcon,
+  },
+  {
+    title: "Contingent Verifier",
+    url: "/dashboard/contingent-verifier",
+    icon: PackageCheckIcon,
   },
   {
     title: "Ticket Scanner",

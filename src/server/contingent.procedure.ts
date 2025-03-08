@@ -26,7 +26,10 @@ export const contingentsRouter = createTRPCRouter({
     }),
   getAllContingents: protectedProcedure.query(async () => {
     const data = await db
-      .select()
+      .select({
+        contingent: contingents,
+        user: users
+      })
       .from(contingents)
       .leftJoin(users, eq(users.id, contingents.userId));
 
@@ -36,7 +39,10 @@ export const contingentsRouter = createTRPCRouter({
       });
     }
 
-    return data;
+    return data.map(({ contingent, user }) => ({
+      ...contingent,
+      user,
+    }));
   }),
   getByContingentId: protectedProcedure
     .input(

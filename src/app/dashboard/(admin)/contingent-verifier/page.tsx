@@ -1,7 +1,7 @@
 "use client";
 import PageHeader from "@/components/page-header";
 import { trpc } from "@/trpc/client";
-import React, { Suspense } from "react";
+import React, { useRef, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -37,12 +37,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ticketStatus } from "@/db/schema";
 import { StatusAction } from "./_components/status-action";
-import { LoaderCircle } from "lucide-react";
+import {
+  LoaderCircle,
+  Mail,
+  Phone,
+  UserIcon,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 const TicketVerifierPage = () => {
-  const { data: tickets, isPending } = trpc.tickets.getAllTickets.useQuery();
+  const { data: tickets, isPending } =
+    trpc.contingents.getAllContingents.useQuery();
 
   if (isPending) {
     return (
@@ -81,7 +91,8 @@ const TicketVerifierPage = () => {
             <TableRow>
               <TableHead className="w-[100px] pl-4">Ticket QR</TableHead>
               <TableHead className="text-center">Status</TableHead>
-              <TableHead>Fest</TableHead>
+              <TableHead className="pl-6">Fest</TableHead>
+              <TableHead>User</TableHead>
               <TableHead>Screenshot</TableHead>
               <TableHead className="text-center">Events</TableHead>
               <TableHead className="text-center">Amount</TableHead>
@@ -97,10 +108,17 @@ const TicketVerifierPage = () => {
                   new Date(a.createdAt).getTime()
               )
               .map((ticket) => {
+                const formattedUser = {
+                  name: ticket.user?.name,
+                  email: ticket.user?.email,
+                  imageUrl: ticket.user?.imageUrl,
+                  phoneNumber: ticket.user?.phoneNumber,
+                };
+
                 return (
-                  <TableRow key={ticket.ticketId}>
+                  <TableRow key={ticket.id}>
                     <TableCell className="font-medium text-center">
-                      <TicketQr ticketId={ticket.ticketId}>Show</TicketQr>
+                      <TicketQr ticketId={ticket.id}>Show</TicketQr>
                     </TableCell>
                     <TableCell className="text-center flex items-center gap-2">
                       <span
@@ -125,8 +143,13 @@ const TicketVerifierPage = () => {
                           ticket.status.slice(1)}
                       </span>
                     </TableCell>
-                    <TableCell className="w-[350px] truncate">
-                      {ticket.festType}
+                    <TableCell className="w-[350px] truncate pl-6">
+                      {ticket.festType === "elysian" ? "Elysian" : "Solaris"}
+                    </TableCell>
+                    <TableCell className="w-[350px] underline-offset-2 underline truncate">
+                      <UserDetailsDialog user={formattedUser}>
+                        Details
+                      </UserDetailsDialog>
                     </TableCell>
                     <TableCell className="w-[300px] truncate">
                       <PaymentScreenshotDialog
@@ -151,7 +174,7 @@ const TicketVerifierPage = () => {
                       {format(ticket.createdAt, "dd MMMM, yyyy")}
                     </TableCell>
                     <TableCell className="text-center flex justify-center">
-                      <StatusAction ticketId={ticket.ticketId} />
+                      <StatusAction ticketId={ticket.id} />
                     </TableCell>
                   </TableRow>
                 );
@@ -165,6 +188,59 @@ const TicketVerifierPage = () => {
 
 export default TicketVerifierPage;
 
+type UserType = {
+  email?: string;
+  name?: string;
+  imageUrl?: string;
+  phoneNumber?: string | null;
+};
+
+const UserDetailsDialog = ({
+  user,
+  children,
+}: {
+  user: UserType;
+  children: React.ReactNode;
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger className="underline underline-offset-2">
+        {children}
+      </DialogTrigger>
+      <DialogContent className="p-6 max-w-md">
+        <DialogHeader className="text-center">
+          <DialogTitle className="text-xl text-center font-semibold">
+            User Details
+          </DialogTitle>
+        </DialogHeader>
+
+        {/* User Profile Section */}
+        <div className="flex flex-col items-center gap-3">
+          <Avatar className="w-16 h-16">
+            <AvatarImage src={user.imageUrl} alt={user.name} />
+            <AvatarFallback className="bg-gray-300 text-gray-700">
+              <UserIcon className="w-6 h-6" />
+            </AvatarFallback>
+          </Avatar>
+          <h2 className="text-lg font-medium">{user.name}</h2>
+        </div>
+
+        {/* User Information */}
+        <ScrollArea className="mt-4 space-y-3">
+          <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-md">
+            <Mail className="w-5 h-5 text-gray-600" />
+            <p className="text-sm text-gray-800">{user.email || "N/A"}</p>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-md">
+            <Phone className="w-5 h-5 text-gray-600" />
+            <p className="text-sm text-gray-800">{user.phoneNumber || "N/A"}</p>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const PaymentScreenshotDialog = ({
   children,
   imageUrl,
@@ -172,31 +248,112 @@ const PaymentScreenshotDialog = ({
   children: React.ReactNode;
   imageUrl: string;
 }) => {
+  const [zoom, setZoom] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+
+  const lastTouchDistance = useRef<number | null>(null);
+
+  // Start dragging (Mouse & Touch)
+  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
+    if ("touches" in e) {
+      if (e.touches.length === 2) return; // Ignore if pinch gesture
+      setStartPos({
+        x: e.touches[0].clientX - position.x,
+        y: e.touches[0].clientY - position.y,
+      });
+    } else {
+      setStartPos({ x: e.clientX - position.x, y: e.clientY - position.y });
+    }
+    setDragging(true);
+  };
+
+  // Drag movement (Mouse & Touch)
+  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!dragging) return;
+
+    if ("touches" in e) {
+      if (e.touches.length === 2) {
+        // Handle pinch zoom
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const newDistance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        );
+
+        if (lastTouchDistance.current !== null) {
+          const scaleChange = newDistance / lastTouchDistance.current;
+          setZoom((z) => Math.min(3, Math.max(1, z * scaleChange)));
+        }
+        lastTouchDistance.current = newDistance;
+        return;
+      }
+      setPosition({
+        x: e.touches[0].clientX - startPos.x,
+        y: e.touches[0].clientY - startPos.y,
+      });
+    } else {
+      setPosition({ x: e.clientX - startPos.x, y: e.clientY - startPos.y });
+    }
+  };
+
+  // Stop dragging (Mouse & Touch)
+  const handleEnd = () => {
+    setDragging(false);
+    lastTouchDistance.current = null;
+  };
+
   return (
     <Dialog>
       <DialogTrigger className="underline-offset-2 underline">
         {children}
       </DialogTrigger>
-      <DialogContent className="flex justify-center items-center">
-        <VisuallyHidden>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader>
-        </VisuallyHidden>
-        <div className="w-[350px] aspect-square">
-          <Suspense fallback={<p>loading...</p>}>
-            <Image
-              src={imageUrl}
-              alt="ss"
-              width={450}
-              height={450}
-              className="w-full rounded-lg"
-            />
-          </Suspense>
+      <DialogContent className="flex flex-col items-center">
+        <DialogHeader>
+          <DialogTitle>Preview Image</DialogTitle>
+        </DialogHeader>
+
+        {/* Image Container */}
+        <div
+          className="relative w-[300px] h-[300px] border rounded-lg overflow-hidden flex justify-center items-center touch-none"
+          onMouseDown={handleStart}
+          onMouseMove={handleMove}
+          onMouseUp={handleEnd}
+          onMouseLeave={handleEnd}
+          onTouchStart={handleStart}
+          onTouchMove={handleMove}
+          onTouchEnd={handleEnd}
+        >
+          <Image
+            src={imageUrl}
+            alt="Preview"
+            // width={500}
+            // height={500}
+            fill
+            className="cursor-grab active:cursor-grabbing object-contain transition-transform duration-300"
+            style={{
+              transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+            }}
+            draggable={false} // Prevents default browser dragging
+          />
+        </div>
+
+        {/* Zoom Controls */}
+        <div className="mt-4 flex gap-4">
+          <Button
+            variant="outline"
+            onClick={() => setZoom((z) => Math.max(1, z - 0.2))}
+          >
+            <ZoomOut className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setZoom((z) => Math.min(3, z + 0.2))}
+          >
+            <ZoomIn className="w-4 h-4" />
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
@@ -216,7 +373,10 @@ const EventDetailsPopover = ({
         {children}
       </PopoverTrigger>
       <PopoverContent className="p-4 bg-white shadow-lg rounded-lg border w-64">
-        <h3 className="text-lg font-semibold mb-2">Event Details</h3>
+        <h3 className="text-lg font-semibold mb-2">
+          Event Details (
+          {events[0].festType === "elysian" ? "Elysian" : "Solaris"})
+        </h3>
         <ScrollArea className="h-60">
           <div className="space-y-3">
             {events.map((event, i) => (

@@ -41,7 +41,6 @@ import {
 const ContingentModal = () => {
   const [contingentGenerator, setContingentGenerator] = useState(false);
 
-
   return (
     <>
       <ContingentGenerator
@@ -128,6 +127,8 @@ const ContingentGenerator = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const utils = trpc.useUtils();
+
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
@@ -135,6 +136,7 @@ const ContingentGenerator = ({
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       toast.success("Upload complete");
+      utils.contingents.invalidate();
       setNewImageUrl(res[0].ufsUrl);
     },
     onUploadError: () => {

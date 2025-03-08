@@ -13,9 +13,9 @@ import toast from "react-hot-toast";
 
 export const StatusAction = ({ ticketId }: { ticketId: string }) => {
   const utils = trpc.useUtils();
-  const update = trpc.tickets.updatedStatus.useMutation({
+  const update = trpc.contingents.updatedStatus.useMutation({
     onSuccess: () => {
-      utils.tickets.getAllTickets.invalidate();
+      utils.contingents.getAllContingents.invalidate();
     },
   });
 
@@ -26,7 +26,7 @@ export const StatusAction = ({ ticketId }: { ticketId: string }) => {
   }) => {
     toast.promise(
       update.mutateAsync({
-        ticketId: ticketId,
+        contingentId: ticketId,
         value: value,
       }),
       {
