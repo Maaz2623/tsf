@@ -14,9 +14,12 @@ const HomePage = () => {
     <div className="h-screen relative">
       <ImagesSlider
         images={[
-          "/slideshow/bg1.jpg",
-          "/slideshow/bg2.jpg",
-          "/slideshow/bg3.jpg",
+          "/slideshow/141.jpg",
+          "/slideshow/181.jpg",
+          "/slideshow/200.jpg",
+          "/slideshow/10697.jpg",
+          "/slideshow/11177.jpg",
+          "/slideshow/26753.jpg",
         ]}
         className="flex flex-col items-center justify-center"
       >
