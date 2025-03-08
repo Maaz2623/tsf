@@ -79,8 +79,8 @@ const TicketVerifierPage = () => {
   return (
     <div className="px-6">
       <PageHeader
-        title="Your tickets"
-        description="Manage all your tickets from here"
+        title="Contingent Verifier"
+        description="Manage all subscriptions"
       />
       <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
         <Select>
