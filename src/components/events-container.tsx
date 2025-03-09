@@ -270,7 +270,7 @@ const TicketGenerator = ({
             </DrawerDescription>
           </VisuallyHidden>
         </DrawerHeader>
-        <div className="min-h-40 space-y-4 w-full flex flex-col justify-center items-center">
+        <div className="min-h-40 space-y-4 w-[300px] flex flex-col justify-center items-center">
           <div>
             <div className="space-y-1 w-[300px]">
               <Label>Phone Number</Label>
@@ -304,7 +304,7 @@ const TicketGenerator = ({
             ) : (
               <>
                 <p className="text-gray-700 text-lg font-medium text-center">
-                  Upload payment screenshot for verification
+                  Upload payment screenshot. (MAX 4MB)
                 </p>
                 <input
                   type="file"
