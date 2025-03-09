@@ -53,11 +53,17 @@ const TicketsPage = () => {
           description="Manage all your tickets from here"
         />
         <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
-          <Select onValueChange={setSelectedStatus}>
+          <Select
+            onValueChange={(value) =>
+              setSelectedStatus(value === "all" ? null : value)
+            }
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Payment status" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All</SelectItem>{" "}
+              {/* Changed from "" to "all" */}
               {ticketStatus.enumValues.map((value) => (
                 <SelectItem key={value} value={value}>
                   {value}
