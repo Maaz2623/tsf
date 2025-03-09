@@ -15,18 +15,20 @@ const TicketVerifier = () => {
 
   return (
     <div className="px-6 py-3 space-y-4 mb-[500px]">
-      <Select
-        value={value}
-        onValueChange={(val) => setValue(val as "ticket" | "contingent")}
-      >
-        <SelectTrigger className="w-[200px]">
-          <SelectValue placeholder="Select scanner type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="ticket">Ticket</SelectItem>
-          <SelectItem value="contingent">Contingent</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="flex w-full justify-center items-center">
+        <Select
+          value={value}
+          onValueChange={(val) => setValue(val as "ticket" | "contingent")}
+        >
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Select scanner type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ticket">Ticket</SelectItem>
+            <SelectItem value="contingent">Contingent</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
       {value === "ticket" && <QRScanner />}
       {value === "contingent" && <ContingentQrScanner />}
