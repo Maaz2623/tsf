@@ -16,6 +16,11 @@ import toast from "react-hot-toast";
 import { format, parseISO } from "date-fns";
 import { trpc } from "@/trpc/client";
 import { Skeleton } from "./ui/skeleton";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export function ThreeDCardDemo({
   title,
@@ -70,9 +75,14 @@ export function ThreeDCardDemo({
         <CardItem
           as="p"
           translateZ="60"
-          className="text-neutral-500 text-sm mt-2 dark:text-neutral-300 line-clamp-2"
+          className="text-neutral-500 text-sm mt-2 dark:text-neutral-300 line-clamp-2 underline md:hover:underline underline-offset-1"
         >
-          {description || "No description available"}
+          <Popover>
+            <PopoverTrigger>
+              {description || "No description available"}
+            </PopoverTrigger>
+            <PopoverContent>{description}</PopoverContent>
+          </Popover>
         </CardItem>
 
         {/* Image */}
