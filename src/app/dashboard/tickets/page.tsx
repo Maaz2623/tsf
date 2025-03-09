@@ -7,13 +7,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import {
   Table,
@@ -35,7 +28,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import QRCode from "react-qr-code";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
-import { ticketStatus } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -43,7 +35,6 @@ import { Button } from "@/components/ui/button";
 import { ZoomIn, ZoomOut } from "lucide-react";
 const TicketsPage = () => {
   const { data: tickets, isFetching } = trpc.tickets.getByClerkId.useQuery();
-  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
 
   if (isFetching || !tickets) {
     return (
@@ -52,26 +43,6 @@ const TicketsPage = () => {
           title="Your tickets"
           description="Manage all your tickets from here"
         />
-        <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
-          <Select
-            onValueChange={(value) =>
-              setSelectedStatus(value === "all" ? null : value)
-            }
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Payment status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>{" "}
-              {/* Changed from "" to "all" */}
-              {ticketStatus.enumValues.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
         <div className="rounded-lg overflow-hidden my-4 h-60 border">
           <Skeleton className="w-full h-full" />
         </div>
@@ -79,32 +50,13 @@ const TicketsPage = () => {
     );
   }
 
-  // Filter tickets based on selected status
-  const filteredTickets = selectedStatus
-    ? tickets.filter((ticket) => ticket.status === selectedStatus)
-    : tickets;
-
   return (
     <div className="px-6">
       <PageHeader
         title="Your tickets"
         description="Manage all your tickets from here"
       />
-      <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
-        <Select onValueChange={setSelectedStatus}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Payment status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All</SelectItem>
-            {ticketStatus.enumValues.map((value) => (
-              <SelectItem key={value} value={value}>
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+
       <div className="rounded-lg overflow-hidden my-4 border">
         <Table className="">
           <TableHeader className="bg-neutral-100">
@@ -118,7 +70,7 @@ const TicketsPage = () => {
               <TableHead className="text-left pl-3">Created At</TableHead>
             </TableRow>
           </TableHeader>
-          {filteredTickets.length === 0 && (
+          {tickets.length === 0 && (
             <TableBody>
               <TableRow>
                 <TableCell
@@ -132,7 +84,7 @@ const TicketsPage = () => {
           )}
 
           <TableBody>
-            {filteredTickets.map((ticket) => (
+            {tickets.map((ticket) => (
               <TableRow key={ticket.ticketId}>
                 <TableCell className="font-medium text-center">
                   <TicketQr ticketId={ticket.ticketId}>Show</TicketQr>
