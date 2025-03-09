@@ -6,15 +6,8 @@ import { toast } from "react-hot-toast";
 import { trpc } from "@/trpc/client";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-const QRScanner = () => {
+const ContingentQrScanner = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const codeReader = useRef<BrowserQRCodeReader | null>(null);
@@ -23,12 +16,12 @@ const QRScanner = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch ticket details based on the scanned ticket ID
-  const { data, isFetching } = trpc.tickets.getByTicketId.useQuery(
-    { ticketId },
+  const { data, isFetching } = trpc.contingents.getByContingentId.useQuery(
+    { contingentId: ticketId },
     { enabled: !!ticketId }
   );
 
-  const ticket = data?.tickets;
+  const ticket = data?.contingents;
   const user = data?.users;
 
   useEffect(() => {
@@ -78,17 +71,6 @@ const QRScanner = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 p-4 bg-white shadow-lg rounded-lg">
-      <Select>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Theme" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-        </SelectContent>
-      </Select>
-
       {error ? (
         <p className="text-red-500 font-semibold">{error}</p>
       ) : (
@@ -107,8 +89,7 @@ const QRScanner = () => {
               </h2>
               <div className="mt-2 text-gray-700 space-y-2">
                 <p>
-                  <span className="font-semibold">Ticket ID:</span>{" "}
-                  {ticket.ticketId}
+                  <span className="font-semibold">Ticket ID:</span> {ticket.id}
                 </p>
                 <p>
                   <span className="font-semibold">Status:</span> {ticket.status}
@@ -186,4 +167,4 @@ const QRScanner = () => {
   );
 };
 
-export default QRScanner;
+export default ContingentQrScanner;
