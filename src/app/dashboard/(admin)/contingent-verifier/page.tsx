@@ -7,13 +7,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import {
   Table,
@@ -35,7 +28,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import QRCode from "react-qr-code";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
-import { ticketStatus } from "@/db/schema";
 import { StatusAction } from "./_components/status-action";
 import { Mail, Phone, UserIcon, ZoomIn, ZoomOut } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -55,20 +47,7 @@ const TicketVerifierPage = () => {
           title="Your tickets"
           description="Manage all your tickets from here"
         />
-        <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Payment status" />
-            </SelectTrigger>
-            <SelectContent>
-              {ticketStatus.enumValues.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+
         <div className="rounded-lg overflow-hidden my-4 h-60">
           <Skeleton className="w-full bg-neutral-300 h-full" />
         </div>
@@ -82,20 +61,7 @@ const TicketVerifierPage = () => {
         title="Contingent Verifier"
         description="Manage all subscriptions"
       />
-      <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Payment status" />
-          </SelectTrigger>
-          <SelectContent>
-            {ticketStatus.enumValues.map((value) => (
-              <SelectItem key={value} value={value}>
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+
       <div className="rounded-lg overflow-hidden my-4 border">
         <Table className="">
           <TableHeader className="bg-neutral-100">
