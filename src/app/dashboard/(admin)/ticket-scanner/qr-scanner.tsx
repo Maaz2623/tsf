@@ -5,12 +5,6 @@ import { BrowserQRCodeReader } from "@zxing/browser";
 import { toast } from "react-hot-toast";
 import { trpc } from "@/trpc/client";
 import Image from "next/image";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const QRScanner = () => {
@@ -31,11 +25,8 @@ const QRScanner = () => {
   const user = data?.users;
 
   useEffect(() => {
-    if (
-      typeof window === "undefined" ||
-      !navigator.mediaDevices?.getUserMedia
-    ) {
-      setError("Camera not supported in this environment.");
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError("Camera not supported.");
       return;
     }
 
@@ -58,9 +49,8 @@ const QRScanner = () => {
           videoRef.current!,
           (result) => {
             if (result && active && result.getText() !== ticketId) {
-              const scannedText = result.getText();
-              setTicketId(scannedText);
-              toast.success("QR Code Scanned Successfully!");
+              setTicketId(result.getText());
+              toast.success("QR Code Scanned!");
             }
           }
         );
@@ -74,7 +64,7 @@ const QRScanner = () => {
 
     return () => {
       active = false;
-      streamRef.current?.getTracks().forEach((track) => track.stop()); // Stop the camera
+      streamRef.current?.getTracks().forEach((track) => track.stop());
       codeReader.current = null;
     };
   }, [ticketId]);
@@ -91,9 +81,7 @@ const QRScanner = () => {
             className="w-[300px] h-[300px] border-2 border-gray-300 rounded-lg shadow-md"
           />
           {isFetching ? (
-            <p className="text-blue-500 font-semibold">
-              Fetching ticket details...
-            </p>
+            <p className="text-blue-500 font-semibold">Fetching details...</p>
           ) : ticket ? (
             <div className="p-4 bg-green-100 border border-green-500 rounded-lg w-full max-w-md">
               <h2 className="text-green-700 font-bold text-lg text-center">
@@ -108,8 +96,21 @@ const QRScanner = () => {
                   <span className="font-semibold">Status:</span> {ticket.status}
                 </p>
                 <p>
+                  <span className="font-semibold">Fest Type:</span>{" "}
+                  {ticket.festType}
+                </p>
+                <p>
+                  <span className="font-semibold">Phone Number:</span>{" "}
+                  {ticket.phoneNumber}
+                </p>
+                <p>
+                  <span className="font-semibold">User Name:</span> {user?.name}
+                </p>
+                <p>
                   <span className="font-semibold">Email:</span> {user?.email}
                 </p>
+
+                {/* Events */}
                 <div>
                   <p className="font-semibold">Event Details:</p>
                   <ScrollArea className="h-60">
@@ -137,16 +138,9 @@ const QRScanner = () => {
                       ))}
                     </div>
                   </ScrollArea>
-                  <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1">
-                      <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                      <AccordionContent>
-                        Yes. It adheres to the WAI-ARIA design pattern.
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
                 </div>
 
+                {/* Payment Screenshot */}
                 {ticket.paymentScreentshotUrl && (
                   <div className="mt-3">
                     <span className="font-semibold">Payment Screenshot:</span>

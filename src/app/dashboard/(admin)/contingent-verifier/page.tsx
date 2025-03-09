@@ -80,10 +80,7 @@ const TicketVerifierPage = () => {
           {tickets.length === 0 && (
             <TableBody>
               <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="h-60 text-center text-gray-500"
-                >
+                <TableCell className="h-60 text-center text-gray-500">
                   No results found.
                 </TableCell>
               </TableRow>
