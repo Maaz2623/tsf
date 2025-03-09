@@ -16,7 +16,7 @@ const EventsPage = () => {
           />
           <p className="pl-3 text-muted-foreground">
             {eventType === "elysian"
-              ? "Explore our cultural fest"
+              ? "Buy one ticket for multiple events"
               : "Explore our management fest"}
           </p>
         </div>
