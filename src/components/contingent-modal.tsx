@@ -200,7 +200,6 @@ const ContingentGenerator = ({
     });
   };
 
-
   return (
     <Drawer
       onOpenChange={setContingentGeneratorOpen}
@@ -238,7 +237,7 @@ const ContingentGenerator = ({
             <Label>Fest Type</Label>
             <Select
               disabled
-              value="elysian"
+              value={festType}
               onValueChange={(value) =>
                 setFestType(value as "elysian" | "solaris")
               }
