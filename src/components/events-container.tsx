@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
-import { UploadIcon, XIcon } from "lucide-react";
+import { PaperclipIcon, UploadIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import {
   Accordion,
@@ -55,9 +55,7 @@ const EventsContainer = ({
 
   const formattedEvents = selectedEvents.map((event) => ({
     ...event,
-    date: event.date
-      ? new Date(event.date).toISOString().split("T")[0]
-      : undefined,
+    date: event.date ? "TBA" : undefined,
   }));
 
   useEffect(() => {
@@ -156,6 +154,14 @@ const EventsContainer = ({
               </AlertDialogContent>
             </AlertDialog>
           </div>
+        </div>
+        <div className="w-full flex justify-start cursor-pointer z-60 -mb-10 items-center">
+          <Button asChild variant={`outline`}>
+            <Link href={`/brochures/brochure.pdf`} target="_blank">
+              <PaperclipIcon />
+              Brochure
+            </Link>
+          </Button>
         </div>
         <div className="flex flex-wrap gap-x-8 justify-center">
           {filteredEvents.map((event, i) => (

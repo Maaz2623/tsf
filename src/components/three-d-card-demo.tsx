@@ -13,7 +13,6 @@ import {
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
-import { format, parseISO } from "date-fns";
 import { trpc } from "@/trpc/client";
 import { Skeleton } from "./ui/skeleton";
 import {
@@ -119,9 +118,7 @@ export function ThreeDCardDemo({
           <div className="flex justify-between w-full items-center mt-2 text-xs text-gray-600 dark:text-gray-300">
             <div className="flex items-center gap-1">
               <CalendarIcon className="size-4" />
-              <span>
-                {date ? format(parseISO(date), "dd MMM yyyy") : "TBA"}
-              </span>
+              <span>{date}</span>
             </div>
             {maxRegistration ? (
               bookedTickets ? (

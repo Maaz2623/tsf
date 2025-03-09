@@ -21,6 +21,7 @@ const EventsPage = () => {
           </p>
         </div>
       </div>
+
       <EventsContainer eventType={eventType} />
     </div>
   );
