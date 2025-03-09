@@ -63,11 +63,40 @@ const TicketVerifierPage = () => {
       "Phone Number": ticket.user?.phoneNumber || "N/A",
       Screenshot: ticket.paymentScreentshotUrl || "N/A",
       Events: ticket.events.map((event) => event.title).join(", "),
-      Amount: ticket.events.reduce((total, event) => total + event.price, 0),
+      Amount: `₹${ticket.events.reduce(
+        (total, event) => total + event.price,
+        0
+      )}`,
       "Created At": new Date(ticket.createdAt).toLocaleDateString(),
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+
+    // **Fix: Use explicit types**
+    const keys = Object.keys(
+      worksheetData[0]
+    ) as (keyof (typeof worksheetData)[0])[];
+
+    // **Auto-adjust column width based on content length**
+    const columnWidths = keys.map((key) => ({
+      wch: Math.max(
+        key.length,
+        ...worksheetData.map(
+          (row) => String(row[key as keyof typeof row]).length
+        )
+      ),
+    }));
+    worksheet["!cols"] = columnWidths;
+
+    // **Bold headers**
+    const range = XLSX.utils.decode_range(worksheet["!ref"] || "");
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].s = { font: { bold: true } };
+      }
+    }
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Tickets");
 

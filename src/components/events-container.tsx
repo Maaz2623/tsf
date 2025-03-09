@@ -351,7 +351,8 @@ const TicketGenerator = ({
                 selectedEvents.length === 0 ||
                 !image ||
                 isUploading ||
-                createTicket.isPending
+                createTicket.isPending ||
+                phoneNumber.length === 0
               }
             >
               {isUploading && "Uploading screenshot"}
