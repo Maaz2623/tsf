@@ -77,7 +77,7 @@ export function ThreeDCardDemo({
             <CardItem
               as="p"
               translateZ="60"
-              className="text-neutral-500 text-sm mt-2 dark:text-neutral-300 line-clamp-2"
+              className="text-neutral-500 text-sm mt-2 dark:text-neutral-300 line-clamp-2 text-start"
             >
               {description || "No description available"}
             </CardItem>
