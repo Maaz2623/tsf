@@ -72,18 +72,18 @@ export function ThreeDCardDemo({
         </CardItem>
 
         {/* Description */}
-        <CardItem
-          as="p"
-          translateZ="60"
-          className="text-neutral-500 text-sm mt-2 dark:text-neutral-300 line-clamp-2 underline md:hover:underline underline-offset-1"
-        >
-          <Popover>
-            <PopoverTrigger>
+        <Popover>
+          <PopoverTrigger>
+            <CardItem
+              as="p"
+              translateZ="60"
+              className="text-neutral-500 text-sm mt-2 dark:text-neutral-300 line-clamp-2 underline md:hover:underline underline-offset-1"
+            >
               {description || "No description available"}
-            </PopoverTrigger>
-            <PopoverContent>{description}</PopoverContent>
-          </Popover>
-        </CardItem>
+            </CardItem>
+          </PopoverTrigger>
+          <PopoverContent>{description}</PopoverContent>
+        </Popover>
 
         {/* Image */}
         <CardItem translateZ="100" className="w-full mt-4">
