@@ -56,7 +56,7 @@ export function ThreeDCardDemo({
     <CardContainer className="inter-var cursor-pointer bg-white/20">
       <CardBody
         className="relative group/card dark:bg-black dark:border-white/[0.2] border-black/[0.1] 
-        w-full md:w-[300px] min-h-[420px] rounded-xl p-4 border flex flex-col"
+        w-[90%] md:w-[300px] min-h-[420px] rounded-xl p-4 border flex flex-col"
       >
         {/* Title */}
         <CardItem
@@ -162,7 +162,7 @@ export function ThreeDCardDemo({
                   <p>Remove</p>
                 </>
               ) : (
-                "Select"
+                "Add to ticket"
               )}
             </Button>
           </div>
