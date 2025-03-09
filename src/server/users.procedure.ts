@@ -6,6 +6,15 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const userRouter = createTRPCRouter({
+  checkIsAdmin: protectedProcedure.query(async ({ ctx }) => {
+    const data = ctx.user;
+
+    if (data.role !== "admin") {
+      return false;
+    } else {
+      return true;
+    }
+  }),
   getUserByClerkId: protectedProcedure.query(async ({ ctx }) => {
     const data = ctx.user;
 
