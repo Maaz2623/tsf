@@ -209,6 +209,7 @@ const ContingentGenerator = ({
           setContingentModalOpen(!contingentModalOpen);
           router.push(`/dashboard/contingents`);
           utils.contingents.getByClerkId.invalidate();
+          utils.contingents.invalidate();
           utils.contingents.getAllContingents.invalidate();
         },
       }
