@@ -21,7 +21,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "./ui/drawer";
-import { PackageIcon, UploadIcon, XIcon } from "lucide-react";
+import { Loader2Icon, PackageIcon, UploadIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -35,7 +35,8 @@ const ContingentModal = () => {
 
   const [contingentModalOpen, setContingentModalOpen] = useState(false);
 
-  const { data: hasContingent } = trpc.contingents.hasContingent.useQuery();
+  const { data: hasContingent, isFetching } =
+    trpc.contingents.hasContingent.useQuery();
 
   return (
     <>
@@ -50,6 +51,7 @@ const ContingentModal = () => {
         open={contingentModalOpen}
       >
         <button
+          disabled={isFetching}
           onClick={() => {
             if (hasContingent) {
               toast.custom((t) => (
@@ -71,7 +73,11 @@ const ContingentModal = () => {
           className="inline-flex h-8 text-sm animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-3 font-medium text-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 "
         >
           <PackageIcon className="size-5 mr-2" />
-          Buy Contingent
+          {isFetching ? (
+            <Loader2Icon className="size-4 animate-spin" />
+          ) : (
+            "Buy Contingent"
+          )}
         </button>
         <AlertDialogContent className="">
           <AlertDialogHeader>
