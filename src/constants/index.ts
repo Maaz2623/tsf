@@ -33,7 +33,7 @@ export const events: EventType[] = [
     rating: 3,
     price: 200,
     teamSize: 1,
-    date: new Date().toISOString().split("T")[0],
+    date: "24th Mar 2025",
     maxRegistration: 10,
     festType: "elysian",
   },
