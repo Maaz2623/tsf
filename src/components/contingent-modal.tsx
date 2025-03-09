@@ -29,13 +29,6 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUploadThing } from "@/lib/uploadthing";
 import { trpc } from "@/trpc/client";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const ContingentModal = () => {
   const [contingentGenerator, setContingentGenerator] = useState(false);
@@ -133,6 +126,7 @@ const ContingentGenerator = ({
 
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [festType, setFestType] = useState<"elysian" | "solaris" | undefined>(
     "elysian"
   );
@@ -232,27 +226,6 @@ const ContingentGenerator = ({
               maxLength={10}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
-          </div>
-          <div className="space-y-1">
-            <Label>Fest Type</Label>
-            <Select
-              disabled
-              value={festType}
-              onValueChange={(value) =>
-                setFestType(value as "elysian" | "solaris")
-              }
-            >
-              <SelectTrigger className=" w-[300px]">
-                <SelectValue
-                  defaultValue={`elysian`}
-                  placeholder="Select event type"
-                />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="elysian">Elysian</SelectItem>
-                <SelectItem value="solaris">Solaris</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
           <div className="flex flex-col w-[300px] items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
             {image ? (
