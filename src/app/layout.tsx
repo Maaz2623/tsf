@@ -25,7 +25,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <Head>
-          <meta name="color-scheme" content="light" />
+          <meta name="color-scheme" content="light only" />
         </Head>
         <body className={`antialiased ${poppins.className} relative`}>
           <TRPCProvider>{children}</TRPCProvider>

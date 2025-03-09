@@ -147,7 +147,7 @@
 }
 
 html {
-  color-scheme: light !important;
+  color-scheme: light only !important;
 }
 
 @config '../../tailwind.config.js';

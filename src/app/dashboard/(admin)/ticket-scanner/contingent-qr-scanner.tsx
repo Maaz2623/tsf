@@ -14,6 +14,7 @@ const ContingentQrScanner = () => {
 
   const [ticketId, setTicketId] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false); // New state for not found
 
   // Fetch ticket details based on the scanned ticket ID
   const { data, isFetching } = trpc.contingents.getByContingentId.useQuery(
@@ -50,6 +51,7 @@ const ContingentQrScanner = () => {
           (result) => {
             if (result && active && result.getText() !== ticketId) {
               setTicketId(result.getText());
+              setNotFound(false); // Reset not found state on new scan
               toast.success("QR Code Scanned!");
             }
           }
@@ -69,6 +71,13 @@ const ContingentQrScanner = () => {
     };
   }, [ticketId]);
 
+  // Check if no data is found
+  useEffect(() => {
+    if (!isFetching && ticketId) {
+      setNotFound(!ticket);
+    }
+  }, [data, isFetching, ticketId, ticket]);
+
   return (
     <div className="flex flex-col items-center gap-4 p-4 bg-white shadow-lg rounded-lg">
       {error ? (
@@ -82,6 +91,10 @@ const ContingentQrScanner = () => {
           />
           {isFetching ? (
             <p className="text-blue-500 font-semibold">Fetching details...</p>
+          ) : notFound ? (
+            <p className="text-red-500 font-semibold">
+              No ticket found for ID: {ticketId}
+            </p>
           ) : ticket ? (
             <div className="p-4 bg-green-100 border border-green-500 rounded-lg w-full max-w-md">
               <h2 className="text-green-700 font-bold text-lg text-center">
@@ -154,13 +167,7 @@ const ContingentQrScanner = () => {
                 )}
               </div>
             </div>
-          ) : (
-            ticketId && (
-              <p className="text-red-500 font-semibold">
-                No ticket found for ID: {ticketId}
-              </p>
-            )
-          )}
+          ) : null}
         </>
       )}
     </div>

@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { trpc } from "@/trpc/client";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
+
 const QRScanner = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -13,6 +14,7 @@ const QRScanner = () => {
 
   const [ticketId, setTicketId] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState<boolean>(false); // New state
 
   // Fetch ticket details based on the scanned ticket ID
   const { data, isFetching } = trpc.tickets.getByTicketId.useQuery(
@@ -50,6 +52,7 @@ const QRScanner = () => {
             if (result && active && result.getText() !== ticketId) {
               setTicketId(result.getText());
               toast.success("QR Code Scanned!");
+              setNotFound(false); // Reset not found state on a new scan
             }
           }
         );
@@ -67,6 +70,13 @@ const QRScanner = () => {
       codeReader.current = null;
     };
   }, [ticketId]);
+
+  // Handle when no ticket is found
+  useEffect(() => {
+    if (!isFetching && ticketId) {
+      setNotFound(!ticket); // If ticket is undefined or null, set notFound to true
+    }
+  }, [ticket, isFetching, ticketId]);
 
   return (
     <div className="flex flex-col items-center gap-4 p-4 bg-white shadow-lg rounded-lg">
@@ -154,13 +164,11 @@ const QRScanner = () => {
                 )}
               </div>
             </div>
-          ) : (
-            ticketId && (
-              <p className="text-red-500 font-semibold">
-                No ticket found for ID: {ticketId}
-              </p>
-            )
-          )}
+          ) : notFound ? (
+            <p className="text-red-500 font-semibold">
+              No ticket found for ID: {ticketId}
+            </p>
+          ) : null}
         </>
       )}
     </div>
