@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
-import { PaperclipIcon, UploadIcon, XIcon } from "lucide-react";
+import { UploadIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import {
   Accordion,
@@ -154,14 +154,6 @@ const EventsContainer = ({
               </AlertDialogContent>
             </AlertDialog>
           </div>
-        </div>
-        <div className="w-full flex justify-start cursor-pointer z-60 -mb-10 items-center">
-          <Link href={`/brochures/brochure.pdf`} target="_blank">
-            <Button variant={`outline`}>
-              <PaperclipIcon />
-              Brochure
-            </Button>
-          </Link>
         </div>
         <div className="flex flex-wrap gap-x-8 justify-center">
           {filteredEvents.map((event, i) => (
