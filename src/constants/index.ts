@@ -45,6 +45,8 @@ export const events: EventType[] = [
     price: 200,
     teamSize: 1,
     festType: "elysian",
+    date: "24th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "REEL MAKING",
@@ -54,6 +56,8 @@ export const events: EventType[] = [
     price: 200,
     teamSize: 1,
     festType: "elysian",
+    date: "25th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "FACE PAINTING",
@@ -63,6 +67,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 1,
     festType: "elysian",
+    date: "24th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "PAINTING",
@@ -71,6 +77,9 @@ export const events: EventType[] = [
     rating: 3,
     price: 200,
     teamSize: 2,
+    date: "24th Mar 2025",
+    maxRegistration: 10,
+
     festType: "elysian",
   },
   {
@@ -81,6 +90,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 4,
     festType: "elysian",
+    date: "25th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "LAW & ORDER",
@@ -90,6 +101,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 1,
     festType: "elysian",
+    date: "25th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "MINI GAMES",
@@ -99,6 +112,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 1,
     festType: "elysian",
+    date: "25th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "STAND UP",
@@ -108,6 +123,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 1,
     festType: "elysian",
+    date: "24th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "AIR CRASH",
@@ -117,6 +134,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 1,
     festType: "elysian",
+    date: "25th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "SHORT MOVIE MAKING",
@@ -126,6 +145,8 @@ export const events: EventType[] = [
     price: 500,
     teamSize: 6,
     festType: "elysian",
+    date: "24th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "BGMI",
@@ -135,6 +156,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 4,
     festType: "elysian",
+    date: "24th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "SOLO DANCE",
@@ -144,6 +167,8 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 1,
     festType: "elysian",
+    date: "25th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "SOLO SINGING",
@@ -153,6 +178,9 @@ export const events: EventType[] = [
     price: 300,
     teamSize: 1,
     festType: "elysian",
+    maxRegistration: 10,
+
+    date: "24th Mar 2025",
   },
   {
     title: "TREASURE HUNT",
@@ -162,6 +190,8 @@ export const events: EventType[] = [
     price: 500,
     teamSize: 3,
     festType: "elysian",
+    date: "24th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "MURDER MYSTERY",
@@ -171,6 +201,8 @@ export const events: EventType[] = [
     price: 500,
     teamSize: 2,
     festType: "elysian",
+    date: "25th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "GROUP SINGING",
@@ -180,6 +212,8 @@ export const events: EventType[] = [
     price: 1200,
     teamSize: 12,
     festType: "elysian",
+    date: "26th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "GROUP DANCE",
@@ -189,6 +223,8 @@ export const events: EventType[] = [
     price: 1200,
     teamSize: 12,
     festType: "elysian",
+    date: "26th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "FASHION",
@@ -198,25 +234,41 @@ export const events: EventType[] = [
     price: 1500,
     teamSize: 12,
     festType: "elysian",
+    date: "26th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "MAD ADS",
     description:
       "Teams create and perform hilarious, over-the-top advertisements for 5+1 minutes, inspired by Japanese culture and humor.",
     rating: 5,
-    price: 1000,
+    price: 1200,
     teamSize: 7,
     festType: "elysian",
+    date: "26th Mar 2025",
+    maxRegistration: 10,
   },
   {
     title: "PERSONALITY HUNT",
     description:
       "A multi-round competition testing confidence, communication, creativity, and adaptability to crown the ultimate Mr. & Mrs. Elysian.",
     rating: 5,
-    price: 500,
+    price: 700,
     teamSize: 1,
     festType: "elysian",
+    date: "26th Mar 2025",
+    maxRegistration: 10,
   },
+  // {
+  //   title: "Entertainment Quiz",
+  //   description:
+  //     "A multi-round competition testing confidence, communication, creativity, and adaptability to crown the ultimate Mr. & Mrs. Elysian.",
+  //   rating: 5,
+  //   price: 500,
+  //   teamSize: 1,
+  //   festType: "elysian",
+  //   date: "25th Mar 2025",
+  // },
 ];
 
 export const contingentPrice = 9000;
