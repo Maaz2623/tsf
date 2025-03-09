@@ -6,6 +6,18 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const contingentsRouter = createTRPCRouter({
+  hasContingent: protectedProcedure.query(async ({ ctx }) => {
+    const [data] = await db
+      .select()
+      .from(contingents)
+      .where(eq(contingents.userId, ctx.user.id));
+
+    if (data) {
+      return true;
+    }
+
+    return false;
+  }),
   updatedStatus: protectedProcedure
     .input(
       z.object({
