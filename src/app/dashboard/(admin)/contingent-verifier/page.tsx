@@ -36,6 +36,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { contingentPrice } from "@/constants";
+import * as XLSX from "xlsx";
 
 const TicketVerifierPage = () => {
   const { data: tickets, isFetching } =
@@ -56,13 +57,67 @@ const TicketVerifierPage = () => {
     );
   }
 
+  const exportToExcel = () => {
+    const worksheetData = tickets.map((ticket) => ({
+      "Ticket QR": ticket.id,
+      Status: ticket.status,
+      Fest: ticket.festType === "elysian" ? "Elysian" : "Solaris",
+      User: ticket.user?.name || "N/A",
+      Email: ticket.user?.email || "N/A",
+      "Phone Number": ticket?.phoneNumber || "N/A",
+      Screenshot: ticket.paymentScreentshotUrl || "N/A",
+      Events: ticket.events.map((event) => event.title).join(", "),
+      Amount: `₹${ticket.events.reduce(
+        (total, event) => total + event.price,
+        0
+      )}`,
+      "Created At": new Date(ticket.createdAt).toLocaleDateString(),
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+
+    // **Fix: Use explicit types**
+    const keys = Object.keys(
+      worksheetData[0]
+    ) as (keyof (typeof worksheetData)[0])[];
+
+    // **Auto-adjust column width based on content length**
+    const columnWidths = keys.map((key) => ({
+      wch: Math.max(
+        key.length,
+        ...worksheetData.map(
+          (row) => String(row[key as keyof typeof row]).length
+        )
+      ),
+    }));
+    worksheet["!cols"] = columnWidths;
+
+    // **Bold headers**
+    const range = XLSX.utils.decode_range(worksheet["!ref"] || "");
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].s = { font: { bold: true } };
+      }
+    }
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tickets");
+
+    XLSX.writeFile(workbook, "tickets.xlsx");
+  };
+
   return (
     <div className="px-6">
       <PageHeader
         title="Contingent Verifier"
         description="Manage all subscriptions"
       />
-
+      <div className="h-10 mt-3 flex justify-end items-center">
+        <Button className="" variant="outline" onClick={exportToExcel}>
+          Export
+        </Button>
+      </div>
       <div className="rounded-lg overflow-hidden my-4 border">
         <Table className="">
           <TableHeader className="bg-neutral-100">

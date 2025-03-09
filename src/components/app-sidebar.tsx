@@ -115,6 +115,7 @@ export function AppSidebar() {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
+                        onClick={handleClick}
                         className={cn("", isActive && "bg-neutral-200")}
                       >
                         <Link href={item.url}>
