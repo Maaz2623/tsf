@@ -108,7 +108,7 @@ export function ThreeDCardDemo({
                 />
               ))}
             </CardItem>
-            <CardItem translateZ={20} className="flex items-center">
+            <CardItem className="flex items-center">
               <UsersIcon className="size-4 mr-1" />
               {teamSize ?? "N/A"}
             </CardItem>

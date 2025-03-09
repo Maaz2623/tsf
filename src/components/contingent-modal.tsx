@@ -174,6 +174,9 @@ const ContingentGenerator = ({
     onUploadError: () => {
       toast.error("Upload error");
     },
+    onUploadBegin: () => {
+      toast.loading("Uploading file. Please wait...");
+    },
   });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -278,7 +281,7 @@ const ContingentGenerator = ({
             ) : (
               <>
                 <p className="text-gray-700 text-lg font-medium text-center">
-                  Upload payment screenshot for verification
+                  Upload payment screenshot. (MAX 4MB)
                 </p>
                 <input
                   type="file"
@@ -309,7 +312,12 @@ const ContingentGenerator = ({
                 collegeName.length === 0
               }
             >
-              {isUploading && "Uploading screenshot"}
+              {isUploading && (
+                <>
+                  <Loader2Icon className="mr-1" />
+                  Uploading
+                </>
+              )}
               {!isUploading && !createTicket.isPending && "Verify"}
               {createTicket.isPending && "Generating..."}
             </Button>
