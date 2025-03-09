@@ -293,9 +293,7 @@ const EventDetailsPopover = ({
                   Price: <span className="font-semibold">₹{event.price}</span>
                 </p>
                 {event.date && (
-                  <p className="text-xs text-gray-500">
-                    Date: {new Date(event.date).toLocaleDateString()}
-                  </p>
+                  <p className="text-xs text-gray-500">Date: {event.date}</p>
                 )}
               </div>
             ))}
