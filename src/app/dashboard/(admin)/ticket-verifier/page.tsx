@@ -60,7 +60,7 @@ const TicketVerifierPage = () => {
       Fest: ticket.festType === "elysian" ? "Elysian" : "Solaris",
       User: ticket.user?.name || "N/A",
       Email: ticket.user?.email || "N/A",
-      "Phone Number": ticket.user?.phoneNumber || "N/A",
+      "Phone Number": ticket?.phoneNumber || "N/A",
       Screenshot: ticket.paymentScreentshotUrl || "N/A",
       Events: ticket.events.map((event) => event.title).join(", "),
       Amount: `₹${ticket.events.reduce(
@@ -109,7 +109,7 @@ const TicketVerifierPage = () => {
         title="Ticket Verifier"
         description="Manage ticket status from here"
       />
-      <div className="h-10 flex justify-end items-center">
+      <div className="h-10 mt-3 flex justify-end items-center">
         <Button className="" variant="outline" onClick={exportToExcel}>
           Export
         </Button>
