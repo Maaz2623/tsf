@@ -57,7 +57,7 @@ export function ThreeDCardDemo({
       : false;
 
   return (
-    <CardContainer className="inter-var cursor-pointer bg-white/20 shadow-xl">
+    <CardContainer className="inter-var cursor-pointer rounded-xl bg-white/20 shadow-xl">
       <CardBody
         className="relative group/card dark:bg-black dark:border-white/[0.2] border-black/[0.1] 
         w-[90%] md:w-[300px] min-h-[420px] rounded-xl p-4 border flex flex-col"
