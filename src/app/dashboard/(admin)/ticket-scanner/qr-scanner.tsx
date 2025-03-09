@@ -6,14 +6,6 @@ import { toast } from "react-hot-toast";
 import { trpc } from "@/trpc/client";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 const QRScanner = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -78,17 +70,6 @@ const QRScanner = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 p-4 bg-white shadow-lg rounded-lg">
-      <Select>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Theme" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-        </SelectContent>
-      </Select>
-
       {error ? (
         <p className="text-red-500 font-semibold">{error}</p>
       ) : (

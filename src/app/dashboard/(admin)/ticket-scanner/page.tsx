@@ -14,7 +14,7 @@ const TicketVerifier = () => {
   const [value, setValue] = useState<"ticket" | "contingent">("ticket");
 
   return (
-    <div className="px-6 py-3 space-y-4">
+    <div className="px-6 py-3 space-y-4 mb-[500px]">
       <Select
         value={value}
         onValueChange={(val) => setValue(val as "ticket" | "contingent")}
