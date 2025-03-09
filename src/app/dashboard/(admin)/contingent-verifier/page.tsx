@@ -35,6 +35,7 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { contingentPrice } from "@/constants";
 
 const TicketVerifierPage = () => {
   const { data: tickets, isFetching } =
@@ -148,11 +149,7 @@ const TicketVerifierPage = () => {
                     </EventDetailsPopover>
                   </TableCell>
                   <TableCell className="text-center">
-                    ₹
-                    {ticket.events.reduce(
-                      (total, event) => total + event.price,
-                      0
-                    )}
+                    ₹{contingentPrice}
                   </TableCell>
                   <TableCell className="text-left">
                     {format(ticket.createdAt, "dd MMMM, yyyy")}

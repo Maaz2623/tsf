@@ -52,9 +52,21 @@ const ContingentModal = () => {
         <button
           onClick={() => {
             if (hasContingent) {
-              toast.custom("You already have a package booked");
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } flex items-center gap-3 bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg shadow-md`}
+                >
+                  <span className="text-yellow-600 text-xl">⚠️</span>
+                  <p className="font-medium">
+                    You already have a package booked.
+                  </p>
+                </div>
+              ));
+            } else {
+              setContingentModalOpen(!contingentModalOpen);
             }
-            setContingentModalOpen(!contingentModalOpen);
           }}
           className="inline-flex h-8 text-sm animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-3 font-medium text-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 "
         >
