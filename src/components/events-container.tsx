@@ -156,12 +156,12 @@ const EventsContainer = ({
           </div>
         </div>
         <div className="w-full flex justify-start cursor-pointer z-60 -mb-10 items-center">
-          <Button asChild variant={`outline`}>
-            <Link href={`/brochures/brochure.pdf`} target="_blank">
+          <Link href={`/brochures/brochure.pdf`} target="_blank">
+            <Button variant={`outline`}>
               <PaperclipIcon />
               Brochure
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
         <div className="flex flex-wrap gap-x-8 justify-center">
           {filteredEvents.map((event, i) => (
