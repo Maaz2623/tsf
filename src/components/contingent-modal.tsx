@@ -162,7 +162,6 @@ const ContingentGenerator = ({
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       startUpload([file]);
-      console.log("Selected file:", file);
     } else {
       alert("Please select a valid image file.");
     }
@@ -201,7 +200,6 @@ const ContingentGenerator = ({
     });
   };
 
-  console.log(festType);
 
   return (
     <Drawer

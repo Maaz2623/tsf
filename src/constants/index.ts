@@ -193,7 +193,7 @@ export const events: EventType[] = [
   {
     title: "MAD ADS",
     description: "Fashion show featuring latest trends",
-    rating: 4,
+    rating: 5,
     price: 1000,
     teamSize: 7,
     festType: "elysian",
@@ -212,4 +212,4 @@ export const contingentPrice = 9000;
 
 const testContingentPrice = 1;
 
-export const contingentUpiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&am=${testContingentPrice}&cu=INR`;
+export const contingentUpiLink = `upi://pay?pa=7349323005@pthdfc&pn=TheStudentForum&am=${testContingentPrice}&cu=INR`;

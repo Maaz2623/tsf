@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { usePathname } from "next/navigation";
 
 export const FloatingNav = ({
   navItems,
@@ -19,6 +20,8 @@ export const FloatingNav = ({
 }) => {
   const isMobile = useIsMobile();
 
+  const pathname = usePathname();
+
   if (!isMobile) return;
   return (
     <AnimatePresence mode="wait">
@@ -28,20 +31,24 @@ export const FloatingNav = ({
           className
         )}
       >
-        {navItems.map((navItem: any, idx: number) => (
-          <Link
-            key={`link=${idx}`}
-            href={navItem.link}
-            className={cn(
-              "relative flex flex-col items-center space-x-2 px-4 py-1 rounded-full text-neutral-600 dark:text-neutral-50 transition-all duration-200 hover:text-neutral-500 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/10"
-            )}
-          >
-            <span className="text-lg sm:text-base">{navItem.icon}</span>
-            <span className=" sm:inline-block text-xs font-medium">
-              {navItem.name}
-            </span>
-          </Link>
-        ))}
+        {navItems.map((navItem: any, idx: number) => {
+          const isActive = pathname.includes(navItem.link);
+          return (
+            <Link
+              key={`link=${idx}`}
+              href={navItem.link}
+              className={cn(
+                "relative flex flex-col items-center justify-center px-4 py-1 rounded-lg text-neutral-600 dark:text-neutral-50 transition-all duration-200 hover:text-neutral-500 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/10",
+                isActive && "text-green-500 bg-neutral-100"
+              )}
+            >
+              <span className="text-lg sm:text-base">{navItem.icon}</span>
+              <span className=" sm:inline-block text-xs font-medium">
+                {navItem.name}
+              </span>
+            </Link>
+          );
+        })}
       </motion.div>
     </AnimatePresence>
   );

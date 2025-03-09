@@ -41,9 +41,9 @@ import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ZoomIn, ZoomOut } from "lucide-react";
-
 const TicketsPage = () => {
   const { data: tickets, isFetching } = trpc.tickets.getByClerkId.useQuery();
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
 
   if (isFetching || !tickets) {
     return (
@@ -53,7 +53,7 @@ const TicketsPage = () => {
           description="Manage all your tickets from here"
         />
         <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
-          <Select>
+          <Select onValueChange={setSelectedStatus}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Payment status" />
             </SelectTrigger>
@@ -73,6 +73,11 @@ const TicketsPage = () => {
     );
   }
 
+  // Filter tickets based on selected status
+  const filteredTickets = selectedStatus
+    ? tickets.filter((ticket) => ticket.status === selectedStatus)
+    : tickets;
+
   return (
     <div className="px-6">
       <PageHeader
@@ -80,11 +85,12 @@ const TicketsPage = () => {
         description="Manage all your tickets from here"
       />
       <div className="h-14 flex items-center md:justify-start justify-center w-full mt-2">
-        <Select>
+        <Select onValueChange={setSelectedStatus}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Payment status" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="">All</SelectItem>
             {ticketStatus.enumValues.map((value) => (
               <SelectItem key={value} value={value}>
                 {value}
@@ -106,7 +112,7 @@ const TicketsPage = () => {
               <TableHead className="text-left pl-3">Created At</TableHead>
             </TableRow>
           </TableHeader>
-          {tickets.length === 0 && (
+          {filteredTickets.length === 0 && (
             <TableBody>
               <TableRow>
                 <TableCell
@@ -120,64 +126,61 @@ const TicketsPage = () => {
           )}
 
           <TableBody>
-            {tickets.map((ticket) => {
-              return (
-                <TableRow key={ticket.ticketId}>
-                  <TableCell className="font-medium text-center">
-                    <TicketQr ticketId={ticket.ticketId}>Show</TicketQr>
-                  </TableCell>
-                  <TableCell className="text-center flex items-center gap-2">
-                    <span
-                      className={cn(
-                        "w-1.5 h-1.5 rounded-full animate-ping",
-                        ticket.status === "pending" && "bg-orange-700",
-                        ticket.status === "processing" && "bg-orange-400",
-                        ticket.status === "verified" && "bg-green-500",
-                        ticket.status === "rejected" && "bg-red-500"
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "font-medium",
-                        ticket.status === "pending" && "text-orange-700",
-                        ticket.status === "processing" && "text-orange-400",
-                        ticket.status === "verified" && "text-green-500",
-                        ticket.status === "rejected" && "text-red-500"
-                      )}
-                    >
-                      {ticket.status.charAt(0).toUpperCase() +
-                        ticket.status.slice(1)}
-                    </span>
-                  </TableCell>
-
-                  <TableCell className="w-[300px] truncate">
-                    {ticket.festType === "elysian" ? "Elysian" : "Solaris"}
-                  </TableCell>
-                  <TableCell className="truncate">
-                    <PaymentScreenshotDialog
-                      imageUrl={ticket.paymentScreentshotUrl}
-                    >
-                      Image
-                    </PaymentScreenshotDialog>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <EventDetailsPopover events={ticket.events}>
-                      Details
-                    </EventDetailsPopover>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    ₹
-                    {ticket.events.reduce(
-                      (total, event) => total + event.price,
-                      0
+            {filteredTickets.map((ticket) => (
+              <TableRow key={ticket.ticketId}>
+                <TableCell className="font-medium text-center">
+                  <TicketQr ticketId={ticket.ticketId}>Show</TicketQr>
+                </TableCell>
+                <TableCell className="text-center flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "w-1.5 h-1.5 rounded-full animate-ping",
+                      ticket.status === "pending" && "bg-orange-700",
+                      ticket.status === "processing" && "bg-orange-400",
+                      ticket.status === "verified" && "bg-green-500",
+                      ticket.status === "rejected" && "bg-red-500"
                     )}
-                  </TableCell>
-                  <TableCell className="text-left pl-3">
-                    {format(ticket.createdAt, "dd MMMM, yyyy")}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                  />
+                  <span
+                    className={cn(
+                      "font-medium",
+                      ticket.status === "pending" && "text-orange-700",
+                      ticket.status === "processing" && "text-orange-400",
+                      ticket.status === "verified" && "text-green-500",
+                      ticket.status === "rejected" && "text-red-500"
+                    )}
+                  >
+                    {ticket.status.charAt(0).toUpperCase() +
+                      ticket.status.slice(1)}
+                  </span>
+                </TableCell>
+                <TableCell className="w-[300px] truncate">
+                  {ticket.festType === "elysian" ? "Elysian" : "Solaris"}
+                </TableCell>
+                <TableCell className="truncate">
+                  <PaymentScreenshotDialog
+                    imageUrl={ticket.paymentScreentshotUrl}
+                  >
+                    Image
+                  </PaymentScreenshotDialog>
+                </TableCell>
+                <TableCell className="text-center">
+                  <EventDetailsPopover events={ticket.events}>
+                    Details
+                  </EventDetailsPopover>
+                </TableCell>
+                <TableCell className="text-center">
+                  ₹
+                  {ticket.events.reduce(
+                    (total, event) => total + event.price,
+                    0
+                  )}
+                </TableCell>
+                <TableCell className="text-left pl-3">
+                  {format(ticket.createdAt, "dd MMMM, yyyy")}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

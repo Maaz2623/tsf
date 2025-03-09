@@ -9,7 +9,7 @@ const SidebarHeaderTsf = () => {
 
   return (
     <div className="bg-white h-14 mb-2 rounded-lg border flex shadow-sm justify-start gap-x-2 items-center px-2">
-      <div className="relative w-[30px] h-[33px]">
+      <div className="relative size-8">
         <Image
           src={`/logo.png`}
           alt="logo"

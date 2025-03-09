@@ -4,21 +4,34 @@ import React from "react";
 
 const Navbar = () => {
   return (
-    <div className="w-full px-2 flex justify-between items-center absolute py-2 z-50 left-0 top-0">
-      <div className="flex items-start justify-center">
-        <div className="relative size-10">
+    <div className="w-full px-6 flex justify-between items-center fixed py-1 z-50 left-0 top-0 backdrop-blur-md bg-black/30 border-b border-gray-700">
+      {/* Left Logo + Title */}
+      <div className="flex items-center gap-x-4">
+        <div className="relative w-12 h-12">
           <Image
-            src={`/jain-logo.png`}
-            alt="logo"
+            src="/jain-logo.png"
+            alt="Jain College Logo"
             fill
-            className="flex justify-center items-center"
+            className="object-contain"
           />
         </div>
-          <p
-            className={`text-neutral-200 text-2xl font-medium ${exo_2.className}`}
-          >
-            Jain College
-          </p>
+      </div>
+      <div>
+        <h1
+          className={`${exo_2.className} text-white text-3xl font-semibold tracking-widest`}
+        >
+          TSF
+        </h1>
+      </div>
+
+      {/* Right Logo */}
+      <div className="relative w-12 h-12">
+        <Image
+          src="/logo.png"
+          alt="Forum Logo"
+          fill
+          className="object-contain"
+        />
       </div>
     </div>
   );

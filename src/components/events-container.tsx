@@ -68,7 +68,7 @@ const EventsContainer = ({
     setPrice(totalPrice);
   }, [selectedEvents]);
 
-  const upiLink = `upi://pay?pa=8296472301@axl&pn=MohammedMaaz&am=${price}&cu=INR`;
+  const upiLink = `upi://pay?pa=7349323005@pthdfc&pn=TheStudentForum&am=${price}&cu=INR`;
 
   // Filter events based on selected rating
   const filteredEvents =
