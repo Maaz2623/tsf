@@ -34,6 +34,7 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import * as XLSX from "xlsx";
 
 const TicketVerifierPage = () => {
   const { data: tickets, isFetching } = trpc.tickets.getAllTickets.useQuery();
@@ -45,7 +46,6 @@ const TicketVerifierPage = () => {
           title="Your tickets"
           description="Manage all your tickets from here"
         />
-
         <div className="rounded-lg overflow-hidden my-4 h-60 border">
           <Skeleton className="w-full h-full" />
         </div>
@@ -53,15 +53,40 @@ const TicketVerifierPage = () => {
     );
   }
 
+  const exportToExcel = () => {
+    const worksheetData = tickets.map((ticket) => ({
+      "Ticket QR": ticket.ticketId,
+      Status: ticket.status,
+      Fest: ticket.festType === "elysian" ? "Elysian" : "Solaris",
+      User: ticket.user?.name || "N/A",
+      Email: ticket.user?.email || "N/A",
+      "Phone Number": ticket.user?.phoneNumber || "N/A",
+      Screenshot: ticket.paymentScreentshotUrl || "N/A",
+      Events: ticket.events.map((event) => event.title).join(", "),
+      Amount: ticket.events.reduce((total, event) => total + event.price, 0),
+      "Created At": new Date(ticket.createdAt).toLocaleDateString(),
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tickets");
+
+    XLSX.writeFile(workbook, "tickets.xlsx");
+  };
+
   return (
     <div className="px-6">
       <PageHeader
         title="Ticket Verifier"
         description="Manage ticket status from here"
       />
-
+      <div className="h-10 flex justify-end items-center">
+        <Button className="" variant="outline" onClick={exportToExcel}>
+          Export
+        </Button>
+      </div>
       <div className="rounded-lg overflow-hidden my-4 border">
-        <Table className="">
+        <Table>
           <TableHeader className="bg-neutral-100">
             <TableRow>
               <TableHead className="w-[100px] pl-4">Ticket QR</TableHead>
@@ -79,7 +104,7 @@ const TicketVerifierPage = () => {
             <TableBody>
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={9}
                   className="h-60 text-center text-gray-500"
                 >
                   No results found.
@@ -87,9 +112,8 @@ const TicketVerifierPage = () => {
               </TableRow>
             </TableBody>
           )}
-
           <TableBody>
-            {tickets?.map((ticket) => {
+            {tickets.map((ticket) => {
               const formattedUser = {
                 name: ticket.user?.name,
                 email: ticket.user?.email,
