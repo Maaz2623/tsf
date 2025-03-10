@@ -55,7 +55,7 @@ const EventsContainer = ({
 
   const formattedEvents = selectedEvents.map((event) => ({
     ...event,
-    date: event.date ? "TBA" : undefined,
+    date: event.date,
   }));
 
   useEffect(() => {
