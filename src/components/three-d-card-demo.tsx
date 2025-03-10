@@ -48,12 +48,17 @@ export function ThreeDCardDemo({
     title,
   });
 
+  const { data: bookedContingents } =
+    trpc.contingents.getBookedContingents.useQuery({
+      title,
+    });
+
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
 
   const isDisabled =
-    bookedTickets && maxRegistration
-      ? bookedTickets.length >= maxRegistration
+    bookedTickets && bookedContingents && maxRegistration
+      ? bookedTickets.length + bookedContingents >= maxRegistration
       : false;
 
   return (
@@ -123,10 +128,10 @@ export function ThreeDCardDemo({
               <span>{date}</span>
             </div>
             {maxRegistration ? (
-              bookedTickets ? (
+              bookedTickets && bookedContingents ? (
                 <div className="flex items-center font-medium">
                   <TicketsIcon className="size-4 mr-1" />
-                  {bookedTickets.length} / {maxRegistration}
+                  {bookedTickets.length + bookedContingents} / {maxRegistration}
                 </div>
               ) : (
                 <Skeleton className="w-[60px] h-6 animate-pulse" />
