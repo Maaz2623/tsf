@@ -7,4 +7,5 @@ interface EventType {
   maxRegistration?: number;
   date?: string;
   festType: "elysian" | "solaris";
+  imageUrl?: string;
 }

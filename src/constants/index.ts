@@ -47,6 +47,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "24th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfexNaaAn8krBcnbuiTLKMtYmR3qCDIvgafNZy",
   },
   {
     title: "REEL MAKING",
@@ -103,6 +105,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "25th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfLtFQq7NbGPnBUh2L0mZoReHOctDrMslYCKEQ",
   },
   {
     title: "MINI GAMES",
@@ -114,6 +118,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "25th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfB1EPkfyhLMs2clnPuDkUCjTvqyYNH9KxrgQf",
   },
   {
     title: "STAND UP",
@@ -125,6 +131,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "24th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfYGTX5BtZFJIoEhgtPKxY16qHnscLjmaf2Bbi",
   },
   {
     title: "AIR CRASH",
@@ -158,6 +166,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "24th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfFXhN58mr8PIGoQKgSOxtpZXU3bzaudLCnRM9",
   },
   {
     title: "SOLO DANCE",
@@ -179,8 +189,9 @@ export const events: EventType[] = [
     teamSize: 1,
     festType: "elysian",
     maxRegistration: 10,
-
     date: "24th Mar 2025",
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfJuiwABTnRYMmSBlC7DVn0ZJcwbkKhjHaoOW3",
   },
   {
     title: "TREASURE HUNT",
@@ -192,6 +203,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "24th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfsj4TASKAXn2CejWNtIm1zOsfcRUrEdoaGK50",
   },
   {
     title: "MURDER MYSTERY",
@@ -214,6 +227,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "26th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfm79gxWlOTJ0QqsIWHc1gXzdC5NuyZnjf8eDF",
   },
   {
     title: "GROUP DANCE",
@@ -236,6 +251,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "26th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfOAUfHCp9UVhJHNnpDOTydjC7Ywbi1WeqIA52",
   },
   {
     title: "MAD ADS",
@@ -258,6 +275,8 @@ export const events: EventType[] = [
     festType: "elysian",
     date: "26th Mar 2025",
     maxRegistration: 10,
+    imageUrl:
+      "https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXfGFyEX455bQvLywKk8XNYrnV1RE9sMoAdDfUH",
   },
   // {
   //   title: "Entertainment Quiz",
