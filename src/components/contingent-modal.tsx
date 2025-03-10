@@ -151,13 +151,14 @@ const ContingentGenerator = ({
 
   const [collegeName, setCollegeName] = useState("");
 
-
   const [phoneNumber, setPhoneNumber] = useState("");
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [festType, setFestType] = useState<"elysian" | "solaris" | undefined>(
     "elysian"
   );
+
+  const [name, setName] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -206,6 +207,7 @@ const ContingentGenerator = ({
         collegeName: collegeName,
         festType: festType as "elysian" | "solaris",
         phoneNumber: phoneNumber,
+        name: name,
       },
       {
         onSuccess: () => {
@@ -228,12 +230,9 @@ const ContingentGenerator = ({
     });
   };
 
-
   return (
-    <Drawer
-      open={contingentGeneratorOpen}
-    >
-      <DrawerContent className="mb-8 z-50">
+    <Drawer open={contingentGeneratorOpen}>
+      <DrawerContent className="z-50">
         <DrawerHeader>
           <DrawerTitle className="w-full text-center text-2xl">
             Generate Contingent Plan
@@ -246,6 +245,13 @@ const ContingentGenerator = ({
           </VisuallyHidden>
         </DrawerHeader>
         <div className="min-h-40 space-y-4 w-full flex flex-col justify-center items-center">
+          <div className="space-y-1 w-[300px]">
+            <Label>Fullname</Label>
+            <Input
+              placeholder="e.g. Rohit Malhotra"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
           <div className="space-y-1 w-[300px]">
             <Label>University Name</Label>
             <Input
@@ -303,7 +309,7 @@ const ContingentGenerator = ({
               </>
             )}
           </div>
-          <div className="w-full flex justify-center items-center">
+          <div className="flex gap-y-2 w-[300px] flex-col justify-center items-center">
             <Button
               className="w-[300px]"
               onClick={handleCreateTicket}
@@ -312,7 +318,8 @@ const ContingentGenerator = ({
                 !image ||
                 isUploading ||
                 createTicket.isPending ||
-                collegeName.length === 0
+                collegeName.length === 0 ||
+                name.length === 0
               }
             >
               {isUploading && (
@@ -324,8 +331,16 @@ const ContingentGenerator = ({
               {!isUploading && !createTicket.isPending && "Verify"}
               {createTicket.isPending && "Generating..."}
             </Button>
+            <Button
+              variant={`outline`}
+              className="w-full"
+              onClick={() => setContingentGeneratorOpen(false)}
+            >
+              Cancel
+            </Button>
           </div>
         </div>
+        <div className="h-[20px]" />
       </DrawerContent>
     </Drawer>
   );

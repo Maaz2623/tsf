@@ -196,6 +196,8 @@ const TicketGenerator = ({
 
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  const [name, setName] = useState("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
@@ -243,6 +245,7 @@ const TicketGenerator = ({
         paymentScreenshotUrl: newImageUrl,
         events: selectedEvents,
         festType: eventType,
+        name: name,
       },
       {
         onSuccess: () => {
@@ -263,7 +266,7 @@ const TicketGenerator = ({
 
   return (
     <Drawer open={ticketGeneratorOpen}>
-      <DrawerContent className="mb-8 w-full">
+      <DrawerContent className="pb-8 w-full border flex justify-center items-center">
         <DrawerHeader>
           <DrawerTitle className="w-full text-center text-2xl">
             Generate Ticket
@@ -276,6 +279,13 @@ const TicketGenerator = ({
           </VisuallyHidden>
         </DrawerHeader>
         <div className="min-h-40 space-y-4 w-[300px] flex flex-col justify-center items-center">
+          <div className="space-y-1 w-[300px]">
+            <Label>Fullname</Label>
+            <Input
+              placeholder="e.g. Rohit Malhotra"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
           <div className="space-y-1 w-[300px]">
             <Label>Phone Number</Label>
             <Input
@@ -344,7 +354,7 @@ const TicketGenerator = ({
               </AccordionItem>
             </Accordion>
           </div>
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex flex-col gap-y-2 justify-center items-center">
             <Button
               className="w-[300px]"
               onClick={handleCreateTicket}
@@ -353,7 +363,8 @@ const TicketGenerator = ({
                 !image ||
                 isUploading ||
                 createTicket.isPending ||
-                phoneNumber.length === 0
+                phoneNumber.length === 0 ||
+                name.length === 0
               }
             >
               {isUploading && (
@@ -364,6 +375,16 @@ const TicketGenerator = ({
               )}
               {!isUploading && !createTicket.isPending && "Verify"}
               {createTicket.isPending && "Generating..."}
+            </Button>
+            <Button
+              onClick={() => {
+                setTicketGeneratorOpen(false);
+                setImage(null);
+              }}
+              variant={`outline`}
+              className="w-full"
+            >
+              Cancel
             </Button>
           </div>
         </div>

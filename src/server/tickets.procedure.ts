@@ -127,6 +127,7 @@ export const ticketsRouter = createTRPCRouter({
     .input(
       z.object({
         paymentScreenshotUrl: z.string(),
+        name: z.string(),
         festType: z.enum(["elysian", "solaris"]),
         phoneNumber: z.string().max(10),
         events: z.array(
@@ -163,6 +164,7 @@ export const ticketsRouter = createTRPCRouter({
           paymentScreentshotUrl: input.paymentScreenshotUrl,
           events: updatedEvents,
           userId: ctx.user.id,
+          name: input.name,
         })
         .returning();
 

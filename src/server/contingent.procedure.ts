@@ -102,6 +102,7 @@ export const contingentsRouter = createTRPCRouter({
     .input(
       z.object({
         paymentScreenshotUrl: z.string(),
+        name: z.string(),
         collegeName: z.string(),
         festType: z.enum(["elysian", "solaris"]),
         phoneNumber: z.string().max(10),
@@ -141,6 +142,7 @@ export const contingentsRouter = createTRPCRouter({
           paymentScreentshotUrl: input.paymentScreenshotUrl,
           events: updatedEvents,
           userId: ctx.user.id,
+          name: input.name,
         })
         .returning();
 

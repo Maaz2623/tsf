@@ -58,7 +58,7 @@ const TicketVerifierPage = () => {
       "Ticket QR": ticket.ticketId,
       Status: ticket.status,
       Fest: ticket.festType === "elysian" ? "Elysian" : "Solaris",
-      User: ticket.user?.name || "N/A",
+      User: ticket.name || "N/A",
       Email: ticket.user?.email || "N/A",
       "Phone Number": ticket?.phoneNumber || "N/A",
       Screenshot: ticket.paymentScreentshotUrl || "N/A",
@@ -144,7 +144,7 @@ const TicketVerifierPage = () => {
           <TableBody>
             {tickets.map((ticket) => {
               const formattedUser = {
-                name: ticket.user?.name,
+                name: ticket.name,
                 email: ticket.user?.email,
                 imageUrl: ticket.user?.imageUrl,
                 phoneNumber: ticket.user?.phoneNumber,
@@ -429,9 +429,7 @@ const EventDetailsPopover = ({
                   Price: <span className="font-semibold">₹{event.price}</span>
                 </p>
                 {event.date && (
-                  <p className="text-xs text-gray-500">
-                    Date: {event.date}
-                  </p>
+                  <p className="text-xs text-gray-500">Date: {event.date}</p>
                 )}
               </div>
             ))}

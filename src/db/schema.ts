@@ -45,6 +45,7 @@ export const tickets = pgTable("tickets", {
   userId: uuid("user_id").references(() => users.id, {
     onDelete: "cascade",
   }),
+  name: text("name").notNull(),
   phoneNumber: text("phone_number").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -63,6 +64,7 @@ export const contingents = pgTable("contingents", {
   userId: uuid("user_id").references(() => users.id, {
     onDelete: "cascade",
   }),
+  name: text("name").notNull(),
   phoneNumber: text("phone_number").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
