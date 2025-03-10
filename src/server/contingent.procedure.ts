@@ -15,7 +15,7 @@ export const contingentsRouter = createTRPCRouter({
     .query(async () => {
       const data = await db.select().from(contingents);
 
-      return data.length;
+      return data;
     }),
   hasContingent: protectedProcedure.query(async ({ ctx }) => {
     const [data] = await db

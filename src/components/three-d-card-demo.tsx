@@ -58,7 +58,7 @@ export function ThreeDCardDemo({
 
   const isDisabled =
     bookedTickets && bookedContingents && maxRegistration
-      ? bookedTickets.length + bookedContingents >= maxRegistration
+      ? bookedTickets.length + bookedContingents.length >= maxRegistration
       : false;
 
   return (
@@ -131,7 +131,8 @@ export function ThreeDCardDemo({
               bookedTickets && bookedContingents ? (
                 <div className="flex items-center font-medium">
                   <TicketsIcon className="size-4 mr-1" />
-                  {bookedTickets.length + bookedContingents} / {maxRegistration}
+                  {bookedTickets.length + bookedContingents.length} /{" "}
+                  {maxRegistration}
                 </div>
               ) : (
                 <Skeleton className="w-[60px] h-6 animate-pulse" />
