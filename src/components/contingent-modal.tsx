@@ -77,7 +77,7 @@ const ContingentModal = () => {
           ) : (
             <>
               <PackageIcon className="size-5 mr-2" />
-              Buy Contingent
+              Contingent
             </>
           )}
         </button>
