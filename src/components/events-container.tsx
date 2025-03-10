@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
-import { UploadIcon, XIcon } from "lucide-react";
+import { Loader2Icon, UploadIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import {
   Accordion,
@@ -204,11 +204,16 @@ const TicketGenerator = ({
 
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
+      toast.dismiss();
       toast.success("Upload complete");
       setNewImageUrl(res[0].ufsUrl);
     },
     onUploadError: () => {
+      toast.dismiss();
       toast.error("Upload error");
+    },
+    onUploadBegin: () => {
+      toast.loading("Uploading file. Please wait...");
     },
   });
 
@@ -241,8 +246,8 @@ const TicketGenerator = ({
       },
       {
         onSuccess: () => {
-          router.push(`/dashboard/tickets`);
           setTicketGeneratorOpen(false);
+          router.push(`/dashboard/tickets`);
           utils.tickets.getByClerkId.invalidate();
           utils.tickets.invalidate();
         },
@@ -257,8 +262,8 @@ const TicketGenerator = ({
   };
 
   return (
-    <Drawer onOpenChange={setTicketGeneratorOpen} open={ticketGeneratorOpen}>
-      <DrawerContent className="mb-8">
+    <Drawer open={ticketGeneratorOpen}>
+      <DrawerContent className="mb-8 w-full">
         <DrawerHeader>
           <DrawerTitle className="w-full text-center text-2xl">
             Generate Ticket
@@ -271,15 +276,13 @@ const TicketGenerator = ({
           </VisuallyHidden>
         </DrawerHeader>
         <div className="min-h-40 space-y-4 w-[300px] flex flex-col justify-center items-center">
-          <div>
-            <div className="space-y-1 w-[300px]">
-              <Label>Phone Number</Label>
-              <Input
-                placeholder="e.g. 829647***1"
-                maxLength={10}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </div>
+          <div className="space-y-1 w-[300px]">
+            <Label>Phone Number</Label>
+            <Input
+              placeholder="e.g. 829647***1"
+              maxLength={10}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
           </div>
           <div className="flex flex-col items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
             {image ? (
@@ -353,7 +356,12 @@ const TicketGenerator = ({
                 phoneNumber.length === 0
               }
             >
-              {isUploading && "Uploading screenshot"}
+              {isUploading && (
+                <>
+                  <Loader2Icon className="mr-1 animate-spin" />
+                  Uploading
+                </>
+              )}
               {!isUploading && !createTicket.isPending && "Verify"}
               {createTicket.isPending && "Generating..."}
             </Button>

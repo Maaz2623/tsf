@@ -151,6 +151,7 @@ const ContingentGenerator = ({
 
   const [collegeName, setCollegeName] = useState("");
 
+
   const [phoneNumber, setPhoneNumber] = useState("");
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -168,10 +169,12 @@ const ContingentGenerator = ({
 
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
+      toast.dismiss();
       toast.success("Upload complete");
       setNewImageUrl(res[0].ufsUrl);
     },
     onUploadError: () => {
+      toast.dismiss();
       toast.error("Upload error");
     },
     onUploadBegin: () => {
@@ -225,9 +228,9 @@ const ContingentGenerator = ({
     });
   };
 
+
   return (
     <Drawer
-      onOpenChange={setContingentGeneratorOpen}
       open={contingentGeneratorOpen}
     >
       <DrawerContent className="mb-8 z-50">
@@ -314,7 +317,7 @@ const ContingentGenerator = ({
             >
               {isUploading && (
                 <>
-                  <Loader2Icon className="mr-1" />
+                  <Loader2Icon className="mr-1 animate-spin" />
                   Uploading
                 </>
               )}
