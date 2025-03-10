@@ -45,7 +45,7 @@ export function EventTypeComboBox({
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="text-2xl w-[200px] font-semibold justify-between"
+          className="text-2xl w-fit font-semibold justify-between"
         >
           {frameworks.find((framework) => framework.value === eventType)
             ?.label || "Select Event Type"}
