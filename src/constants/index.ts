@@ -279,16 +279,16 @@ export const events: EventType[] = [
     maxRegistration: 10,
     imageUrl: "/cards-images/personality-hunt.jpeg",
   },
-  // {
-  //   title: "Entertainment Quiz",
-  //   description:
-  //     "A multi-round competition testing confidence, communication, creativity, and adaptability to crown the ultimate Mr. & Mrs. Elysian.",
-  //   rating: 5,
-  //   price: 500,
-  //   teamSize: 1,
-  //   festType: "elysian",
-  //   date: "25th Mar 2025",
-  // },
+   {
+     title: "Entertainment Quiz",
+     description:
+       "",
+     rating: 3,
+     price: 300,
+     teamSize: 2,
+     festType: "elysian",
+     date: "25th Mar 2025",
+   },
 ];
 
 export const contingentPrice = 9000;
