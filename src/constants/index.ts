@@ -282,7 +282,7 @@ export const events: EventType[] = [
    {
      title: "Entertainment Quiz",
      description:
-       "",
+       "From samurai legends to feudal feats, can you master this Matsu Batsu quiz and claim your place as a trivia champion?",
      rating: 3,
      price: 300,
      teamSize: 2,
