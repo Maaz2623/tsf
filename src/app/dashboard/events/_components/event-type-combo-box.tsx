@@ -90,7 +90,7 @@ export function EventTypeComboBox({
       </Popover>
       <Button asChild variant={`outline`} className="h-8 text-xs">
         <a
-          href={`https://8i3zvqcf63.ufs.sh/f/ZE7bonILDjXflORjUPB2w9YJbXMexhT8GRHP7IKml3Zt5piB`}
+          href={`/brochures/brochure.pdf`}
           target="_blank"
           rel="noopener noreferrer"
         >
