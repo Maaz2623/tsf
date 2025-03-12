@@ -115,7 +115,7 @@ const ContingentModal = () => {
           <div className="min-h-40 w-full gap-y-3 flex flex-col justify-center items-center">
             <div className="flex flex-col items-center justify-center bg-white rounded-lg relative">
               <h2 className="text-lg font-medium mb-2">
-                Scan or Click to Pay{" "}
+                Scan or Click QR to Pay{" "}
                 <span className="font-bold text-black">₹{contingentPrice}</span>
               </h2>
               <Link href={contingentUpiLink}>
