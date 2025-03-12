@@ -279,19 +279,19 @@ export const events: EventType[] = [
     maxRegistration: 10,
     imageUrl: "/cards-images/personality-hunt.jpeg",
   },
-   {
-     title: "Entertainment Quiz",
-     description:
-       "From samurai legends to feudal feats, can you master this Matsu Batsu quiz and claim your place as a trivia champion?",
-     rating: 3,
-     price: 300,
-     teamSize: 2,
-     festType: "elysian",
-     date: "25th Mar 2025",
-   },
+  {
+    title: "Entertainment Quiz",
+    description:
+      "From samurai legends to feudal feats, can you master this Matsu Batsu quiz and claim your place as a trivia champion?",
+    rating: 3,
+    price: 300,
+    teamSize: 2,
+    festType: "elysian",
+    date: "25th Mar 2025",
+    imageUrl: "/cards-images/eq.jpeg",
+  },
 ];
 
 export const contingentPrice = 9000;
-
 
 export const contingentUpiLink = `upi://pay?pa=7349323005@pthdfc&pn=TheStudentForum&am=${contingentPrice}&cu=INR`;
