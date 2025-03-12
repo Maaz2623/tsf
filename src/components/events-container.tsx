@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RatingsCombobox } from "./combo-box";
 import { ThreeDCardDemo } from "./three-d-card-demo";
 import { events, solarisEvents } from "@/constants";
@@ -17,8 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
-import { Loader2Icon, UploadIcon, XIcon } from "lucide-react";
-import Image from "next/image";
+import { Loader2Icon } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -198,12 +197,6 @@ const TicketGenerator = ({
 
   const [name, setName] = useState("");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       toast.dismiss();
@@ -298,7 +291,16 @@ const TicketGenerator = ({
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
-          <div className="flex flex-col items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
+          <div className="space-y-1 w-[300px]">
+            <Label>Upload payment screenshot (MAX 4MB)</Label>
+            <Input
+              disabled={createTicket.isPending}
+              placeholder="Select image"
+              type="file"
+              onChange={handleFileChange}
+            />
+          </div>
+          {/* <div className="flex flex-col items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
             {image ? (
               <div className="flex flex-col justify-center items-center space-y-2">
                 <p className="text-center text-lg font-semibold">
@@ -341,7 +343,7 @@ const TicketGenerator = ({
                 </Button>
               </>
             )}
-          </div>
+          </div> */}
           <div className="w-full flex justify-center items-center">
             <Accordion type="single" collapsible className="w-[300px]">
               <AccordionItem
