@@ -44,9 +44,15 @@ export function ThreeDCardDemo({
   maxRegistration?: number;
   event: EventType;
 }) {
-  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery({
-    title,
-  });
+  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery(
+    {
+      title,
+    },
+    {
+      staleTime: 10000,
+      refetchInterval: 10000,
+    }
+  );
 
   const { data: bookedContingents } =
     trpc.contingents.getBookedContingents.useQuery(
@@ -54,17 +60,13 @@ export function ThreeDCardDemo({
         title,
       },
       {
+        staleTime: 10000,
         refetchInterval: 10000,
       }
     );
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
-    trpc.tickets.getByEventTitleUserId.useQuery(
-      { title },
-      {
-        refetchInterval: 10000,
-      }
-    );
+    trpc.tickets.getByEventTitleUserId.useQuery({ title });
 
   const isDisabled =
     Array.isArray(bookedTickets) && Array.isArray(bookedContingents)
