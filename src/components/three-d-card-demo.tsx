@@ -44,11 +44,12 @@ export function ThreeDCardDemo({
   maxRegistration?: number;
   event: EventType;
 }) {
-  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery({
-    title,
-  });
+  const { data: bookedTickets, isSuccess: fetchedBookedTickets } =
+    trpc.tickets.getByEventTitle.useQuery({
+      title,
+    });
 
-  const { data: bookedContingents } =
+  const { data: bookedContingents, isSuccess: fetchedBookedContingents } =
     trpc.contingents.getBookedContingents.useQuery({
       title,
     });
@@ -56,10 +57,10 @@ export function ThreeDCardDemo({
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
 
-  const isDisabled =
-    Array.isArray(bookedTickets) && Array.isArray(bookedContingents)
-      ? bookedTickets.length + bookedContingents.length >= 10
-      : false;
+  const totalTicketsBooked =
+    fetchedBookedContingents && fetchedBookedTickets
+      ? (bookedContingents?.length || 0) + (bookedTickets?.length || 0)
+      : 0;
 
   return (
     <CardContainer className="inter-var cursor-pointer rounded-xl bg-white/20">
@@ -146,11 +147,15 @@ export function ThreeDCardDemo({
               {price === "Free" ? "Free" : <>₹{price}</>}
             </CardItem>
             <Button
-              disabled={isDisabled || isUserTicketLoading || userTicket}
+              disabled={
+                totalTicketsBooked === maxRegistration ||
+                isUserTicketLoading ||
+                userTicket
+              }
               variant="outline"
               className={cn(
                 "h-8 px-4 flex items-center justify-center text-sm",
-                isDisabled &&
+                totalTicketsBooked === maxRegistration &&
                   !userTicket &&
                   "bg-red-100/80 border border-red-500 text-red-600",
                 selectedEvents.some((e) => e.title === event.title) &&
@@ -169,7 +174,7 @@ export function ThreeDCardDemo({
                 "Loading"
               ) : userTicket ? (
                 "Booked"
-              ) : isDisabled ? (
+              ) : totalTicketsBooked === maxRegistration ? (
                 "Maxed out"
               ) : selectedEvents.some((e) => e.title === event.title) ? (
                 <>
