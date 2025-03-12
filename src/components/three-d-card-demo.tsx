@@ -44,26 +44,14 @@ export function ThreeDCardDemo({
   maxRegistration?: number;
   event: EventType;
 }) {
-  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery(
-    {
-      title,
-    },
-    {
-      staleTime: 10000,
-      refetchInterval: 10000,
-    }
-  );
+  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery({
+    title,
+  });
 
   const { data: bookedContingents } =
-    trpc.contingents.getBookedContingents.useQuery(
-      {
-        title,
-      },
-      {
-        staleTime: 10000,
-        refetchInterval: 10000,
-      }
-    );
+    trpc.contingents.getBookedContingents.useQuery({
+      title,
+    });
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
