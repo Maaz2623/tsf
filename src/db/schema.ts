@@ -47,6 +47,7 @@ export const tickets = pgTable("tickets", {
   }),
   name: text("name").notNull(),
   phoneNumber: text("phone_number").notNull(),
+  collegeName: text("college_name").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

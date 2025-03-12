@@ -197,6 +197,8 @@ const TicketGenerator = ({
 
   const [name, setName] = useState("");
 
+  const [collegeName, setCollegeName] = useState("");
+
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       toast.dismiss();
@@ -239,6 +241,7 @@ const TicketGenerator = ({
         events: selectedEvents,
         festType: eventType,
         name: name,
+        collegeName: collegeName,
       },
       {
         onSuccess: () => {
@@ -289,6 +292,14 @@ const TicketGenerator = ({
               type="number"
               maxLength={10}
               onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1 w-[300px]">
+            <Label>University Name</Label>
+            <Input
+              disabled={createTicket.isPending}
+              placeholder="e.g. Jain College"
+              onChange={(e) => setCollegeName(e.target.value)}
             />
           </div>
           <div className="space-y-1 w-[300px]">

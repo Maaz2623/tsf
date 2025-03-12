@@ -131,6 +131,7 @@ export const ticketsRouter = createTRPCRouter({
         name: z.string(),
         festType: z.enum(["elysian", "solaris"]),
         phoneNumber: z.string().max(10),
+        collegeName: z.string(),
         events: z.array(
           z.object({
             title: z.string(),
@@ -151,8 +152,6 @@ export const ticketsRouter = createTRPCRouter({
         });
       }
 
-      
-
       const updatedEvents = input.events.map((event) => ({
         ...event,
         festType: input.festType,
@@ -161,6 +160,7 @@ export const ticketsRouter = createTRPCRouter({
       const [newTicket] = await db
         .insert(tickets)
         .values({
+          collegeName: input.collegeName,
           phoneNumber: input.phoneNumber,
           festType: input.festType,
           status: "processing",
