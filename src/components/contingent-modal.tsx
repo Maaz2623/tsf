@@ -53,7 +53,7 @@ const ContingentModal = () => {
         open={contingentModalOpen}
       >
         <button
-          disabled={isFetching || full}
+          disabled={isFetching}
           onClick={() => {
             if (full) {
               toast.custom((t) => (
