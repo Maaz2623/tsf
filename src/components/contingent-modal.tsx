@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -21,8 +21,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "./ui/drawer";
-import { Loader2Icon, PackageIcon, UploadIcon, XIcon } from "lucide-react";
-import Image from "next/image";
+import { Loader2Icon, PackageIcon } from "lucide-react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import toast from "react-hot-toast";
@@ -184,14 +183,7 @@ const ContingentGenerator = ({
 
   const [name, setName] = useState("");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const utils = trpc.useUtils();
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       toast.dismiss();
@@ -297,7 +289,16 @@ const ContingentGenerator = ({
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
-          <div className="flex flex-col w-[300px] items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
+          <div className="space-y-1 w-[300px]">
+            <Label>Upload payment screenshot (MAX 4MB)</Label>
+            <Input
+              disabled={createTicket.isPending}
+              placeholder="Select image"
+              type="file"
+              onChange={handleFileChange}
+            />
+          </div>
+          {/* <div className="flex flex-col w-[300px] items-center justify-center space-y-4 p-6  border-dotted border-2 rounded-lg">
             {image ? (
               <div className="flex flex-col justify-center items-center space-y-2">
                 <p className="text-center text-lg font-semibold">
@@ -340,7 +341,7 @@ const ContingentGenerator = ({
                 </Button>
               </>
             )}
-          </div>
+          </div> */}
           <div className="flex gap-y-2 w-[300px] flex-col justify-center items-center">
             <Button
               className="w-[300px]"
