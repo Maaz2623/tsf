@@ -49,8 +49,8 @@ export function ThreeDCardDemo({
       title,
     },
     {
-      staleTime: 5000,
-      refetchInterval: 5000,
+      staleTime: 10000,
+      refetchOnWindowFocus: true,
     }
   );
 
@@ -60,8 +60,8 @@ export function ThreeDCardDemo({
         title,
       },
       {
-        staleTime: 5000,
-        refetchInterval: 5000,
+        staleTime: 10000,
+        refetchOnWindowFocus: true,
       }
     );
 
