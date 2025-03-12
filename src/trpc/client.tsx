@@ -2,7 +2,11 @@
 // ^-- to make sure we can mount the Provider from a server component
 import type { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
+import {
+  httpBatchLink,
+  splitLink,
+  unstable_httpSubscriptionLink,
+} from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
 import { makeQueryClient } from "./query-client";
@@ -48,6 +52,17 @@ export function TRPCProvider(
             headers.set("x-trpc-source", "nextjs-react");
             return headers;
           },
+        }),
+        splitLink({
+          condition: (op) => op.type === "subscription",
+          true: unstable_httpSubscriptionLink({
+            url: "/api/trpc",
+            transformer: superjson,
+          }),
+          false: unstable_httpSubscriptionLink({
+            url: "/api/trpc",
+            transformer: superjson,
+          }),
         }),
       ],
     })

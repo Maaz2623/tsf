@@ -20,7 +20,8 @@ export const ticketsRouter = createTRPCRouter({
           sql`EXISTS (
           SELECT 1 FROM jsonb_array_elements(${tickets.events}) AS event
           WHERE event->>'title' = ${input.title}
-        ) AND ${tickets.userId} = ${ctx.user.id}`
+        ) AND ${tickets.userId} = ${ctx.user.id}
+          AND ${tickets.status} != 'rejected'`
         );
 
       if (data.length > 0) {
@@ -39,7 +40,7 @@ export const ticketsRouter = createTRPCRouter({
       const data = await db.select().from(tickets).where(sql`EXISTS (
       SELECT 1 FROM jsonb_array_elements(${tickets.events}) AS event
       WHERE event->>'title' = ${input.title}
-    )`);
+    )  AND ${tickets.status} != 'rejected'`);
 
       return data;
     }),
