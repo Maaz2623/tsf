@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { contingents, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, ne } from "drizzle-orm";
 import { z } from "zod";
 
 export const contingentsRouter = createTRPCRouter({
@@ -13,7 +13,10 @@ export const contingentsRouter = createTRPCRouter({
       })
     )
     .query(async () => {
-      const data = await db.select().from(contingents);
+      const data = await db
+        .select()
+        .from(contingents)
+        .where(ne(contingents.status, "rejected"));
 
       return data;
     }),
