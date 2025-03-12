@@ -55,6 +55,21 @@ const ContingentModal = () => {
         <button
           disabled={isFetching || full}
           onClick={() => {
+            if (full) {
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } flex items-center gap-3 bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg shadow-md`}
+                >
+                  <span className="text-yellow-600 text-xl">⚠️</span>
+                  <p className="font-medium">
+                    Some events are full. Please select events and buy tickets
+                    instead of a contingent.
+                  </p>
+                </div>
+              ));
+            }
             if (hasContingent) {
               toast.custom((t) => (
                 <div
