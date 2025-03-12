@@ -151,6 +151,8 @@ export const ticketsRouter = createTRPCRouter({
         });
       }
 
+      
+
       const updatedEvents = input.events.map((event) => ({
         ...event,
         festType: input.festType,

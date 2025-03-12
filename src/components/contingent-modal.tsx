@@ -36,31 +36,6 @@ const ContingentModal = () => {
 
   const { data: hasContingent, isFetching } =
     trpc.contingents.hasContingent.useQuery();
-
-  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery(
-    {
-      title: "JAM",
-    },
-    {
-      staleTime: 10000,
-    }
-  );
-
-  const { data: bookedContingents } =
-    trpc.contingents.getBookedContingents.useQuery(
-      {
-        title: "JAM",
-      },
-      {
-        staleTime: 10000,
-      }
-    );
-
-  const isDisabled =
-    Array.isArray(bookedTickets) && Array.isArray(bookedContingents)
-      ? bookedTickets.length + bookedContingents.length >= 10
-      : false;
-
   return (
     <>
       <ContingentGenerator
@@ -74,7 +49,7 @@ const ContingentModal = () => {
         open={contingentModalOpen}
       >
         <button
-          disabled={isFetching || isDisabled}
+          disabled={isFetching}
           onClick={() => {
             if (hasContingent) {
               toast.custom((t) => (
