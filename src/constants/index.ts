@@ -88,7 +88,7 @@ export const events: EventType[] = [
     festType: "elysian",
   },
   {
-    title: "HOGOTHON",
+    title: "HOGATHON",
     description:
       "A speed-based eating challenge where teams of four race to finish Asian dishes as quickly as possible.",
     rating: 3,
