@@ -27,6 +27,18 @@ export const solarisEvents: EventType[] = [
 ];
 export const events: EventType[] = [
   {
+    title: "Test Event",
+    description:
+      "A Japanese-themed twist on the classic Just A Minute game. Speak on a random Japanese culture topic for one minute without hesitation, repetition, or deviation.",
+    rating: 3,
+    price: 200,
+    teamSize: 1,
+    date: "24th Mar 2025",
+    maxRegistration: 10,
+    festType: "elysian",
+    imageUrl: "/cards-images/jam.jpeg",
+  },
+  {
     title: "JAM",
     description:
       "A Japanese-themed twist on the classic Just A Minute game. Speak on a random Japanese culture topic for one minute without hesitation, repetition, or deviation.",
