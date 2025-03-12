@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { CardBody, CardContainer, CardItem } from "./ui/3d-card";
 import {
   StarIcon,
@@ -70,7 +70,9 @@ export function ThreeDCardDemo({
       ? (bookedContingents?.length || 0) + (bookedTickets?.length || 0)
       : 0;
 
-  setFull(totalTicketsBooked === 10);
+  useEffect(() => {
+    setFull(totalTicketsBooked === maxRegistration);
+  }, [totalTicketsBooked, setFull, maxRegistration]);
 
   const isFetchingTickets = fetchingBookedTickets || fetchingBookedContingents;
 
