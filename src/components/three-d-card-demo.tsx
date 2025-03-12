@@ -49,7 +49,8 @@ export function ThreeDCardDemo({
       title,
     },
     {
-      staleTime: 10000,
+      staleTime: 5000,
+      refetchInterval: 5000,
     }
   );
 
@@ -59,7 +60,8 @@ export function ThreeDCardDemo({
         title,
       },
       {
-        staleTime: 10000,
+        staleTime: 5000,
+        refetchInterval: 5000,
       }
     );
 
