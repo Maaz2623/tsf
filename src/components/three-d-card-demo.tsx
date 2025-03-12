@@ -44,15 +44,21 @@ export function ThreeDCardDemo({
   maxRegistration?: number;
   event: EventType;
 }) {
-  const { data: bookedTickets, isSuccess: fetchedBookedTickets } =
-    trpc.tickets.getByEventTitle.useQuery({
-      title,
-    });
+  const {
+    data: bookedTickets,
+    isSuccess: fetchedBookedTickets,
+    isFetching: fetchingBookedTickets,
+  } = trpc.tickets.getByEventTitle.useQuery({
+    title,
+  });
 
-  const { data: bookedContingents, isSuccess: fetchedBookedContingents } =
-    trpc.contingents.getBookedContingents.useQuery({
-      title,
-    });
+  const {
+    data: bookedContingents,
+    isSuccess: fetchedBookedContingents,
+    isFetching: fetchingBookedContingents,
+  } = trpc.contingents.getBookedContingents.useQuery({
+    title,
+  });
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
@@ -61,6 +67,8 @@ export function ThreeDCardDemo({
     fetchedBookedContingents && fetchedBookedTickets
       ? (bookedContingents?.length || 0) + (bookedTickets?.length || 0)
       : 0;
+
+  const isFetchingTickets = fetchingBookedTickets || fetchingBookedContingents;
 
   return (
     <CardContainer className="inter-var cursor-pointer rounded-xl bg-white/20">
@@ -150,7 +158,8 @@ export function ThreeDCardDemo({
               disabled={
                 totalTicketsBooked === maxRegistration ||
                 isUserTicketLoading ||
-                userTicket
+                userTicket ||
+                isFetchingTickets
               }
               variant="outline"
               className={cn(
@@ -170,7 +179,7 @@ export function ThreeDCardDemo({
                 toast.success("Event list updated");
               }}
             >
-              {isUserTicketLoading ? (
+              {isUserTicketLoading || isFetchingTickets ? (
                 "Loading"
               ) : userTicket ? (
                 "Booked"
