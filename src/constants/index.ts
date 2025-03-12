@@ -34,7 +34,7 @@ export const events: EventType[] = [
     price: 200,
     teamSize: 1,
     date: "24th Mar 2025",
-    maxRegistration: 10,
+    maxRegistration: 1,
     festType: "elysian",
     imageUrl: "/cards-images/jam.jpeg",
   },
