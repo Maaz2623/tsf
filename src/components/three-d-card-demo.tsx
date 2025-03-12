@@ -47,9 +47,6 @@ export function ThreeDCardDemo({
   const { data: bookedTickets } = trpc.tickets.getByEventTitle.useQuery(
     {
       title,
-    },
-    {
-      staleTime: 5000,
     }
   );
 
@@ -57,18 +54,12 @@ export function ThreeDCardDemo({
     trpc.contingents.getBookedContingents.useQuery(
       {
         title,
-      },
-      {
-        staleTime: 5000,
       }
     );
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery(
-      { title },
-      {
-        staleTime: 5000,
-      }
+      { title }
     );
 
   const isDisabled =
