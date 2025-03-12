@@ -282,6 +282,7 @@ const TicketGenerator = ({
           <div className="space-y-1 w-[300px]">
             <Label>Fullname</Label>
             <Input
+              disabled={createTicket.isPending}
               placeholder="e.g. Rohit Malhotra"
               onChange={(e) => setName(e.target.value)}
             />
@@ -289,7 +290,10 @@ const TicketGenerator = ({
           <div className="space-y-1 w-[300px]">
             <Label>Phone Number</Label>
             <Input
+              disabled={createTicket.isPending}
               placeholder="e.g. 829647***1"
+              minLength={10}
+              type="number"
               maxLength={10}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
@@ -320,6 +324,7 @@ const TicketGenerator = ({
                   Upload payment screenshot. (MAX 4MB)
                 </p>
                 <input
+                  disabled={createTicket.isPending}
                   type="file"
                   ref={fileInputRef}
                   className="hidden"
@@ -327,6 +332,7 @@ const TicketGenerator = ({
                   accept="image/*" // Allows only image files
                 />
                 <Button
+                  disabled={createTicket.isPending}
                   className="flex items-center gap-2 px-6 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow"
                   onClick={handleUploadClick}
                 >
@@ -364,7 +370,8 @@ const TicketGenerator = ({
                 isUploading ||
                 createTicket.isPending ||
                 phoneNumber.length === 0 ||
-                name.length === 0
+                name.length === 0 ||
+                phoneNumber.length === 0
               }
             >
               {isUploading && (
