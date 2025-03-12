@@ -56,6 +56,7 @@
         "drizzle-orm": "^0.40.0",
         "embla-carousel-react": "^8.5.2",
         "input-otp": "^1.4.2",
+        "jotai": "^2.12.2",
         "lucide-react": "^0.477.0",
         "motion": "^12.4.9",
         "next": "15.2.0",
@@ -1003,6 +1004,8 @@
     "iterator.prototype": ["iterator.prototype@1.1.5", "", { "dependencies": { "define-data-property": "^1.1.4", "es-object-atoms": "^1.0.0", "get-intrinsic": "^1.2.6", "get-proto": "^1.0.0", "has-symbols": "^1.1.0", "set-function-name": "^2.0.2" } }, "sha512-H0dkQoCa3b2VEeKQBOxFph+JAbcrQdE7KC0UkqwpLmv2EC4P41QXP+rqo9wYodACiG5/WM5s9oDApTU8utwj9g=="],
 
     "jiti": ["jiti@2.4.2", "", { "bin": { "jiti": "lib/jiti-cli.mjs" } }, "sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A=="],
+
+    "jotai": ["jotai@2.12.2", "", { "peerDependencies": { "@types/react": ">=17.0.0", "react": ">=17.0.0" }, "optionalPeers": ["@types/react", "react"] }, "sha512-oN8715y7MkjXlSrpyjlR887TOuc/NLZMs9gvgtfWH/JP47ChwO0lR2ijSwBvPMYyXRAPT+liIAhuBavluKGgtA=="],
 
     "js-cookie": ["js-cookie@3.0.5", "", {}, "sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw=="],
 

@@ -28,6 +28,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUploadThing } from "@/lib/uploadthing";
 import { trpc } from "@/trpc/client";
+import { useContingentFull } from "@/hooks/use-contingent-full";
 
 const ContingentModal = () => {
   const [contingentGenerator, setContingentGenerator] = useState(false);
@@ -36,6 +37,9 @@ const ContingentModal = () => {
 
   const { data: hasContingent, isFetching } =
     trpc.contingents.hasContingent.useQuery();
+
+  const [full] = useContingentFull();
+
   return (
     <>
       <ContingentGenerator
@@ -49,7 +53,7 @@ const ContingentModal = () => {
         open={contingentModalOpen}
       >
         <button
-          disabled={isFetching}
+          disabled={isFetching || full}
           onClick={() => {
             if (hasContingent) {
               toast.custom((t) => (
@@ -118,7 +122,10 @@ const ContingentModal = () => {
           </div>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Button onClick={() => setContingentGenerator(true)}>
+            <Button
+              onClick={() => setContingentGenerator(true)}
+              disabled={full}
+            >
               I have paid
             </Button>
           </AlertDialogFooter>

@@ -20,6 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useContingentFull } from "@/hooks/use-contingent-full";
 
 export function ThreeDCardDemo({
   title,
@@ -44,6 +45,7 @@ export function ThreeDCardDemo({
   maxRegistration?: number;
   event: EventType;
 }) {
+  const [, setFull] = useContingentFull();
   const {
     data: bookedTickets,
     isSuccess: fetchedBookedTickets,
@@ -67,6 +69,8 @@ export function ThreeDCardDemo({
     fetchedBookedContingents && fetchedBookedTickets
       ? (bookedContingents?.length || 0) + (bookedTickets?.length || 0)
       : 0;
+
+  setFull(totalTicketsBooked === 10);
 
   const isFetchingTickets = fetchingBookedTickets || fetchingBookedContingents;
 
