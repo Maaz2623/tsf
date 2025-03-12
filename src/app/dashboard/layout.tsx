@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { UserButton } from "@clerk/nextjs";
 
-import { Calendar, Ticket, Package } from "lucide-react";
+import { Calendar, Ticket, Package, HandHelping } from "lucide-react";
 import { JSX } from "react";
 
 const navItems: {
@@ -30,6 +30,11 @@ const navItems: {
     name: "Contingents",
     link: "/dashboard/contingents",
     icon: <Package className="size-5" />,
+  },
+  {
+    name: "Help",
+    link: "/dashboard/help",
+    icon: <HandHelping className="size-5" />,
   },
 ];
 
