@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   other: {
     "color-schema": "light only",
   },
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 const poppins = Poppins({
