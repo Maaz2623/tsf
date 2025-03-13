@@ -9,9 +9,7 @@ export function TimelineDemo() {
       content: (
         <div>
           <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Explore upcoming the events on our platform and add the ones you
-            desire to the ticket. Yes! You can buy one ticket for multiple
-            events.
+            Explore upcoming events on our platform and add your favorites to your ticket. Yes! You can purchase a single ticket for multiple events.
           </p>
           <Image
             src="/help/browse-events.png"
