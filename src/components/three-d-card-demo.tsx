@@ -50,17 +50,29 @@ export function ThreeDCardDemo({
     data: bookedTickets,
     isSuccess: fetchedBookedTickets,
     isFetching: fetchingBookedTickets,
-  } = trpc.tickets.getByEventTitle.useQuery({
-    title,
-  });
+  } = trpc.tickets.getByEventTitle.useQuery(
+    {
+      title,
+    },
+    {
+      staleTime: 25000,
+      refetchInterval: 25000,
+    }
+  );
 
   const {
     data: bookedContingents,
     isSuccess: fetchedBookedContingents,
     isFetching: fetchingBookedContingents,
-  } = trpc.contingents.getBookedContingents.useQuery({
-    title,
-  });
+  } = trpc.contingents.getBookedContingents.useQuery(
+    {
+      title,
+    },
+    {
+      staleTime: 25000,
+      refetchInterval: 25000,
+    }
+  );
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
