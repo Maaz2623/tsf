@@ -28,11 +28,9 @@ export function TimelineDemo() {
       content: (
         <div>
           <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Click on buy ticket button and a QR will appear with total amount
-            calculated. Scan the QR from inside your UPI payments provider or
-            click the QR and you will be redirected to your UPI payments
-            provider. Make the payment and keep the screenshot of the
-            transaction handy.
+            Click Buy Ticket, scan the QR with your UPI app, or tap it to open
+            your UPI provider. Complete the payment and save the transaction
+            screenshot.
           </p>
           <Image
             src="/help/payment.png"
