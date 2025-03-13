@@ -31,18 +31,22 @@ export const ticketsRouter = createTRPCRouter({
       return false;
     }),
   getByEventTitle: protectedProcedure
-    .input(
-      z.object({
-        title: z.string(),
-      })
-    )
-    .query(async ({ input }) => {
-      const data = await db.select().from(tickets).where(sql`EXISTS (
-      SELECT 1 FROM jsonb_array_elements(${tickets.events}) AS event
-      WHERE event->>'title' = ${input.title}
-    )  AND ${tickets.status} != 'rejected'`);
+    .input(z.object({ title: z.string() }))
+    .subscription(async function* ({ input }) {
+      while (true) {
+        const data = await db
+          .select()
+          .from(tickets)
+          .where(
+            sql`EXISTS (
+            SELECT 1 FROM jsonb_array_elements(${tickets.events}) AS event
+            WHERE event->>'title' = ${input.title}
+          ) AND ${tickets.status} != 'rejected'`
+          );
 
-      return data;
+        yield data; // Send updated data to the client
+        await new Promise((resolve) => setTimeout(resolve, 3000)); // Fetch updates every 3 seconds
+      }
     }),
   updatedStatus: protectedProcedure
     .input(
