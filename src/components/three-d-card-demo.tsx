@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CardBody, CardContainer, CardItem } from "./ui/3d-card";
 import {
   StarIcon,
@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useContingentFull } from "@/hooks/use-contingent-full";
+import { tickets } from "@/db/schema";
 
 export function ThreeDCardDemo({
   title,
@@ -46,17 +47,21 @@ export function ThreeDCardDemo({
   event: EventType;
 }) {
   const [, setFull] = useContingentFull();
-  const {
-    data: bookedTickets,
-    isSuccess: fetchedBookedTickets,
-    isFetching: fetchingBookedTickets,
-  } = trpc.tickets.getByEventTitle.useQuery(
+  const [fetchingBookedTickets, setFetchingBookedTickets] = useState(false);
+  const [fetchedBookedTickets, setFetchedBookedTickets] = useState<
+    Array<typeof tickets.$inferSelect>
+  >([]);
+
+  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useSubscription(
     {
       title,
     },
     {
-      staleTime: 25000,
-      refetchInterval: 25000,
+      onStarted: () => setFetchingBookedTickets(true),
+      onData: (newTickets) => {
+        setFetchedBookedTickets(newTickets); // 👈 Correctly type `newTickets`
+        setFetchingBookedTickets(false);
+      },
     }
   );
 
