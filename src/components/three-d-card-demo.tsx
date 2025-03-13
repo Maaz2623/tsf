@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CardBody, CardContainer, CardItem } from "./ui/3d-card";
 import {
   StarIcon,
@@ -21,7 +21,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useContingentFull } from "@/hooks/use-contingent-full";
-import { tickets } from "@/db/schema";
 
 export function ThreeDCardDemo({
   title,
@@ -47,37 +46,21 @@ export function ThreeDCardDemo({
   event: EventType;
 }) {
   const [, setFull] = useContingentFull();
-  const [fetchingBookedTickets, setFetchingBookedTickets] = useState(false);
-  const [fetchedBookedTickets, setFetchedBookedTickets] = useState<
-    Array<typeof tickets.$inferSelect>
-  >([]);
-
-  const { data: bookedTickets } = trpc.tickets.getByEventTitle.useSubscription(
-    {
-      title,
-    },
-    {
-      onStarted: () => setFetchingBookedTickets(true),
-      onData: (newTickets) => {
-        setFetchedBookedTickets(newTickets); // 👈 Correctly type `newTickets`
-        setFetchingBookedTickets(false);
-      },
-    }
-  );
+  const {
+    data: bookedTickets,
+    isSuccess: fetchedBookedTickets,
+    isFetching: fetchingBookedTickets,
+  } = trpc.tickets.getByEventTitle.useQuery({
+    title,
+  });
 
   const {
     data: bookedContingents,
     isSuccess: fetchedBookedContingents,
     isFetching: fetchingBookedContingents,
-  } = trpc.contingents.getBookedContingents.useQuery(
-    {
-      title,
-    },
-    {
-      staleTime: 25000,
-      refetchInterval: 25000,
-    }
-  );
+  } = trpc.contingents.getBookedContingents.useQuery({
+    title,
+  });
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
