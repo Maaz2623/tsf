@@ -1,6 +1,7 @@
 "use client";
 import {
   Calendar,
+  HelpingHandIcon,
   Package,
   PackageCheckIcon,
   QrCodeIcon,
@@ -42,6 +43,11 @@ export const items = [
     title: "Contingents",
     url: "/dashboard/contingents",
     icon: Package,
+  },
+  {
+    title: "Help",
+    url: "/dashboard/help",
+    icon: HelpingHandIcon,
   },
 ];
 
