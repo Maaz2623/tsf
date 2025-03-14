@@ -89,7 +89,7 @@ const ContingentModal = () => {
               ));
               return;
             }
-            if (hasTickets) {
+            if (hasTickets && hasTickets.length !== 0) {
               toast.custom((t) => (
                 <div
                   className={`${
