@@ -59,6 +59,9 @@ const EventsContainer = ({
 
   const { data: allTickets } = trpc.tickets.getAllTickets.useQuery();
 
+  const { data: allContingents } =
+    trpc.contingents.getAllContingents.useQuery();
+
   useEffect(() => {
     const totalPrice = selectedEvents.reduce(
       (acc, event) => acc + event.price,
@@ -166,7 +169,8 @@ const EventsContainer = ({
 
             return (
               <ThreeDCardDemo
-                bookedTickets={bookedTickets}
+                bookedTickets={bookedTickets.length}
+                bookedContingents={allContingents ? allContingents.length : 0}
                 maxRegistration={event.maxRegistration}
                 date={event.date}
                 event={event}

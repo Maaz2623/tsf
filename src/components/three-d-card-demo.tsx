@@ -21,7 +21,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useContingentFull } from "@/hooks/use-contingent-full";
-import { tickets } from "@/db/schema";
 
 export function ThreeDCardDemo({
   title,
@@ -35,6 +34,7 @@ export function ThreeDCardDemo({
   setSelectedEvents,
   event,
   bookedTickets,
+  bookedContingents,
 }: {
   selectedEvents: EventType[];
   setSelectedEvents: React.Dispatch<React.SetStateAction<EventType[]>>;
@@ -46,21 +46,17 @@ export function ThreeDCardDemo({
   date?: string;
   maxRegistration?: number;
   event: EventType;
-  bookedTickets: (typeof tickets.$inferSelect)[];
+  bookedTickets: number;
+  bookedContingents: number;
 }) {
   const [, setFull] = useContingentFull();
-
-  const { data: bookedContingents, isSuccess: fetchedBookedContingents } =
-    trpc.contingents.getBookedContingents.useQuery({
-      title,
-    });
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
 
   const totalTicketsBooked =
-    fetchedBookedContingents && bookedTickets
-      ? (bookedContingents?.length || 0) + (bookedTickets?.length || 0)
+    bookedContingents && bookedTickets
+      ? (bookedContingents || 0) + (bookedTickets || 0)
       : 0;
 
   useEffect(() => {
@@ -139,8 +135,7 @@ export function ThreeDCardDemo({
               bookedTickets && bookedContingents ? (
                 <div className="flex items-center font-medium">
                   <TicketsIcon className="size-4 mr-1" />
-                  {bookedTickets.length + bookedContingents.length} /{" "}
-                  {maxRegistration}
+                  {bookedTickets + bookedContingents} / {maxRegistration}
                 </div>
               ) : (
                 <Skeleton className="w-[60px] h-6 animate-pulse" />
