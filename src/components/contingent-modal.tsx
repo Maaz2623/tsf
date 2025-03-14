@@ -38,6 +38,9 @@ const ContingentModal = () => {
   const { data: hasContingent, isFetching } =
     trpc.contingents.hasContingent.useQuery();
 
+  const { data: hasTickets, isFetching: fetchingTickets } =
+    trpc.tickets.getByClerkId.useQuery();
+
   const [full] = useContingentFull();
 
   return (
@@ -53,7 +56,7 @@ const ContingentModal = () => {
         open={contingentModalOpen}
       >
         <button
-          disabled={isFetching}
+          disabled={isFetching || fetchingTickets}
           onClick={() => {
             if (full) {
               toast.custom((t) => (
@@ -81,6 +84,24 @@ const ContingentModal = () => {
                   <span className="text-yellow-600 text-xl">⚠️</span>
                   <p className="font-medium">
                     You already have a package booked.
+                  </p>
+                </div>
+              ));
+              return;
+            }
+            if (hasTickets) {
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } flex items-center gap-3 bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg shadow-md`}
+                >
+                  <span className="text-yellow-600 text-xl">⚠️</span>
+                  <p className="font-medium">
+                    You have already booked one or more one-time tickets. Please
+                    use them to purchase additional event tickets instead of
+                    opting for the contingent plan, which grants access to all
+                    events.
                   </p>
                 </div>
               ));
