@@ -55,6 +55,9 @@ export function ThreeDCardDemo({
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
 
+  const { data: userContingent, isFetching: fetchingHasContingent } =
+    trpc.contingents.hasContingent.useQuery();
+
   const totalTicketsBooked =
     bookedContingents && bookedTickets
       ? (bookedContingents.length || 0) + (bookedTickets.length || 0)
@@ -63,8 +66,6 @@ export function ThreeDCardDemo({
   useEffect(() => {
     setFull(totalTicketsBooked === maxRegistration);
   }, [totalTicketsBooked, setFull, maxRegistration]);
-
-  console.log(bookedTickets);
 
   return (
     <CardContainer className="inter-var cursor-pointer rounded-xl bg-white/20">
@@ -153,7 +154,8 @@ export function ThreeDCardDemo({
               disabled={
                 totalTicketsBooked === maxRegistration ||
                 isUserTicketLoading ||
-                userTicket
+                userTicket ||
+                fetchingHasContingent
               }
               variant="outline"
               className={cn(
@@ -165,6 +167,22 @@ export function ThreeDCardDemo({
                   "bg-red-100/80 border border-red-500 text-red-600"
               )}
               onClick={() => {
+                if (userContingent) {
+                  toast.custom((t) => (
+                    <div
+                      className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                      } flex items-center gap-3 bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg shadow-md`}
+                    >
+                      <span className="text-yellow-600 text-xl">⚠️</span>
+                      <p className="font-medium">
+                        You already have a contingent plan and this event is
+                        included.
+                      </p>
+                    </div>
+                  ));
+                  return;
+                }
                 setSelectedEvents((prev) =>
                   prev.some((e) => e.title === event.title)
                     ? prev.filter((e) => e.title !== event.title)
@@ -173,7 +191,7 @@ export function ThreeDCardDemo({
                 toast.success("Event list updated");
               }}
             >
-              {isUserTicketLoading ? (
+              {isUserTicketLoading || fetchingHasContingent ? (
                 "Loading"
               ) : userTicket ? (
                 "Booked"
