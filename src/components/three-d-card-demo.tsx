@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useContingentFull } from "@/hooks/use-contingent-full";
+import { contingents, tickets } from "@/db/schema";
 
 export function ThreeDCardDemo({
   title,
@@ -46,8 +47,8 @@ export function ThreeDCardDemo({
   date?: string;
   maxRegistration?: number;
   event: EventType;
-  bookedTickets: number;
-  bookedContingents: number;
+  bookedTickets: (typeof tickets.$inferSelect)[];
+  bookedContingents: (typeof contingents.$inferSelect)[];
 }) {
   const [, setFull] = useContingentFull();
 
@@ -56,7 +57,7 @@ export function ThreeDCardDemo({
 
   const totalTicketsBooked =
     bookedContingents && bookedTickets
-      ? (bookedContingents || 0) + (bookedTickets || 0)
+      ? (bookedContingents.length || 0) + (bookedTickets.length || 0)
       : 0;
 
   useEffect(() => {
@@ -135,7 +136,7 @@ export function ThreeDCardDemo({
               bookedTickets && bookedContingents ? (
                 <div className="flex items-center font-medium">
                   <TicketsIcon className="size-4 mr-1" />
-                  {bookedTickets + bookedContingents} / {maxRegistration}
+                  {totalTicketsBooked} / {maxRegistration}
                 </div>
               ) : (
                 <Skeleton className="w-[60px] h-6 animate-pulse" />

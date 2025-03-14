@@ -169,8 +169,8 @@ const EventsContainer = ({
 
             return (
               <ThreeDCardDemo
-                bookedTickets={bookedTickets.length}
-                bookedContingents={allContingents ? allContingents.length : 0}
+                bookedTickets={bookedTickets}
+                bookedContingents={allContingents ? allContingents : []}
                 maxRegistration={event.maxRegistration}
                 date={event.date}
                 event={event}
