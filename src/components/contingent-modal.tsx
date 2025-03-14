@@ -98,10 +98,9 @@ const ContingentModal = () => {
                 >
                   <span className="text-yellow-600 text-xl">⚠️</span>
                   <p className="font-medium">
-                    You have already booked one or more one-time tickets. Please
-                    use them to purchase additional event tickets instead of
-                    opting for the contingent plan, which grants access to all
-                    events.
+                    You have already booked one or more one-time tickets. You
+                    cannot have both contingent plan and one-time tickets.
+                    Generate one-time tickets again and add your events
                   </p>
                 </div>
               ));
