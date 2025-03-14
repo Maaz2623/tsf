@@ -295,4 +295,4 @@ export const events: EventType[] = [
 
 export const contingentPrice = 9000;
 
-export const contingentUpiLink = `upi://pay?pa=7349323005@pthdfc&pn=TheStudentForum&am=${contingentPrice}&cu=INR`;
+export const contingentUpiLink = `upi://pay?pa=7349305608-2@ybl&pn=TheStudentForum&am=${contingentPrice}&cu=INR`;
