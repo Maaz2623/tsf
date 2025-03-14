@@ -57,6 +57,8 @@ const EventsContainer = ({
     date: event.date,
   }));
 
+  const { data: allTickets } = trpc.tickets.getAllTickets.useQuery();
+
   useEffect(() => {
     const totalPrice = selectedEvents.reduce(
       (acc, event) => acc + event.price,
@@ -155,21 +157,30 @@ const EventsContainer = ({
           </div>
         </div>
         <div className="flex flex-wrap gap-x-8 justify-center">
-          {filteredEvents.map((event, i) => (
-            <ThreeDCardDemo
-              maxRegistration={event.maxRegistration}
-              date={event.date}
-              event={event}
-              key={i}
-              selectedEvents={selectedEvents}
-              setSelectedEvents={setSelectedEvents}
-              teamSize={event.teamSize}
-              rating={event.rating}
-              title={event.title}
-              description={event.description}
-              price={event.price}
-            />
-          ))}
+          {filteredEvents.map((event, i) => {
+            const bookedTickets = allTickets
+              ? allTickets.filter((ticket) =>
+                  ticket.events.some((tEvent) => tEvent.title === event.title)
+                )
+              : [];
+
+            return (
+              <ThreeDCardDemo
+                bookedTickets={bookedTickets}
+                maxRegistration={event.maxRegistration}
+                date={event.date}
+                event={event}
+                key={i}
+                selectedEvents={selectedEvents}
+                setSelectedEvents={setSelectedEvents}
+                teamSize={event.teamSize}
+                rating={event.rating}
+                title={event.title}
+                description={event.description}
+                price={event.price}
+              />
+            );
+          })}
         </div>
       </div>
     </>

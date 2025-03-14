@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useContingentFull } from "@/hooks/use-contingent-full";
+import { tickets } from "@/db/schema";
 
 export function ThreeDCardDemo({
   title,
@@ -33,6 +34,7 @@ export function ThreeDCardDemo({
   selectedEvents,
   setSelectedEvents,
   event,
+  bookedTickets,
 }: {
   selectedEvents: EventType[];
   setSelectedEvents: React.Dispatch<React.SetStateAction<EventType[]>>;
@@ -44,29 +46,20 @@ export function ThreeDCardDemo({
   date?: string;
   maxRegistration?: number;
   event: EventType;
+  bookedTickets: (typeof tickets.$inferSelect)[];
 }) {
   const [, setFull] = useContingentFull();
-  const {
-    data: bookedTickets,
-    isSuccess: fetchedBookedTickets,
-    isFetching: fetchingBookedTickets,
-  } = trpc.tickets.getByEventTitle.useQuery({
-    title,
-  });
 
-  const {
-    data: bookedContingents,
-    isSuccess: fetchedBookedContingents,
-    isFetching: fetchingBookedContingents,
-  } = trpc.contingents.getBookedContingents.useQuery({
-    title,
-  });
+  const { data: bookedContingents, isSuccess: fetchedBookedContingents } =
+    trpc.contingents.getBookedContingents.useQuery({
+      title,
+    });
 
   const { data: userTicket, isLoading: isUserTicketLoading } =
     trpc.tickets.getByEventTitleUserId.useQuery({ title });
 
   const totalTicketsBooked =
-    fetchedBookedContingents && fetchedBookedTickets
+    fetchedBookedContingents && bookedTickets
       ? (bookedContingents?.length || 0) + (bookedTickets?.length || 0)
       : 0;
 
@@ -74,7 +67,7 @@ export function ThreeDCardDemo({
     setFull(totalTicketsBooked === maxRegistration);
   }, [totalTicketsBooked, setFull, maxRegistration]);
 
-  const isFetchingTickets = fetchingBookedTickets || fetchingBookedContingents;
+  console.log(bookedTickets);
 
   return (
     <CardContainer className="inter-var cursor-pointer rounded-xl bg-white/20">
@@ -164,8 +157,7 @@ export function ThreeDCardDemo({
               disabled={
                 totalTicketsBooked === maxRegistration ||
                 isUserTicketLoading ||
-                userTicket ||
-                isFetchingTickets
+                userTicket
               }
               variant="outline"
               className={cn(
@@ -185,7 +177,7 @@ export function ThreeDCardDemo({
                 toast.success("Event list updated");
               }}
             >
-              {isUserTicketLoading || isFetchingTickets ? (
+              {isUserTicketLoading ? (
                 "Loading"
               ) : userTicket ? (
                 "Booked"
