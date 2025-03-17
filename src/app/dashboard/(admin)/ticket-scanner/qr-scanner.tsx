@@ -113,10 +113,14 @@ const QRScanner = () => {
                   {ticket.phoneNumber}
                 </p>
                 <p>
-                  <span className="font-semibold">User Name:</span> {user?.name}
+                  <span className="font-semibold">Name:</span> {ticket.name}
                 </p>
                 <p>
                   <span className="font-semibold">Email:</span> {user?.email}
+                </p>
+                <p>
+                  <span className="font-semibold">College:</span>{" "}
+                  {ticket.collegeName}
                 </p>
 
                 {/* Events */}

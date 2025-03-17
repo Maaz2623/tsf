@@ -68,6 +68,7 @@ const TicketVerifierPage = () => {
       User: ticket.name || "N/A",
       Email: ticket.user?.email || "N/A",
       "Phone Number": ticket?.phoneNumber || "N/A",
+      College: ticket.collegeName,
       Screenshot: ticket.paymentScreentshotUrl || "N/A",
       Events: ticket.events.map((event) => event.title).join(", "),
       Amount: `₹${ticket.events.reduce(
