@@ -28,7 +28,14 @@ import QRCode from "react-qr-code";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { StatusAction } from "./_components/status-action";
-import { Mail, Phone, UserIcon, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  BuildingIcon,
+  Mail,
+  Phone,
+  UserIcon,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -183,6 +190,7 @@ const TicketVerifierPage = () => {
                   </TableCell>
                   <TableCell className="w-[350px] underline-offset-2 underline truncate">
                     <UserDetailsDialog
+                      collegeName={ticket.collegeName}
                       phoneNumber={ticket.phoneNumber}
                       user={formattedUser}
                     >
@@ -237,8 +245,10 @@ const UserDetailsDialog = ({
   user,
   children,
   phoneNumber,
+  collegeName,
 }: {
   user: UserType;
+  collegeName: string;
   children: React.ReactNode;
   phoneNumber: string;
 }) => {
@@ -274,6 +284,10 @@ const UserDetailsDialog = ({
           <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-md">
             <Phone className="w-5 h-5 text-gray-600" />
             <p className="text-sm text-gray-800">{phoneNumber || "N/A"}</p>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-md">
+            <BuildingIcon className="w-5 h-5 text-gray-600" />
+            <p className="text-sm text-gray-800">{collegeName || "N/A"}</p>
           </div>
         </ScrollArea>
       </DialogContent>
